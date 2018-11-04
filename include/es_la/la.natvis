@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <Type Name="la::Matrix&lt;*,*,*,la::Col_major&gt;">
+    <DisplayString>{{ Rows={rows_} Column={cols_} }}</DisplayString>
+    <Expand>
+      <ArrayItems Condition="data_.data_ != 0">
+        <Direction>Backward</Direction>
+        <Rank>2</Rank>
+        <Size>$i == 0 ? rows_ : cols_</Size>
+        <ValuePointer>data_.data_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="la::Matrix&lt;*,*,*,la::Row_major&gt;">
+    <DisplayString>{{ Rows={rows_} Column={cols_} }}</DisplayString>
+    <Expand>
+      <ArrayItems Condition="data_.data_ != 0">
+        <Direction>Forward</Direction>
+        <Rank>2</Rank>
+        <Size>$i == 0 ? rows_ : cols_</Size>
+        <ValuePointer>data_.data_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>
