@@ -1,2 +1,1 @@
-# es_la
-Linear algebra library
+# Linear algebra library
