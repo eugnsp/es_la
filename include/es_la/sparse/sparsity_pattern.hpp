@@ -45,9 +45,9 @@ public:
 	void remove_duplicates()
 	{
 		std::sort(begin(), end());
- 		const auto new_length = std::unique(begin(), end()) - begin();
- 		row_indices_.resize(new_length);
- 		col_indices_.resize(new_length);
+		const auto new_length = std::unique(begin(), end()) - begin();
+		row_indices_.resize(new_length);
+		col_indices_.resize(new_length);
 	}
 
 	auto begin()
@@ -162,12 +162,14 @@ public:
 		{
 			const auto lower_pos = std::lower_bound(r.begin(), r.end(), *cols_first);
 			auto lower = lower_pos - r.begin();
-			const auto upper = std::upper_bound(lower_pos, r.end(), *std::prev(cols_last)) - r.begin();
+			const auto upper =
+				std::upper_bound(lower_pos, r.end(), *std::prev(cols_last)) - r.begin();
 
 			const auto middle = r.size();
 			while (cols_first != cols_last)
 			{
-				const auto pos = std::equal_range(r.begin() + lower, r.begin() + upper, *cols_first);
+				const auto pos =
+					std::equal_range(r.begin() + lower, r.begin() + upper, *cols_first);
 				lower = pos.second - r.begin();
 				if (pos.first == pos.second)
 					r.push_back(*cols_first);
@@ -187,7 +189,7 @@ public:
 		return std::all_of(rows_.begin(), rows_.end(), [](auto& row) { return !row.empty(); });
 	}
 
-	// TODO 
+	// TODO
 	bool is_symmetric() const
 	{
 		for (std::size_t row = 0; row < n_rows(); ++row)
@@ -217,7 +219,7 @@ private:
 		assert(std::adjacent_find(cols_first, cols_last) == cols_last);
 
 		std::for_each(cols_first, cols_last,
-			[row](std::size_t col) { debug_check_index(row, col); });
+					  [row](std::size_t col) { debug_check_index(row, col); });
 	}
 
 private:
@@ -226,10 +228,10 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 
-template<class Symmetry_tag> 
+template<class Symmetry_tag>
 es_util::Error Sparsity_pattern<Symmetry_tag>::check() const
 {
-	es_util::Error err("Sparsity pattern check");
+	es_util::Error err;
 
 	unsigned int n_errors = 0;
 	for (std::size_t i = 0; i < rows_.size(); ++i)
@@ -238,41 +240,37 @@ es_util::Error Sparsity_pattern<Symmetry_tag>::check() const
 		if (!std::is_sorted(row.begin(), row.end()))
 		{
 			++n_errors;
-			err << "\n* Error: not sorted row.\n"
-				<< "The row #" << i << " is not sorted.\n"
-				<< "The indices are: " << es_util::join_as_string(row.begin(), row.end());
+			err.append("\n* Error: not sorted row.\n", "The row #", i, " is not sorted.\n",
+					   "The indices are: ", es_util::join_as_string(row.begin(), row.end()));
 		}
 
 		auto pos = std::adjacent_find(row.begin(), row.end());
 		if (pos != row.end())
 		{
 			++n_errors;
-			err << "\n* Error: same indices in the row.\n"
-				<< "The row #" << i << " contains two or more same indices: ";
+			err.append("\n* Error: same indices in the row.\n", "The row #", i,
+					   " contains two or more same indices: ");
 
 			for (;;)
 			{
-				err << *pos++;
+				err.append(*pos++);
 				pos = std::adjacent_find(pos, row.end());
 				if (pos != row.end())
-					err << ", ";
+					err.append(", ");
 				else
 					break;
 			}
 
-			err << "\nThe indices are: " << es_util::join_as_string(row.begin(), row.end());
+			err.append("\nThe indices are: ", es_util::join_as_string(row.begin(), row.end()));
 		}
 
 		if (n_errors >= 10)
 		{
-			err << "\nToo many errors.";
+			err.append("\nToo many errors.");
 			break;
 		}
 	}
 
-	if (n_errors > 0)
-		err.set_error_flag();
-
 	return err;
 }
-}	// namespace la
+} // namespace la
