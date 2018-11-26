@@ -21,13 +21,7 @@ namespace la
 class Matfile_writer : private internal::Matfile_base
 {
 public:
-	explicit Matfile_writer(const std::string& file_name)
-	{
-		file_.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-		file_.open(file_name, std::ofstream::binary);
-
-		write_header();
-	}
+	explicit Matfile_writer(const std::string& file_name);
 
 	void write(const std::string& var_name, const std::string& str)
 	{
@@ -89,21 +83,10 @@ public:
 	}
 
 private:
-	static constexpr std::size_t padding_size = 8;
-
 	// Computes size rounded up to the 64-bit boundary (padding_size = 8)
-	static std::size_t padded_size(std::size_t size)
-	{
-		return padding_size * ((size + padding_size - 1) / padding_size);
-	}
+	static std::size_t padded_size(std::size_t size);
 
-	void write_zero_padding(std::size_t length_to_pad)
-	{
-		static const char zero_padding_bytes[padding_size] = {0};
-
-		const auto n_padding_bytes = padded_size(length_to_pad) - length_to_pad;
-		write_raw(zero_padding_bytes, n_padding_bytes);
-	}
+	void write_zero_padding(std::size_t length_to_pad);
 
 	template<typename T>
 	void write_raw(const T& data)
@@ -117,59 +100,16 @@ private:
 		file_.write(reinterpret_cast<const char*>(data), n_elements * sizeof(T));
 	}
 
-	void write_tag(internal::Matfile_data_types data_type, std::size_t n_bytes)
-	{
-		Tag tag{data_type, static_cast<std::uint32_t>(n_bytes)};
-		write_raw(tag);
-	}
+	void write_tag(internal::Matfile_data_types, std::size_t n_bytes);
 
-	void write_header()
-	{
-		Header header;
-		header.reserved1 = 0;
-		header.reserved2 = 0;
-		header.version = 0x0100;
-		header.endian = ('M' << 8) | 'I';	// = "IM"
+	void write_header();
 
-		std::string text("MATLAB 5.0 MAT-file, created on: " + es_util::date_time_string());
-		text.resize(sizeof(header.text), ' ');
-		text.copy(header.text, sizeof(header.text));
+	void write_array_flags_subelement(internal::Matfile_class_types,
+		bool is_complex, std::size_t nnz);
 
-		write_raw(header);
-	}
+	void write_dimensions_subelement(std::size_t rows, std::size_t cols);
 
-	void write_array_flags_subelement(internal::Matfile_class_types class_type,
-		bool is_complex, std::size_t nnz)
-	{
-		[[maybe_unused]] constexpr std::uint8_t logical_flag = 0b0010;
-		[[maybe_unused]] constexpr std::uint8_t global_flag = 0b0100;
-		[[maybe_unused]] constexpr std::uint8_t complex_flag = 0b1000;
-
-		Array_flags array_flags;
-		array_flags.class_type = static_cast<std::uint8_t>(class_type);
-		array_flags.nnz = static_cast<std::uint32_t>(nnz);
-		array_flags.flags = 0;
-		if (is_complex)
-			array_flags.flags |= complex_flag;
-
-		write_raw(array_flags);
-	}
-
-	void write_dimensions_subelement(std::size_t rows, std::size_t cols)
-	{
-		Dimensions dims;
-		dims.rows = static_cast<std::uint32_t>(rows);
-		dims.cols = static_cast<std::uint32_t>(cols);
-
-		write_raw(dims);
-	}
-
-	void write_array_name_subelement(const std::string& name)
-	{
-		write_tag(internal::Matfile_data_types::INT8, name.length());
-		write_raw(name.c_str(), name.length());
-		write_zero_padding(name.length());
-	}
+	void write_array_name_subelement(const std::string& name);
 
 	template<typename T>
 	void write_array_element(
