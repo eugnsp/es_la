@@ -13,9 +13,7 @@ add_library(es_la STATIC "${ES_LA_SRC}")
 target_include_directories(es_la PUBLIC "include")
 
 if (NOT TARGET es_util)
-	set(ES_UTIL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/es_util/include")
-	add_library(es_util INTERFACE IMPORTED)
-	set_target_properties(es_util PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${ES_UTIL_INCLUDE_DIR}")
+	add_subdirectory("external/es_util")
 endif()
 target_link_libraries(es_la PUBLIC es_util)
 
