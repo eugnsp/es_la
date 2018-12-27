@@ -18,8 +18,8 @@ endif()
 target_link_libraries(es_la PUBLIC es_util)
 
 target_include_directories(es_la PUBLIC "$ENV{MKLROOT}/include")
-link_directories("$ENV{MKLROOT}/lib/intel64")
 add_definitions(-DMKL_ILP64)
-set(MKL_LIBRARIES "-Wl,--start-group" libmkl_intel_ilp64.a libmkl_sequential.a libmkl_core.a "-Wl,--end-group" pthread m dl)
+set(MKL_LIB "$ENV{MKLROOT}/lib/intel64")
+set(MKL_LIBRARIES "-Wl,--start-group" "${MKL_LIB}/libmkl_intel_ilp64.a" "${MKL_LIB}/libmkl_sequential.a" "${MKL_LIB}/libmkl_core.a" "-Wl,--end-group" pthread m dl)
 
 target_link_libraries(es_la PUBLIC "${MKL_LIBRARIES}")
