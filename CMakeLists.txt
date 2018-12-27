@@ -10,18 +10,18 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -flto")
 
 file(GLOB_RECURSE ES_LA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library(es_la STATIC "${ES_LA_SRC}")
-target_include_directories(es_la PRIVATE "include")
+target_include_directories(es_la PUBLIC "include")
 
 if (NOT TARGET es_util)
 	set(ES_UTIL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/es_util/include")
 	add_library(es_util INTERFACE IMPORTED)
 	set_target_properties(es_util PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${ES_UTIL_INCLUDE_DIR}")
 endif()
-target_link_libraries(es_la es_util)
+target_link_libraries(es_la PUBLIC es_util)
 
 include_directories("$ENV{MKLROOT}/include")
 link_directories("$ENV{MKLROOT}/lib/intel64")
 add_definitions(-DMKL_ILP64)
 set(MKL_LIBRARIES "-Wl,--start-group" libmkl_intel_ilp64.a libmkl_sequential.a libmkl_core.a "-Wl,--end-group" pthread m dl)
 
-target_link_libraries(es_la "${MKL_LIBRARIES}")
+target_link_libraries(es_la PUBLIC "${MKL_LIBRARIES}")
