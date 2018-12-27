@@ -135,6 +135,18 @@ T det(Matrix<T, 2, 2>& m)
 }
 
 template<typename T>
+void invert(Matrix<T, 2, 2>& m)
+{
+	const auto d = det(m);
+
+	std::swap(m(0, 0), m(1, 1));
+	m(0, 0) /= d;
+	m(1, 1) /= d;
+	m(1, 0) /= -d;
+	m(0, 1) /= -d;
+}
+
+template<typename T>
 void invert_transpose(Matrix<T, 2, 2>& m)
 {
 	const auto d = det(m);

@@ -10,6 +10,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <vector>
 
@@ -65,7 +66,7 @@ public:
 		MKL_INT info;
 
 		job[0] = 0;				// The matrix in the CSR format is converted to the CSC format
-		job[1] = job[2] = 0;	// Zero-based indexing	
+		job[1] = job[2] = 0;	// Zero-based indexing
 		job[5] = 1;				// All output arrays (acsc, ja1, and ia1) are filled in for the output storage
 
 		mkl_dcsrcsc(job, &n, const_cast<double*>(matrix.data()), (MKL_INT*)(matrix.col_indices()),
