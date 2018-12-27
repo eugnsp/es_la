@@ -19,7 +19,7 @@ if (NOT TARGET es_util)
 endif()
 target_link_libraries(es_la PUBLIC es_util)
 
-include_directories("$ENV{MKLROOT}/include")
+target_include_directories(es_la PUBLIC "$ENV{MKLROOT}/include")
 link_directories("$ENV{MKLROOT}/lib/intel64")
 add_definitions(-DMKL_ILP64)
 set(MKL_LIBRARIES "-Wl,--start-group" libmkl_intel_ilp64.a libmkl_sequential.a libmkl_core.a "-Wl,--end-group" pthread m dl)
