@@ -33,35 +33,34 @@ public:
 	using Value = Value_t<Derived>;
 
 public:
-	Matrix_base_dynamic()
-		: Matrix_base_dynamic(zero_or_static_size(ct_rows), zero_or_static_size(ct_cols))
-	{ }
+	Matrix_base_dynamic() :
+		Matrix_base_dynamic(zero_or_static_size(ct_rows), zero_or_static_size(ct_cols))
+	{}
 
-	Matrix_base_dynamic(std::size_t rows, std::size_t cols)
-		: Shape_base(rows, cols), data_(rows * cols)
-	{ }
+	Matrix_base_dynamic(std::size_t rows, std::size_t cols) :
+		Shape_base(rows, cols), data_(rows * cols)
+	{}
 
-	Matrix_base_dynamic(const Matrix_base_dynamic& other)
-		: Matrix_base_dynamic(other.rows(), other.cols())
+	Matrix_base_dynamic(const Matrix_base_dynamic& other) :
+		Matrix_base_dynamic(other.rows(), other.cols())
 	{
 		this->assign(other);
 	}
 
-	Matrix_base_dynamic(Matrix_base_dynamic&& other) noexcept
-		: Matrix_base_dynamic()
+	Matrix_base_dynamic(Matrix_base_dynamic&& other) noexcept : Matrix_base_dynamic()
 	{
 		swap(other);
 	}
 
 	template<class Expr>
-	Matrix_base_dynamic(const Expression<Expr>& expr)
-		: Matrix_base_dynamic(expr.rows(), expr.cols())
+	Matrix_base_dynamic(const Expression<Expr>& expr) :
+		Matrix_base_dynamic(expr.rows(), expr.cols())
 	{
 		this->assign(expr);
 	}
 
-	using Shape_base::rows;
 	using Shape_base::cols;
+	using Shape_base::rows;
 	using Shape_base::size;
 
 	Matrix_base_dynamic& operator=(const Matrix_base_dynamic& other)
@@ -122,7 +121,8 @@ auto Matrix_base_dynamic<ct_rows, ct_cols, Derived, Layout>::operator[](std::siz
 
 template<std::size_t ct_rows, std::size_t ct_cols, class Derived, class Layout>
 template<bool is_vector, typename>
-auto Matrix_base_dynamic<ct_rows, ct_cols, Derived, Layout>::operator[](std::size_t index) const -> Value
+auto Matrix_base_dynamic<ct_rows, ct_cols, Derived, Layout>::operator[](std::size_t index) const
+	-> Value
 {
 	return (*this)(index, 0);
 }
@@ -130,8 +130,8 @@ auto Matrix_base_dynamic<ct_rows, ct_cols, Derived, Layout>::operator[](std::siz
 //////////////////////////////////////////////////////////////////////////
 
 template<size_t t_rows, class Derived, class Layout>
-class Matrix_base<t_rows, dynamic, Derived, Layout> 
-	: public Matrix_base_dynamic<t_rows, dynamic, Derived, Layout>
+class Matrix_base<t_rows, dynamic, Derived, Layout> :
+	public Matrix_base_dynamic<t_rows, dynamic, Derived, Layout>
 {
 private:
 	using Base = Matrix_base_dynamic<t_rows, dynamic, Derived, Layout>;
@@ -140,33 +140,28 @@ public:
 	using Value = Value_t<Derived>;
 
 public:
-	explicit Matrix_base(std::size_t cols = 0)
-		: Base(t_rows, cols)
-	{ }
+	explicit Matrix_base(std::size_t cols = 0) : Base(t_rows, cols)
+	{}
 
-	Matrix_base(std::size_t cols, const Value& value)
-		: Matrix_base(cols)
+	Matrix_base(std::size_t cols, const Value& value) : Matrix_base(cols)
 	{
 		std::fill(data_.data(), data_.data() + this->size(), value);
 	}
 
-	Matrix_base(std::size_t cols, std::initializer_list<Value> values)
-		: Matrix_base(cols)
+	Matrix_base(std::size_t cols, std::initializer_list<Value> values) : Matrix_base(cols)
 	{
 		assert(values.size() == this->size());
 		std::copy(values.begin(), values.end(), data_.data());
 	}
 
-	Matrix_base(std::initializer_list<Value> values)
-		: Matrix_base(values.size() / t_rows, values)
+	Matrix_base(std::initializer_list<Value> values) : Matrix_base(values.size() / t_rows, values)
 	{
 		assert(values.size() % t_rows == 0);
 	}
 
 	template<class Expr>
-	Matrix_base(const Expression<Expr>& expr)
-		: Base(expr)
-	{ }
+	Matrix_base(const Expression<Expr>& expr) : Base(expr)
+	{}
 
 	void resize(std::size_t cols, bool preserve_data = false)
 	{
@@ -184,8 +179,8 @@ protected:
 };
 
 template<size_t t_cols, class Derived, class Layout>
-class Matrix_base<dynamic, t_cols, Derived, Layout> 
-	: public Matrix_base_dynamic<dynamic, t_cols, Derived, Layout>
+class Matrix_base<dynamic, t_cols, Derived, Layout> :
+	public Matrix_base_dynamic<dynamic, t_cols, Derived, Layout>
 {
 private:
 	using Base = Matrix_base_dynamic<dynamic, t_cols, Derived, Layout>;
@@ -194,33 +189,28 @@ public:
 	using Value = Value_t<Derived>;
 
 public:
-	explicit Matrix_base(std::size_t rows = 0)
-		: Base(rows, t_cols)
-	{ }
+	explicit Matrix_base(std::size_t rows = 0) : Base(rows, t_cols)
+	{}
 
-	Matrix_base(std::size_t rows, const Value& value)
-		: Matrix_base(rows)
+	Matrix_base(std::size_t rows, const Value& value) : Matrix_base(rows)
 	{
 		std::fill(data_.data(), data_.data() + this->size(), value);
 	}
 
-	Matrix_base(std::size_t rows, std::initializer_list<Value> values)
-		: Matrix_base(rows)
+	Matrix_base(std::size_t rows, std::initializer_list<Value> values) : Matrix_base(rows)
 	{
 		assert(values.size() == this->size());
 		std::copy(values.begin(), values.end(), data_.data());
 	}
 
-	Matrix_base(std::initializer_list<Value> values)
-		: Matrix_base(values.size() / t_cols, values)
+	Matrix_base(std::initializer_list<Value> values) : Matrix_base(values.size() / t_cols, values)
 	{
 		assert(values.size() % t_cols == 0);
 	}
 
 	template<class Expr>
-	Matrix_base(const Expression<Expr>& expr)
-		: Base(expr)
-	{ }
+	Matrix_base(const Expression<Expr>& expr) : Base(expr)
+	{}
 
 	void resize(std::size_t rows, bool preserve_data = false)
 	{
@@ -238,8 +228,8 @@ protected:
 };
 
 template<class Derived, class Layout>
-class Matrix_base<dynamic, dynamic, Derived, Layout> 
-	: public Matrix_base_dynamic<dynamic, dynamic, Derived, Layout>
+class Matrix_base<dynamic, dynamic, Derived, Layout> :
+	public Matrix_base_dynamic<dynamic, dynamic, Derived, Layout>
 {
 private:
 	using Base = Matrix_base_dynamic<dynamic, dynamic, Derived, Layout>;
@@ -248,31 +238,27 @@ public:
 	using Value = Value_t<Derived>;
 
 public:
-	Matrix_base(std::size_t rows, std::size_t cols)
-		: Base(rows, cols)
-	{ }
+	Matrix_base(std::size_t rows, std::size_t cols) : Base(rows, cols)
+	{}
 
-	Matrix_base()
-		: Matrix_base(0, 0)
-	{ }
+	Matrix_base() : Matrix_base(0, 0)
+	{}
 
-	Matrix_base(std::size_t rows, std::size_t cols, const Value& value)
-		: Matrix_base(rows, cols)
+	Matrix_base(std::size_t rows, std::size_t cols, const Value& value) : Matrix_base(rows, cols)
 	{
- 		std::fill(data_.data(), data_.data() + this->size(), value);
+		std::fill(data_.data(), data_.data() + this->size(), value);
 	}
 
-	Matrix_base(std::size_t rows, std::size_t cols, std::initializer_list<Value> values)
-		: Matrix_base(rows, cols)
+	Matrix_base(std::size_t rows, std::size_t cols, std::initializer_list<Value> values) :
+		Matrix_base(rows, cols)
 	{
 		MATHLA_ASSERT(values.size() == this->size());
 		std::copy(values.begin(), values.end(), data_.data());
 	}
 
 	template<class Expr>
-	Matrix_base(const Expression<Expr>& expr)
-		: Base(expr)
-	{ }
+	Matrix_base(const Expression<Expr>& expr) : Base(expr)
+	{}
 
 	void resize(std::size_t rows, std::size_t cols, bool preserve_data = false)
 	{
@@ -288,5 +274,4 @@ public:
 protected:
 	using Base::data_;
 };
-}
-
+} // namespace la::internal

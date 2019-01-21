@@ -21,8 +21,8 @@ private:
 	using Base1 = Base<T_Derived>;
 
 public:
-	using Base1::rows;
 	using Base1::cols;
+	using Base1::rows;
 	using Base1::self;
 
 	typename Base1::Value operator()(std::size_t row, std::size_t col) const
@@ -56,15 +56,15 @@ public:
 	// 		{
 	// 			return false;
 	// 		}
-	// 
+	//
 	// 		for (std::size_t col = 0; col < other.n_cols(); ++col)
 	// 			for (std::size_t row = 0; row < other.n_rows(); ++row)
 	// 				if ((*this)(row, col) != other.self()(row, col))
 	// 					return false;
-	// 
+	//
 	// 		return true;
 	// 	}
-	// 
+	//
 	// 	template<class Other>
 	// 	bool operator!=(const Expr<Other>& other) const
 	// 	{
@@ -75,44 +75,58 @@ public:
 	/** Views */
 
 	// Block views
-	template<class Rows, class Cols, typename = 
-		std::enable_if_t<is_indexer_v<Rows> && is_indexer_v<Cols>>>
+	template<
+		class Rows,
+		class Cols,
+		typename = std::enable_if_t<is_indexer_v<Rows> && is_indexer_v<Cols>>>
 	auto view(Rows rows, Cols cols) const
 	{
 		return Sub_expr_t<const T_Derived, Rows, Cols>{self(), std::move(rows), std::move(cols)};
 	}
 
-	template<std::size_t t_start_row, std::size_t t_rows, std::size_t t_start_col, std::size_t t_cols>
+	template<
+		std::size_t t_start_row,
+		std::size_t t_rows,
+		std::size_t t_start_col,
+		std::size_t t_cols>
 	auto view() const
 	{
 		return view(Range<t_start_row, t_rows>{}, Range<t_start_col, t_cols>{});
 	}
 
-	auto view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const
+	auto view(
+		std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const
 	{
 		return view(Range<0, 0>{start_row, rows}, Range<0, 0>{start_col, cols});
 	}
 
-// 	template<std::size_t rows, std::size_t cols>
-// 	auto view(Matrix<std::size_t, rows, cols> indices)
-// 	{
-// 		//return col(Matrix_slice<rows, cols>{std::move(indices)});
-// 	}
+	// 	template<std::size_t rows, std::size_t cols>
+	// 	auto view(Matrix<std::size_t, rows, cols> indices)
+	// 	{
+	// 		//return col(Matrix_slice<rows, cols>{std::move(indices)});
+	// 	}
 
-	template<class Rows, class Cols, typename =
-		std::enable_if_t<is_indexer_v<Rows> && is_indexer_v<Cols>>>
+	template<
+		class Rows,
+		class Cols,
+		typename = std::enable_if_t<is_indexer_v<Rows> && is_indexer_v<Cols>>>
 	auto cview(Rows rows, Cols cols) const
 	{
 		return view(std::move(rows), std::move(cols));
 	}
 
-	template<std::size_t t_start_row, std::size_t t_rows, std::size_t t_start_col, std::size_t t_cols>
+	template<
+		std::size_t t_start_row,
+		std::size_t t_rows,
+		std::size_t t_start_col,
+		std::size_t t_cols>
 	auto cview() const
 	{
 		return view<t_start_row, t_rows, t_start_col, t_cols>();
 	}
 
-	auto cview(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const
+	auto cview(
+		std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const
 	{
 		return view(start_row, rows, start_col, cols);
 	}
@@ -124,11 +138,11 @@ public:
 		return view(Range<0, rows_v<T_Derived>>{0, rows()}, std::move(cols));
 	}
 
-  	template<std::size_t t_size>
-  	auto col(Vector<std::size_t, t_size> indices) const
-  	{
+	template<std::size_t t_size>
+	auto col(Vector<std::size_t, t_size> indices) const
+	{
 		return col(Slice<t_size>{std::move(indices)});
-  	}
+	}
 
 	template<std::size_t t_index>
 	auto col() const
@@ -164,7 +178,7 @@ public:
 		return col(index);
 	}
 
- 	// Row views
+	// Row views
 	template<class TRows, typename = std::enable_if_t<is_indexer_v<TRows>>>
 	auto row(TRows rows) const
 	{
@@ -226,8 +240,8 @@ public:
 	using typename Base::Value;
 
 public:
-	using Base::rows;
 	using Base::cols;
+	using Base::rows;
 	using Base::self;
 
 	template<class TExpr>
@@ -265,20 +279,24 @@ public:
 		static_assert(is_vector_expr_v<T_Derived>);
 		return self()(index, 0);
 	}
-	
-	// TODO
- 	//template<typename T_Value, typename = std::enable_if_t<!is_any_expr_v<T_Value>>>
-	//                                                                           V !!!
-	template<typename T_Value, typename = std::void_t<decltype(std::declval<Value&>() += std::declval<T_Value&>())>>
- 	Expr_base& operator+=(const T_Value& value)
- 	{
- 		for (std::size_t col = 0; col < cols(); ++col)
- 			for (std::size_t row = 0; row < rows(); ++row)
- 				self()(row, col) += value;
- 		return *this;
- 	}
 
-	template<typename T_Value, typename = std::void_t<decltype(std::declval<Value&>() -= std::declval<T_Value&>())>>
+	// TODO
+	// template<typename T_Value, typename = std::enable_if_t<!is_any_expr_v<T_Value>>>
+	//                                                                           V !!!
+	template<
+		typename T_Value,
+		typename = std::void_t<decltype(std::declval<Value&>() += std::declval<T_Value&>())>>
+	Expr_base& operator+=(const T_Value& value)
+	{
+		for (std::size_t col = 0; col < cols(); ++col)
+			for (std::size_t row = 0; row < rows(); ++row)
+				self()(row, col) += value;
+		return *this;
+	}
+
+	template<
+		typename T_Value,
+		typename = std::void_t<decltype(std::declval<Value&>() -= std::declval<T_Value&>())>>
 	Expr_base& operator-=(const T_Value& value)
 	{
 		for (std::size_t col = 0; col < cols(); ++col)
@@ -337,17 +355,23 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
-	using Base::view;
 	using Base::cview;
+	using Base::view;
 
-	template<class TRows, class TCols, typename =
-		std::enable_if_t<is_indexer_v<TRows> && is_indexer_v<TCols>>>
+	template<
+		class TRows,
+		class TCols,
+		typename = std::enable_if_t<is_indexer_v<TRows> && is_indexer_v<TCols>>>
 	auto view(TRows rows, TCols cols)
 	{
 		return Sub_expr_t<T_Derived, TRows, TCols>{self(), std::move(rows), std::move(cols)};
 	}
 
-	template<std::size_t t_start_row, std::size_t t_rows, std::size_t t_start_col, std::size_t t_cols>
+	template<
+		std::size_t t_start_row,
+		std::size_t t_rows,
+		std::size_t t_start_col,
+		std::size_t t_cols>
 	auto view()
 	{
 		return view(Range<t_start_row, t_rows>{}, Range<t_start_col, t_cols>{});
@@ -355,12 +379,14 @@ public:
 
 	auto view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols)
 	{
-		return view(Range<la::dynamic, la::dynamic>{start_row, rows}, Range<la::dynamic, la::dynamic>{start_col, cols});
+		return view(
+			Range<la::dynamic, la::dynamic>{start_row, rows},
+			Range<la::dynamic, la::dynamic>{start_col, cols});
 	}
 
 	// Column views
-	using Base::col;
 	using Base::ccol;
+	using Base::col;
 
 	template<class TCols, typename = std::enable_if_t<is_indexer_v<TCols>>>
 	auto col(TCols cols)
@@ -386,8 +412,8 @@ public:
 	}
 
 	// Row views
-	using Base::row;
 	using Base::crow;
+	using Base::row;
 
 	template<class TRows, typename = std::enable_if_t<is_indexer_v<TRows>>>
 	auto row(TRows rows)
@@ -412,4 +438,4 @@ public:
 		return row(Vector<std::size_t, 1>{index});
 	}
 };
-}
+} // namespace la::internal

@@ -59,4 +59,4 @@ public:
 		mem_free(ptr);
 	}
 };
-}
+} // namespace la::internal

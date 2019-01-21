@@ -14,4 +14,4 @@ auto cross2(const Expression<Left>& left, const Expression<Right>& right)
 
 	return es_util::det(left[0], left[1], right[0], right[1]);
 }
-}
+} // namespace la

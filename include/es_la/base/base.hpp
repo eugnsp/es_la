@@ -63,4 +63,4 @@ inline const T_Derived& Base<T_Derived>::self() const
 {
 	return static_cast<const T_Derived&>(*this);
 }
-}
+} // namespace la::internal

@@ -48,7 +48,8 @@ public:
 	}
 
 	template<class Symmetry_tag_type>
-	void write(const std::string& var_name, const la::Sparse_matrix<double, Symmetry_tag_type>& matrix)
+	void write(
+		const std::string& var_name, const la::Sparse_matrix<double, Symmetry_tag_type>& matrix)
 	{
 		const MKL_INT n = matrix.n_cols();
 		auto nnz = matrix.nnz();
@@ -62,20 +63,24 @@ public:
 		std::vector<MKL_INT> cscColumnIndex(n + 1);
 		std::vector<double> cscValues(nnz);
 
-		MKL_INT job[8] = { };
+		MKL_INT job[8] = {};
 		MKL_INT info;
 
-		job[0] = 0;				// The matrix in the CSR format is converted to the CSC format
-		job[1] = job[2] = 0;	// Zero-based indexing
-		job[5] = 1;				// All output arrays (acsc, ja1, and ia1) are filled in for the output storage
+		job[0] = 0;          // The matrix in the CSR format is converted to the CSC format
+		job[1] = job[2] = 0; // Zero-based indexing
+		job[5] = 1; // All output arrays (acsc, ja1, and ia1) are filled in for the output storage
 
-		mkl_dcsrcsc(job, &n, const_cast<double*>(matrix.data()), (MKL_INT*)(matrix.col_indices()),
-			(MKL_INT*)(matrix.row_indices()), cscValues.data(), cscRows.data(), cscColumnIndex.data(), &info);
+		mkl_dcsrcsc(
+			job, &n, const_cast<double*>(matrix.data()), (MKL_INT*)(matrix.col_indices()),
+			(MKL_INT*)(matrix.row_indices()), cscValues.data(), cscRows.data(),
+			cscColumnIndex.data(), &info);
 
 		if (info != 0)
 			throw std::runtime_error("Matrix format conversion error");
 
-		write_sparse_array_element(var_name, matrix.n_rows(), matrix.n_cols(), matrix.nnz(), cscRows.data(), cscColumnIndex.data(), cscValues.data());
+		write_sparse_array_element(
+			var_name, matrix.n_rows(), matrix.n_cols(), matrix.nnz(), cscRows.data(),
+			cscColumnIndex.data(), cscValues.data());
 	}
 
 	void close()
@@ -105,8 +110,8 @@ private:
 
 	void write_header();
 
-	void write_array_flags_subelement(internal::Matfile_class_types,
-		bool is_complex, std::size_t nnz);
+	void write_array_flags_subelement(
+		internal::Matfile_class_types, bool is_complex, std::size_t nnz);
 
 	void write_dimensions_subelement(std::size_t rows, std::size_t cols);
 
@@ -115,16 +120,19 @@ private:
 	template<typename T>
 	void write_array_element(
 		const std::string& name,
-		std::size_t rows, std::size_t cols,
+		std::size_t rows,
+		std::size_t cols,
 		const T* real_values,
 		es_util::Identity_t<const T*> complex_values = nullptr);
 
 	template<typename T, typename Index>
 	void write_sparse_array_element(
 		const std::string& name,
-		std::size_t rows, std::size_t cols,
+		std::size_t rows,
+		std::size_t cols,
 		std::size_t nnz,
-		const Index* ir, const Index* jc,
+		const Index* ir,
+		const Index* jc,
 		const T* real_values,
 		es_util::Identity_t<const T*> complex_values = nullptr);
 
@@ -137,8 +145,10 @@ private:
 /************************************************************************/
 
 template<typename T>
-void Matfile_writer::write_array_element(const std::string& name,
-	std::size_t rows, std::size_t cols,
+void Matfile_writer::write_array_element(
+	const std::string& name,
+	std::size_t rows,
+	std::size_t cols,
 	const T* real_values,
 	es_util::Identity_t<const T*> complex_values)
 {
@@ -150,12 +160,11 @@ void Matfile_writer::write_array_element(const std::string& name,
 	if (data_size_in_bytes > INT32_MAX)
 		throw std::length_error("Level 5 MAT-files cannot hold variables exceeding 2GB");
 
-	const std::size_t total_size_in_bytes =	// The total size includes all subelement paddings
-		sizeof(Array_flags) +						// Array flags
-		sizeof(Dimensions) +						// Dimensions array
-		sizeof(Tag) + padded_size(name.length()) +	// Array name
-		(sizeof(Tag) + padded_size(data_size_in_bytes)) *
-		(is_complex_data ? 2 : 1);					// Data size
+	const std::size_t total_size_in_bytes = // The total size includes all subelement paddings
+		sizeof(Array_flags) +               // Array flags
+		sizeof(Dimensions) +                // Dimensions array
+		sizeof(Tag) + padded_size(name.length()) +                                   // Array name
+		(sizeof(Tag) + padded_size(data_size_in_bytes)) * (is_complex_data ? 2 : 1); // Data size
 
 	write_tag(internal::Matfile_data_types::MATRIX, total_size_in_bytes);
 
@@ -178,10 +187,13 @@ void Matfile_writer::write_array_element(const std::string& name,
 }
 
 template<typename T, typename Index>
-void Matfile_writer::write_sparse_array_element(const std::string& name,
-	std::size_t rows, std::size_t cols,
+void Matfile_writer::write_sparse_array_element(
+	const std::string& name,
+	std::size_t rows,
+	std::size_t cols,
 	std::size_t nnz,
-	const Index* ir, const Index* jc,
+	const Index* ir,
+	const Index* jc,
 	const T* real_values,
 	es_util::Identity_t<const T*> complex_values)
 {
@@ -196,14 +208,13 @@ void Matfile_writer::write_sparse_array_element(const std::string& name,
 	if (data_size_in_bytes > INT32_MAX)
 		throw std::length_error("Level 5 MAT-files cannot hold variables exceeding 2GB");
 
-	const std::size_t total_size_in_bytes =		// Total size includes all subelement paddings
-		sizeof(Array_flags) +									// Array flags
-		sizeof(Dimensions) +									// Dimensions array
-		sizeof(Tag) + padded_size(name.length()) +				// Array name
-		sizeof(Tag) + padded_size(row_ind_size_in_bytes) +		// Row indices
-		sizeof(Tag) + padded_size(column_ind_size_in_bytes) +	// Column indices
-		(sizeof(Tag) + padded_size(data_size_in_bytes)) *
-		(is_complex_data ? 2 : 1);								// Data size
+	const std::size_t total_size_in_bytes =        // Total size includes all subelement paddings
+		sizeof(Array_flags) +                      // Array flags
+		sizeof(Dimensions) +                       // Dimensions array
+		sizeof(Tag) + padded_size(name.length()) + // Array name
+		sizeof(Tag) + padded_size(row_ind_size_in_bytes) +    // Row indices
+		sizeof(Tag) + padded_size(column_ind_size_in_bytes) + // Column indices
+		(sizeof(Tag) + padded_size(data_size_in_bytes)) * (is_complex_data ? 2 : 1); // Data size
 
 	write_tag(internal::Matfile_data_types::MATRIX, total_size_in_bytes);
 
@@ -242,4 +253,4 @@ void Matfile_writer::write_sparse_array_element(const std::string& name,
 		write_zero_padding(data_size_in_bytes);
 	}
 }
-}
+} // namespace la

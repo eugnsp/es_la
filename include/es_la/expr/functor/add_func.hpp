@@ -15,4 +15,4 @@ struct Add_func : public Elementwise_func<Left, Right>
 		return left(row, col) + right(row, col);
 	}
 };
-}
+} // namespace la::internal

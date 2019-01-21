@@ -26,29 +26,29 @@ private:
 	TScalar scalar_;
 	Expr_storage_t<const TExpr> expr_;
 };
-}
+} // namespace internal
 
 //////////////////////////////////////////////////////////////////////////
 
 template<class TExpr, typename TScalar, typename = std::enable_if_t<!internal::is_matrix<TScalar>>>
 auto operator*(const Expression<TExpr>& expr, const TScalar& scalar)
 {
-	return internal::Unary_expr<TExpr, TScalar, 
-		internal::Scalar_mul_func<TExpr, TScalar>>{expr.self(), scalar};
+	return internal::Unary_expr<TExpr, TScalar, internal::Scalar_mul_func<TExpr, TScalar>>{
+		expr.self(), scalar};
 }
 
 template<class TExpr, typename TScalar, typename = std::enable_if_t<!internal::is_matrix<TScalar>>>
 auto operator*(const TScalar& scalar, const Expression<TExpr>& expr)
 {
-	return internal::Unary_expr<TExpr, TScalar, 
-		internal::Scalar_mul_func<TExpr, TScalar>>{expr.self(), scalar};
+	return internal::Unary_expr<TExpr, TScalar, internal::Scalar_mul_func<TExpr, TScalar>>{
+		expr.self(), scalar};
 }
 
 template<class TExpr, typename TScalar>
 auto operator/(const Expression<TExpr>& expr, const TScalar& scalar)
 {
-	return internal::Unary_expr<TExpr, TScalar,
-		internal::Scalar_div_func<TExpr, TScalar>>{expr.self(), scalar};
+	return internal::Unary_expr<TExpr, TScalar, internal::Scalar_div_func<TExpr, TScalar>>{
+		expr.self(), scalar};
 }
 
 /************************************************************************/
@@ -58,9 +58,9 @@ auto operator/(const Expression<TExpr>& expr, const TScalar& scalar)
 namespace internal
 {
 template<class TExpr, typename TScalar, class TFunc>
-inline Unary_expr<TExpr, TScalar, TFunc>::Unary_expr(const TExpr& expr, const TScalar& scalar)
-	: scalar_(scalar), expr_(expr)
-{ }
+inline Unary_expr<TExpr, TScalar, TFunc>::Unary_expr(const TExpr& expr, const TScalar& scalar) :
+	scalar_(scalar), expr_(expr)
+{}
 
 template<class TExpr, typename TScalar, class TFunc>
 inline std::size_t Unary_expr<TExpr, TScalar, TFunc>::rows() const
@@ -75,10 +75,10 @@ inline std::size_t Unary_expr<TExpr, TScalar, TFunc>::cols() const
 }
 
 template<class TExpr, typename TScalar, class TFunc>
-inline auto Unary_expr<TExpr, TScalar, TFunc>::operator()(
-	std::size_t row, std::size_t col) const -> typename Base::Value
+inline auto Unary_expr<TExpr, TScalar, TFunc>::operator()(std::size_t row, std::size_t col) const ->
+	typename Base::Value
 {
 	return TFunc::element(expr_, scalar_, row, col);
 }
-}
-}
+} // namespace internal
+} // namespace la

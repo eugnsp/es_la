@@ -20,14 +20,13 @@ public:
 	using Value = typename Base::Value;
 
 public:
-	Sub_expr(Ex& expr, const Rows& rows, const Cols& cols)
-		: expr_(expr), rows_(rows), cols_(cols)
+	Sub_expr(Ex& expr, const Rows& rows, const Cols& cols) : expr_(expr), rows_(rows), cols_(cols)
 	{
-		static_assert(ct_greater_equal(rows_v<Ex>, size_v<Rows>),
-			"Too many rows in the sub-matrix");
+		static_assert(
+			ct_greater_equal(rows_v<Ex>, size_v<Rows>), "Too many rows in the sub-matrix");
 		// HACK
-// 		static_assert(ct_greater_equal(cols_v<Ex>, size_v<Cols>),
-// 			"Too many columns in the sub-matrix");
+		// 		static_assert(ct_greater_equal(cols_v<Ex>, size_v<Cols>),
+		// 			"Too many columns in the sub-matrix");
 
 		MATHLA_ASSERT(rows.are_all_less(expr.rows()));
 		MATHLA_ASSERT(cols.are_all_less(expr.cols()));
@@ -54,7 +53,8 @@ public:
 
 	const Value* data() const
 	{
-		static_assert(is_matrix_block<std::decay_t<decltype(*this)>>,
+		static_assert(
+			is_matrix_block<std::decay_t<decltype(*this)>>,
 			"Sub-expression should be an l-value matrix block");
 
 		return expr_.data() + cols_.begin() * lead_dim() + rows_.begin();
@@ -62,7 +62,8 @@ public:
 
 	std::size_t lead_dim() const
 	{
-		static_assert(is_matrix_block<std::decay_t<decltype(*this)>>,
+		static_assert(
+			is_matrix_block<std::decay_t<decltype(*this)>>,
 			"Sub-expression should be an l-value matrix block");
 
 		return expr_.rows();
@@ -108,25 +109,25 @@ public:
 
 	typename Base::Value* data()
 	{
-		static_assert(is_matrix_block<std::decay_t<decltype(*this)>>,
+		static_assert(
+			is_matrix_block<std::decay_t<decltype(*this)>>,
 			"Sub-expression should be an l-value matrix block");
 
 		return expr_.data() + cols_.begin() * this->lead_dim() + rows_.begin();
 	}
 
 private:
+	using Base::cols_;
 	using Base::expr_;
 	using Base::rows_;
-	using Base::cols_;
 };
 
-// template<typename Value, std::size_t ct_rows, std::size_t ct_cols, 
+// template<typename Value, std::size_t ct_rows, std::size_t ct_cols,
 // 	std::size_t rows_begin, std::size_t rows_size,
 // 	std::size_t cols_begin, std::size_t cols_size, class Access_tag>
-// class Sub<Matrix<Value, ct_rows, ct_cols>, Range<>, Range<>, Access_tag> : 
+// class Sub<Matrix<Value, ct_rows, ct_cols>, Range<>, Range<>, Access_tag> :
 // 	Sub_expr<Matrix<>, Range<>, Range<>, Access_tag>,
 // 	Special_int
 // { };
 
-
-}
+} // namespace la::internal

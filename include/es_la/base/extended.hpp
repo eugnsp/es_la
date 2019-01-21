@@ -145,8 +145,7 @@ inline void Extended<T_Derived, t_rows, 0>::swap(Extended& other) noexcept
 }
 
 template<class T_Derived, std::size_t t_rows>
-inline Extended<T_Derived, t_rows, 0>::Extended(std::size_t rows, std::size_t cols)
-	: cols_(cols)
+inline Extended<T_Derived, t_rows, 0>::Extended(std::size_t rows, std::size_t cols) : cols_(cols)
 {
 	MATHLA_ASSERT(rows == t_rows);
 }
@@ -178,8 +177,7 @@ inline void Extended<T_Derived, 0, t_cols>::swap(Extended& other) noexcept
 }
 
 template<class T_Derived, std::size_t t_cols>
-inline Extended<T_Derived, 0, t_cols>::Extended(std::size_t rows, std::size_t cols)
-	: rows_(rows)
+inline Extended<T_Derived, 0, t_cols>::Extended(std::size_t rows, std::size_t cols) : rows_(rows)
 {
 	MATHLA_ASSERT(cols == t_cols);
 }
@@ -213,7 +211,7 @@ inline void Extended<T_Derived, 0, 0>::swap(Extended& other) noexcept
 }
 
 template<class T_Derived>
-inline Extended<T_Derived, 0, 0>::Extended(std::size_t rows, std::size_t cols)
-	: rows_(rows), cols_(cols)
-{ }
-}
+inline Extended<T_Derived, 0, 0>::Extended(std::size_t rows, std::size_t cols) :
+	rows_(rows), cols_(cols)
+{}
+} // namespace la::internal

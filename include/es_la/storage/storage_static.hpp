@@ -11,11 +11,11 @@ inline constexpr std::size_t get_default_alignment()
 {
 	if constexpr (std::is_arithmetic_v<T>)
 	{
-	#if defined __AVX__ || defined __AVX2__ || defined __SSE__
+#if defined __AVX__ || defined __AVX2__ || defined __SSE__
 		return 32;
-	#else
+#else
 		return alignof(T);
-	#endif
+#endif
 	}
 
 	return alignof(T);
@@ -27,9 +27,9 @@ class Storage
 public:
 	Storage() = default;
 
-	constexpr Storage(const std::array<T, static_size>& values)
-		: Storage(values, std::make_index_sequence<static_size>{})
-	{ }
+	constexpr Storage(const std::array<T, static_size>& values) :
+		Storage(values, std::make_index_sequence<static_size>{})
+	{}
 
 	static constexpr std::size_t size() noexcept
 	{
@@ -41,7 +41,7 @@ public:
 		MATHLA_ASSERT(index < size());
 		return data_[index];
 	}
-	
+
 	constexpr const T& operator[](std::size_t index) const
 	{
 		MATHLA_ASSERT(index < size());
@@ -60,11 +60,11 @@ public:
 
 private:
 	template<std::size_t... Is>
-	constexpr Storage(const std::array<T, static_size>& values, std::index_sequence<Is...>)
-		: data_{values[Is]...}
-	{ }
+	constexpr Storage(const std::array<T, static_size>& values, std::index_sequence<Is...>) :
+		data_{values[Is]...}
+	{}
 
 protected:
 	alignas(align) T data_[static_size];
 };
-}
+} // namespace la::internal

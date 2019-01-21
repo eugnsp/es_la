@@ -8,7 +8,8 @@
 
 namespace la
 {
-template<class Sparse_matrix_type,
+template<
+	class Sparse_matrix_type,
 	class T_Structure_tag = typename Sparse_matrix_type::Symmetry_tag,
 	bool t_is_positive_definite = false>
 class Pardiso_solver
@@ -28,23 +29,20 @@ public:
 	void analyze(const Sparse_matrix&);
 	void analyze_factorize(const Sparse_matrix&);
 	void analyze_factorize_solve(
-		const Sparse_matrix&,
-		const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution);
+		const Sparse_matrix&, const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution);
 
 	void factorize(const Sparse_matrix&);
 	void factorize_solve(
-		const Sparse_matrix&,
-		const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution);
+		const Sparse_matrix&, const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution);
 
-	void solve(
-		const Sparse_matrix&,
-		const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution);
-	
+	void solve(const Sparse_matrix&, const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution);
+
 	// 	void solve(const Sparse_matrix<T_Value>&, const Vector<T_Value, 0>&, Vector<T_Value, 0>&)
-// 	{ 
-// //		assert(structure_ != SparseMatrixStructure::STRUCTURAL_SYMMETRIC || pattern.is_symmetric());
-// 
-// 	}
+	// 	{
+	// //		assert(structure_ != SparseMatrixStructure::STRUCTURAL_SYMMETRIC ||
+	// pattern.is_symmetric());
+	//
+	// 	}
 
 private:
 	enum class Pardiso_matrix_type : MKL_INT
@@ -73,8 +71,10 @@ private:
 
 private:
 	void call_pardiso(
-		Pardiso_phase, const Sparse_matrix* = nullptr,
-		const T_Value* rhs = nullptr, T_Value* solution = nullptr);
+		Pardiso_phase,
+		const Sparse_matrix* = nullptr,
+		const T_Value* rhs = nullptr,
+		T_Value* solution = nullptr);
 
 	static constexpr Pardiso_matrix_type pardiso_matrix_type();
 	static std::string pardiso_error_string(MKL_INT error);
@@ -95,10 +95,10 @@ Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::Pardiso_
 {
 	MKL_INT matrix_type = static_cast<MKL_INT>(pardiso_matrix_type());
 	pardisoinit(handle_, &matrix_type, parameters_);
-	parameters_[34] = 1;		// Zero-based indexing
+	parameters_[34] = 1; // Zero-based indexing
 
 #ifndef NDEBUG
-	parameters_[26] = 1;		// Matrix checker
+	parameters_[26] = 1; // Matrix checker
 #endif
 }
 
@@ -131,9 +131,10 @@ void Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::ana
 }
 
 template<class Sparse_matrix, class T_Structure_tag, bool t_is_positive_definite>
-void Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::analyze_factorize_solve(
-	const Sparse_matrix& matrix, const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution)
-{ 
+void Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::
+	analyze_factorize_solve(
+		const Sparse_matrix& matrix, const Vector_x<T_Value>& rhs, Vector_x<T_Value>& solution)
+{
 	call_pardiso(Pardiso_phase::ANALYZE_FACTORIZE_SOLVE, &matrix, rhs.data(), solution.data());
 }
 
@@ -148,8 +149,7 @@ void Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::fac
 
 template<class Sparse_matrix, class T_Structure_tag, bool t_is_positive_definite>
 void Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::call_pardiso(
-	Pardiso_phase phase, const Sparse_matrix* matrix,
-	const T_Value* rhs, T_Value* solution)
+	Pardiso_phase phase, const Sparse_matrix* matrix, const T_Value* rhs, T_Value* solution)
 {
 	assert(phase == Pardiso_phase::RELEASE_ALL || matrix);
 
@@ -162,30 +162,34 @@ void Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::cal
 	MKL_INT error = 0;
 
 	if (matrix)
-		::pardiso(handle_, &max_factors, &matrix_number, &matrix_type,
-			reinterpret_cast<const MKL_INT*>(&phase), &n_equations,
-			matrix->data(),
+		::pardiso(
+			handle_, &max_factors, &matrix_number, &matrix_type,
+			reinterpret_cast<const MKL_INT*>(&phase), &n_equations, matrix->data(),
 			reinterpret_cast<const MKL_INT*>(matrix->row_indices()),
-			reinterpret_cast<const MKL_INT*>(matrix->col_indices()),
-			nullptr, &n_rhs, parameters_, &message_level_, const_cast<T_Value*>(rhs), solution, &error);
+			reinterpret_cast<const MKL_INT*>(matrix->col_indices()), nullptr, &n_rhs, parameters_,
+			&message_level_, const_cast<T_Value*>(rhs), solution, &error);
 	else
-		::pardiso(handle_, &max_factors, &matrix_number, &matrix_type,
-			reinterpret_cast<const MKL_INT*>(&phase), &n_equations, nullptr,
-			nullptr, nullptr, nullptr, &n_rhs, parameters_, &message_level_, const_cast<T_Value*>(rhs), solution, &error);
+		::pardiso(
+			handle_, &max_factors, &matrix_number, &matrix_type,
+			reinterpret_cast<const MKL_INT*>(&phase), &n_equations, nullptr, nullptr, nullptr,
+			nullptr, &n_rhs, parameters_, &message_level_, const_cast<T_Value*>(rhs), solution,
+			&error);
 
- 	if (error)
- 		throw std::runtime_error(pardiso_error_string(error));
+	if (error)
+		throw std::runtime_error(pardiso_error_string(error));
 }
 
 template<typename T>
-struct Is_complex : std::false_type { };
+struct Is_complex : std::false_type
+{};
 
 template<typename T>
 constexpr bool is_complex_v = Is_complex<T>::value;
 
 template<class Sparse_matrix, class T_Structure_tag, bool t_is_positive_definite>
-constexpr auto Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::pardiso_matrix_type() -> Pardiso_matrix_type
-{ 
+constexpr auto Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::
+	pardiso_matrix_type() -> Pardiso_matrix_type
+{
 	constexpr bool is_complex = is_complex_v<T_Value>;
 
 	if constexpr (std::is_same_v<T_Structure_tag, Symmetric_upper>)
@@ -193,44 +197,75 @@ constexpr auto Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_defi
 		if constexpr (is_complex)
 			return Pardiso_matrix_type::COMPLEX_SYMMETRIC;
 		else
-			return t_is_positive_definite ? Pardiso_matrix_type::REAL_SYMMETRIC_POS_DEFINITE : Pardiso_matrix_type::REAL_SYMMETRIC_INDEFINITE;
+			return t_is_positive_definite ? Pardiso_matrix_type::REAL_SYMMETRIC_POS_DEFINITE
+										  : Pardiso_matrix_type::REAL_SYMMETRIC_INDEFINITE;
 	}
-	
+
 	if constexpr (std::is_same_v<T_Structure_tag, Structural_symmetric>)
-		return is_complex ? Pardiso_matrix_type::COMPLEX_STRUCTURAL_SYMMETRIC : Pardiso_matrix_type::REAL_STRUCTURAL_SYMMETRIC;
+		return is_complex ? Pardiso_matrix_type::COMPLEX_STRUCTURAL_SYMMETRIC
+						  : Pardiso_matrix_type::REAL_STRUCTURAL_SYMMETRIC;
 
 	if constexpr (std::is_same_v<T_Structure_tag, Hermitian>)
 	{
 		static_assert(is_complex, "Hermitian tag should be used with complex matrices only");
-		return t_is_positive_definite ? Pardiso_matrix_type::COMPLEX_HERMITIAN_POS_DEFINITE : Pardiso_matrix_type::COMPLEX_HERMITIAN_INDEFINITE;
+		return t_is_positive_definite ? Pardiso_matrix_type::COMPLEX_HERMITIAN_POS_DEFINITE
+									  : Pardiso_matrix_type::COMPLEX_HERMITIAN_INDEFINITE;
 	}
 
 	return is_complex ? Pardiso_matrix_type::COMPLEX_GENERAL : Pardiso_matrix_type::REAL_GENERAL;
 }
 
 template<class Sparse_matrix, class T_Structure_tag, bool t_is_positive_definite>
-std::string Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::pardiso_error_string(MKL_INT error)
+std::string Pardiso_solver<Sparse_matrix, T_Structure_tag, t_is_positive_definite>::
+	pardiso_error_string(MKL_INT error)
 {
 	std::string str = "Pardiso error " + std::to_string(error) + ": ";
 	switch (error)
 	{
-	case 0:		str += "No error"; break;
-	case -1:	str += "Input inconsistent"; break;
-	case -2:	str += "Not enough memory"; break;
-	case -3:	str += "Reordering problem"; break;
-	case -4:	str += "Zero pivot, numerical factorization or iterative refinement problem"; break;
-	case -5:	str += "Unclassified (internal) error";	break;
-	case -6:	str += "Reordering failed (nonsymmetric real and complex matrices only)"; break;
-	case -7:	str += "Diagonal matrix is singular"; break;
-	case -8:	str += "32-bit integer overflow problem"; break;
-	case -9:	str += "Not enough memory for OOC"; break;
-	case -10:	str += "Error opening OOC files"; break;
-	case -11:	str += "Read/write error with OOC files"; break;
-	case -12:	str += "pardiso_64 called from 32-bit library";	break;
-	default:	str += "Unknown error";
+	case 0:
+		str += "No error";
+		break;
+	case -1:
+		str += "Input inconsistent";
+		break;
+	case -2:
+		str += "Not enough memory";
+		break;
+	case -3:
+		str += "Reordering problem";
+		break;
+	case -4:
+		str += "Zero pivot, numerical factorization or iterative refinement problem";
+		break;
+	case -5:
+		str += "Unclassified (internal) error";
+		break;
+	case -6:
+		str += "Reordering failed (nonsymmetric real and complex matrices only)";
+		break;
+	case -7:
+		str += "Diagonal matrix is singular";
+		break;
+	case -8:
+		str += "32-bit integer overflow problem";
+		break;
+	case -9:
+		str += "Not enough memory for OOC";
+		break;
+	case -10:
+		str += "Error opening OOC files";
+		break;
+	case -11:
+		str += "Read/write error with OOC files";
+		break;
+	case -12:
+		str += "pardiso_64 called from 32-bit library";
+		break;
+	default:
+		str += "Unknown error";
 	}
 
 	return str;
 }
 
-}
+} // namespace la

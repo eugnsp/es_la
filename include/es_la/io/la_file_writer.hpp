@@ -50,10 +50,10 @@ private:
 	void write_header()
 	{
 		std::string text("LA file, created on: " + es_util::date_time_string());
-		text.resize(64, ' ');		
+		text.resize(64, ' ');
 
 		file_.write(text.c_str(), la_file_header_length);
-		
+
 		const std::uint32_t version = 1;
 		write_raw(version);
 	}
@@ -61,4 +61,4 @@ private:
 private:
 	std::ofstream file_;
 };
-}
+} // namespace la

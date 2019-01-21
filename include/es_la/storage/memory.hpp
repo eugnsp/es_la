@@ -4,7 +4,7 @@
 
 #if defined _MSC_VER
 
-#include <malloc.h>
+#	include <malloc.h>
 
 namespace la::internal
 {
@@ -22,16 +22,16 @@ inline void mem_free(void* ptr) noexcept
 {
 	::_aligned_free(ptr);
 }
-}
+} // namespace la::internal
 
 #else
 
-#include <mkl_version.h>
-#include <mkl_service.h>
+#	include <mkl_version.h>
+#	include <mkl_service.h>
 
-#if INTEL_MKL_VERSION < 110301
-#error MKL 2011.3.1 or later is required for alignment-preserving mkl_realloc()
-#endif
+#	if INTEL_MKL_VERSION < 110301
+#		error MKL 2011.3.1 or later is required for alignment-preserving mkl_realloc()
+#	endif
 
 namespace la::internal
 {
@@ -40,7 +40,7 @@ inline void* mem_alloc(std::size_t size, std::size_t alignment)
 	return ::mkl_malloc(size, static_cast<int>(alignment));
 }
 
-inline void* mem_realloc(void* ptr, std::size_t size, std::size_t alignment)
+inline void* mem_realloc(void* ptr, std::size_t size, [[maybe_unused]] std::size_t alignment)
 {
 	const auto new_ptr = ::mkl_realloc(ptr, size);
 
@@ -54,6 +54,6 @@ inline void mem_free(void* ptr) noexcept
 {
 	::mkl_free(ptr);
 }
-}
+} // namespace la::internal
 
 #endif

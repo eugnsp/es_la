@@ -18,4 +18,4 @@ static constexpr bool ct_greater_equal(std::size_t x, std::size_t y)
 {
 	return ct_equal(x, y) || ct_greater(x, y);
 }
-}
+} // namespace la::internal

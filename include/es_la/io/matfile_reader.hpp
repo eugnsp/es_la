@@ -28,15 +28,13 @@ public:
 	}
 
 	std::string read_string(const std::string& var_name)
-	{
-		
-	}
+	{}
 
 	template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 	void read(const std::string& var_name, T& scalar)
 	{
 		file_.seekg(sizeof(Header));
-		
+
 		while (true)
 		{
 			Tag tag;
@@ -47,7 +45,7 @@ public:
 			switch (tag.data_type)
 			{
 			case internal::Matfile_data_types::MATRIX:
-//				read_array_flags_subelement();
+				//				read_array_flags_subelement();
 				break;
 
 			default:
@@ -58,8 +56,7 @@ public:
 
 	template<class T, std::size_t rows, std::size_t cols>
 	void read(const std::string& var_name, const Matrix<T, rows, cols>& matrix)
-	{
-	}
+	{}
 
 	void close()
 	{
@@ -92,12 +89,15 @@ private:
 			throw std::runtime_error("Unsupported MAT-file endianness");
 
 		header_text_.assign(header.text, sizeof(header.text));
-		header_text_.erase(std::find_if(header_text_.rbegin(), header_text_.rend(),
-			[](char ch) { return ch != ' '; }).base(), header_text_.end());
+		header_text_.erase(
+			std::find_if(
+				header_text_.rbegin(), header_text_.rend(), [](char ch) { return ch != ' '; })
+				.base(),
+			header_text_.end());
 	}
 
-	void read_array_flags_subelement(internal::Matfile_class_types& class_type,
-		Flags& flags, std::size_t& nnz)
+	void read_array_flags_subelement(
+		internal::Matfile_class_types& class_type, Flags& flags, std::size_t& nnz)
 	{
 		Array_flags array_flags;
 		read_raw(array_flags);
@@ -106,12 +106,12 @@ private:
 
 		class_type = static_cast<internal::Matfile_class_types>(array_flags.class_type);
 		flags.from_uint8(array_flags.flags);
-//		nnz
-// 		array_flags.class_type = static_cast<std::uint8_t>(class_type);
-// 		array_flags.nnz = static_cast<std::uint32_t>(nnz);
-// 		array_flags.flags = 0;
-// 		if (is_complex)
-// 			array_flags.flags |= complex_flag;
+		//		nnz
+		// 		array_flags.class_type = static_cast<std::uint8_t>(class_type);
+		// 		array_flags.nnz = static_cast<std::uint32_t>(nnz);
+		// 		array_flags.flags = 0;
+		// 		if (is_complex)
+		// 			array_flags.flags |= complex_flag;
 	}
 
 private:
@@ -120,4 +120,4 @@ private:
 	std::ifstream file_;
 	std::string header_text_;
 };
-}
+} // namespace la

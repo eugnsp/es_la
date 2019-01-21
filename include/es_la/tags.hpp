@@ -7,7 +7,9 @@ namespace la
 #ifdef LA_USE_AUTO_EXTENT
 namespace internal
 {
-enum class Dynamic_extent { };
+enum class Dynamic_extent
+{
+};
 }
 
 inline constexpr auto dynamic = impl::Dynamic_extent{};
@@ -23,16 +25,19 @@ struct Col_major
 };
 
 struct Row_major
-{ 
+{
 	static constexpr auto is_col_major = false;
 	static constexpr auto is_row_major = true;
 };
 
 // Symmetry tags
-struct Not_symmetric { };
-struct Structural_symmetric { };
-struct Symmetric_upper { };
-struct Hermitian { };
+struct Not_symmetric
+{};
+struct Structural_symmetric
+{};
+struct Symmetric_upper
+{};
+struct Hermitian
+{};
 
-
-}
+} // namespace la

@@ -13,12 +13,10 @@ private:
 	using Alloc = Allocator<T, align>;
 
 public:
-	Storage() noexcept
-		: data_(nullptr), capacity_(0)
-	{ }
+	Storage() noexcept : data_(nullptr), capacity_(0)
+	{}
 
-	explicit Storage(std::size_t size)
-		: capacity_(size)
+	explicit Storage(std::size_t size) : capacity_(size)
 	{
 		data_ = Alloc::allocate(size);
 	}
@@ -85,4 +83,4 @@ protected:
 private:
 	std::size_t capacity_;
 };
-}
+} // namespace la::internal

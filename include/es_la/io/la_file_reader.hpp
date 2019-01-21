@@ -58,4 +58,4 @@ private:
 private:
 	std::ifstream file_;
 };
-}
+} // namespace la

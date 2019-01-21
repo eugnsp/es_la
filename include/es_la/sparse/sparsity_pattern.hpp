@@ -218,8 +218,8 @@ private:
 		assert(std::is_sorted(cols_first, cols_last));
 		assert(std::adjacent_find(cols_first, cols_last) == cols_last);
 
-		std::for_each(cols_first, cols_last,
-					  [row](std::size_t col) { debug_check_index(row, col); });
+		std::for_each(
+			cols_first, cols_last, [row](std::size_t col) { debug_check_index(row, col); });
 	}
 
 private:
@@ -240,16 +240,18 @@ es_util::Error Sparsity_pattern<Symmetry_tag>::check() const
 		if (!std::is_sorted(row.begin(), row.end()))
 		{
 			++n_errors;
-			err.append("\n* Error: not sorted row.\n", "The row #", i, " is not sorted.\n",
-					   "The indices are: ", es_util::join_as_string(row.begin(), row.end()));
+			err.append(
+				"\n* Error: not sorted row.\n", "The row #", i, " is not sorted.\n",
+				"The indices are: ", es_util::join_as_string(row.begin(), row.end()));
 		}
 
 		auto pos = std::adjacent_find(row.begin(), row.end());
 		if (pos != row.end())
 		{
 			++n_errors;
-			err.append("\n* Error: same indices in the row.\n", "The row #", i,
-					   " contains two or more same indices: ");
+			err.append(
+				"\n* Error: same indices in the row.\n", "The row #", i,
+				" contains two or more same indices: ");
 
 			for (;;)
 			{

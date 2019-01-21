@@ -38,4 +38,4 @@ struct Mul_func
 		return result;
 	}
 };
-}
+} // namespace la::internal

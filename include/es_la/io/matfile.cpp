@@ -7,7 +7,7 @@
 
 namespace util
 {
-//void Matlab::write(const std::string& name, const math::LA::CSRSparseMatrix<double>& matrix)
+// void Matlab::write(const std::string& name, const math::LA::CSRSparseMatrix<double>& matrix)
 //{
 //	const auto n = matrix.cols();
 //	auto nnz = matrix.nnz();
@@ -25,15 +25,18 @@ namespace util
 //	MKL_INT info;
 //
 //	job[0] = 0;				// The matrix in the CSR format is converted to the CSC format
-//	job[1] = job[2] = 0;	// Zero-based indexing	
-//	job[5] = 1;				// All output arrays (acsc, ja1, and ia1) are filled in for the output storage
+//	job[1] = job[2] = 0;	// Zero-based indexing
+//	job[5] = 1;				// All output arrays (acsc, ja1, and ia1) are filled in for the output
+//storage
 //
-//	math::MKL::CsrCsc(job, &n, const_cast<double*>(matrix.valuesData()), const_cast<std::size_t*>(matrix.colsData()),
-//					  const_cast<std::size_t*>(matrix.rowIndexData()), cscValues.data(), cscRows.data(), cscColumnIndex.data(), &info);
+//	math::MKL::CsrCsc(job, &n, const_cast<double*>(matrix.valuesData()),
+//const_cast<std::size_t*>(matrix.colsData()), 					  const_cast<std::size_t*>(matrix.rowIndexData()),
+//cscValues.data(), cscRows.data(), cscColumnIndex.data(), &info);
 //
 //	if (info != 0)
 //		throw std::runtime_error("Matrix format conversion error");
 //
-//	write_sparse_array_element(name, matrix.rows(), matrix.cols(), matrix.nnz(), cscRows.data(), cscColumnIndex.data(), cscValues.data());
+//	write_sparse_array_element(name, matrix.rows(), matrix.cols(), matrix.nnz(), cscRows.data(),
+//cscColumnIndex.data(), cscValues.data());
 //}
 }

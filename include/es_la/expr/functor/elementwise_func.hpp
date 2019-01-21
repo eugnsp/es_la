@@ -28,4 +28,4 @@ struct Elementwise_func
 		return left.cols();
 	}
 };
-}
+} // namespace la::internal

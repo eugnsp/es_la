@@ -47,4 +47,4 @@ inline auto Scalar_div_func<TExpr, TScalar>::element(
 {
 	return expr(row, col) / scalar;
 }
-}
+} // namespace la::internal

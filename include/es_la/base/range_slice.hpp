@@ -47,8 +47,7 @@ template<std::size_t ct_begin>
 class Range<ct_begin, la::dynamic>
 {
 public:
-	Range(std::size_t begin, std::size_t size)
-		: begin_(begin), size_(size)
+	Range(std::size_t begin, std::size_t size) : begin_(begin), size_(size)
 	{
 		MATHLA_ASSERT(size_ > 0);
 	}
@@ -106,8 +105,7 @@ private:
 /************************************************************************/
 
 template<std::size_t t_size>
-inline Slice<t_size>::Slice(Vector<std::size_t, t_size> indices)
-	: indices_(std::move(indices))
+inline Slice<t_size>::Slice(Vector<std::size_t, t_size> indices) : indices_(std::move(indices))
 {
 	MATHLA_ASSERT(!indices_.is_empty());
 }
@@ -132,5 +130,4 @@ inline bool Slice<t_size>::are_all_less(std::size_t max) const
 			return false;
 	return true;
 }
-}
-
+} // namespace la::internal

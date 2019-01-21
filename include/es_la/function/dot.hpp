@@ -16,4 +16,4 @@ auto dot(const Expression<Left>& left, const Expression<Right>& right)
 
 	return result;
 }
-}
+} // namespace la

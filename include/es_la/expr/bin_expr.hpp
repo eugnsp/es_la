@@ -52,7 +52,7 @@ private:
 	Expr_storage_t<const Left> left_;
 	Expr_storage_t<const Right> right_;
 };
-}
+} // namespace internal
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -76,4 +76,4 @@ auto operator*(const Expression<Left>& left, const Expression<Right>& right)
 	using namespace internal;
 	return Bin_expr<Left, Right, Mul_func>{left.self(), right.self()};
 }
-}
+} // namespace la

@@ -54,8 +54,7 @@ public:
 	}
 
 protected:
-	constexpr Shape_base(std::size_t rows, std::size_t cols) noexcept
-		: cols_(cols)
+	constexpr Shape_base(std::size_t rows, std::size_t cols) noexcept : cols_(cols)
 	{
 		ES_LA_ASSERT(rows == rows_);
 	}
@@ -83,7 +82,7 @@ public:
 	{
 		return rows_;
 	}
-	 
+
 	static constexpr std::size_t cols() noexcept
 	{
 		return cols_;
@@ -95,8 +94,7 @@ public:
 	}
 
 protected:
-	constexpr Shape_base(std::size_t rows, std::size_t cols) noexcept
-		: rows_(rows)
+	constexpr Shape_base(std::size_t rows, std::size_t cols) noexcept : rows_(rows)
 	{
 		ES_LA_ASSERT(cols == cols_);
 	}
@@ -124,7 +122,7 @@ public:
 	{
 		return rows_;
 	}
-	 
+
 	constexpr std::size_t cols() const noexcept
 	{
 		return cols_;
@@ -136,9 +134,8 @@ public:
 	}
 
 protected:
-	constexpr Shape_base(std::size_t rows, std::size_t cols) noexcept
-		: rows_(rows), cols_(cols)
-	{ }
+	constexpr Shape_base(std::size_t rows, std::size_t cols) noexcept : rows_(rows), cols_(cols)
+	{}
 
 	void set_size(std::size_t rows, std::size_t cols) noexcept
 	{
@@ -164,8 +161,8 @@ private:
 	using Base = Shape_base<ct_rows, ct_cols>;
 
 public:
-	using Base::rows;
 	using Base::cols;
+	using Base::rows;
 
 	// Leading dimension
 	constexpr std::size_t ldim() const noexcept
@@ -190,4 +187,4 @@ protected:
 			return col + row * ldim();
 	}
 };
-}
+} // namespace la::internal

@@ -13,4 +13,4 @@ using All = std::is_same<Bool_pack<true, t_values...>, Bool_pack<t_values..., tr
 template<bool... t_values>
 constexpr bool all_v = All<t_values...>::value;
 
-}
+} // namespace math_la::internal

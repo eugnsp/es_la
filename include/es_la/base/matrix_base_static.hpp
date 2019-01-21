@@ -28,7 +28,7 @@ public:
 
 public:
 	Matrix_base()
-	{ }
+	{}
 
 	Matrix_base(const Matrix_base&) = default;
 	Matrix_base(Matrix_base&&) = default;
@@ -44,13 +44,11 @@ public:
 	Matrix_base& operator=(const Matrix_base&) = default;
 	Matrix_base& operator=(Matrix_base&&) = default;
 
-	constexpr Matrix_base(const std::array<Value, t_rows * t_cols>& values)
-		: data_{values}
-	{ }
+	constexpr Matrix_base(const std::array<Value, t_rows * t_cols>& values) : data_{values}
+	{}
 
 	template<std::size_t t_size>
-	constexpr Matrix_base(const Value(&values)[t_size])
-		: Matrix_base(es_util::to_array(values))
+	constexpr Matrix_base(const Value (&values)[t_size]) : Matrix_base(es_util::to_array(values))
 	{
 		static_assert(t_size == t_rows * t_cols);
 	}
@@ -59,9 +57,9 @@ public:
 	{
 		std::fill(data_.data(), data_.data() + this->size(), value);
 	}
-	 
-	using Shape_base::rows;
+
 	using Shape_base::cols;
+	using Shape_base::rows;
 	using Shape_base::size;
 
 	constexpr Value& operator[](std::size_t index)
@@ -92,4 +90,4 @@ protected:
 private:
 	using Shape_base::linear_index;
 };
-}
+} // namespace la::internal

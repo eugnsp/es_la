@@ -17,7 +17,7 @@ double norm2(const Expression<TExpr>& vec)
 #if ES_LA_USE_MKL
 template<std::size_t size>
 double norm2(const Vector<double, size>& vec)
-{ 
+{
 	return ::cblas_dnrm2(vec.size(), vec.data(), 1);
 }
 #else
@@ -44,4 +44,4 @@ double norm_f(const Matrix<double, rows, cols>& mat)
 
 	return std::sqrt(s);
 }
-}
+} // namespace la

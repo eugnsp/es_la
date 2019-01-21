@@ -41,11 +41,16 @@ struct Assign
 
 // TODO : for dynamic only
 template<class To, class From>
-struct Assign<To, From, std::void_t<std::enable_if_t<std::conjunction_v<
-	Has_fd_or_complex_fd_element<To>, Is_dyn_matrix_or_dyn_matrix_block<To>,
-	Has_fd_or_complex_fd_element<From>, Is_product_expr<From>,
-	Is_dyn_matrix_or_dyn_matrix_block<typename From::Lhs>,
-	Is_dyn_matrix_or_dyn_matrix_block<typename From::Rhs>>>>>
+struct Assign<
+	To,
+	From,
+	std::void_t<std::enable_if_t<std::conjunction_v<
+		Has_fd_or_complex_fd_element<To>,
+		Is_dyn_matrix_or_dyn_matrix_block<To>,
+		Has_fd_or_complex_fd_element<From>,
+		Is_product_expr<From>,
+		Is_dyn_matrix_or_dyn_matrix_block<typename From::Lhs>,
+		Is_dyn_matrix_or_dyn_matrix_block<typename From::Rhs>>>>>
 {
 	void operator()(To& to, const From& from) const
 	{
@@ -54,11 +59,11 @@ struct Assign<To, From, std::void_t<std::enable_if_t<std::conjunction_v<
 		auto& left = from.left();
 		auto& right = from.right();
 
-		mkl_blas_gemm(Mkl_blas_layout::ROW_MAJOR,
-			Mkl_blas_transpose::NO_TRANS, Mkl_blas_transpose::NO_TRANS,
-			left.rows(), right.cols(), left.cols(), 1., left.data(), left.lead_dim(),
-			right.data(), right.lead_dim(), 0., to.data(), to.lead_dim());
+		mkl_blas_gemm(
+			Mkl_blas_layout::ROW_MAJOR, Mkl_blas_transpose::NO_TRANS, Mkl_blas_transpose::NO_TRANS,
+			left.rows(), right.cols(), left.cols(), 1., left.data(), left.lead_dim(), right.data(),
+			right.lead_dim(), 0., to.data(), to.lead_dim());
 	}
 };
 #endif
-}
+} // namespace la::internal
