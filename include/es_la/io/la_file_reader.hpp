@@ -7,7 +7,7 @@
 #include <string>
 #include <fstream>
 
-namespace la
+namespace es_la
 {
 class La_file_reader
 {

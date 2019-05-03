@@ -1,7 +1,7 @@
 #pragma once
-#include "traits.hpp"
+#include <es_la/base/type_traits.hpp>
 
-namespace la::internal
+namespace es_la::internal
 {
 // Compile-time size checks
 static constexpr bool ct_equal(std::size_t x, std::size_t y)

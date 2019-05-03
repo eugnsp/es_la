@@ -5,7 +5,7 @@
 #include <utility>
 #include <cassert>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<class T_Derived, std::size_t t_rows, std::size_t t_cols>
 class Extended : public Expression<T_Derived>

@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace la
+namespace es_la
 {
 // template<class TLhs_expr, class TRhs_expr>
 // inline bool operator==(const TLhs_expr& lhs, const TRhs_expr& rhs)

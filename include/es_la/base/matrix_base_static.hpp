@@ -1,20 +1,22 @@
 #pragma once
 #include "../config.hpp"
 #include "base.hpp"
-#include "traits.hpp"
+#include <es_la/base/type_traits.hpp>
 #include "expression.hpp"
 //#include "extended.hpp"
 #include <es_la/storage/storage.hpp>
 #include <es_la/base/ct_shape.hpp>
 #include <es_la/base/shape.hpp>
+
 #include <es_util/array.hpp>
+
 #include <array>
 #include <cstddef>
 #include <initializer_list>
 #include <algorithm>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<size_t t_rows, size_t t_cols, class T_Derived, class Layout>
 class Matrix_base : public Expression<T_Derived>, public Shape<t_rows, t_cols, Layout>

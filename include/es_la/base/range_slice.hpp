@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <cassert>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<std::size_t ct_begin, std::size_t ct_size>
 class Range
@@ -44,7 +44,7 @@ public:
 };
 
 template<std::size_t ct_begin>
-class Range<ct_begin, la::dynamic>
+class Range<ct_begin, dynamic>
 {
 public:
 	Range(std::size_t begin, std::size_t size) : begin_(begin), size_(size)

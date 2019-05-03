@@ -1,2 +1,10 @@
 #pragma once
-#include "sparse/sparse_matrix.hpp"
+#include <es_la/sparse/algorithm.hpp>
+#include <es_la/sparse/csr_matrix.hpp>
+#include <es_la/sparse/mkl_sparse_matrix.read_only.hpp>
+#include <es_la/sparse/mkl_sparse_matrix.read_write.hpp>
+#include <es_la/sparse/mkl_sparse_matrix_ext.hpp>
+#include <es_la/sparse/sparse_matrix.hpp>
+#include <es_la/sparse/type_traits.hpp>
+#include <es_la/tags.hpp>
+#include <es_la/type_traits.hpp>

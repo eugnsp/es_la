@@ -1,17 +1,14 @@
 #pragma once
-#include "forward.hpp"
+#include <es_la/base/forward.hpp>
 #include <complex>
+#include <es_la/tags.hpp>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
-struct Read_only_tag
-{};
-struct Read_write_tag
-{};
 
 template<class T>
-using Tag_by_constness = std::conditional_t<std::is_const_v<T>, Read_only_tag, Read_write_tag>;
+using Tag_by_constness = std::conditional_t<std::is_const_v<T>, Read_only, Read_write>;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +81,7 @@ template<typename T_Value, std::size_t t_rows, std::size_t t_cols, class Layout>
 struct Traits_impl<Matrix<T_Value, t_rows, t_cols, Layout>>
 {
 	using Value = T_Value;
-	using Access_tag = Read_write_tag;
+	using Access_tag = Read_write;
 
 	static constexpr std::size_t rows = t_rows;
 	static constexpr std::size_t cols = t_cols;
@@ -96,9 +93,7 @@ template<class TExpr, class TRows, class TCols, class TAccess_tag>
 struct Traits_impl<Sub_expr<TExpr, TRows, TCols, TAccess_tag>>
 {
 	using Value = Value_t<TExpr>;
-	using Access_tag = std::conditional_t<
-		std::is_same_v<TAccess_tag, Read_only_tag>,
-		Read_only_tag,
+	using Access_tag = std::conditional_t<std::is_same_v<TAccess_tag, Read_only>, Read_only,
 		typename Traits<TExpr>::Access_tag>;
 
 	static constexpr std::size_t rows = size_v<TRows>;
@@ -123,7 +118,7 @@ template<class TExpr, typename TScalar, class TFunc>
 struct Traits_impl<Unary_expr<TExpr, TScalar, TFunc>>
 {
 	using Value = typename TFunc::Value;
-	using Access_tag = Read_only_tag;
+	using Access_tag = Read_only;
 
 	static constexpr std::size_t rows = rows_v<TExpr>;
 	static constexpr std::size_t cols = cols_v<TExpr>;
@@ -133,7 +128,7 @@ template<class Left, class Right, template<class, class> class Func>
 struct Traits_impl<Bin_expr<Left, Right, Func>>
 {
 	using Value = typename Func<Left, Right>::Value;
-	using Access_tag = Read_only_tag;
+	using Access_tag = Read_only;
 
 	static constexpr std::size_t rows = Func<Left, Right>::ct_rows;
 	static constexpr std::size_t cols = Func<Left, Right>::ct_cols;
@@ -238,9 +233,7 @@ constexpr bool is_vector_expr_v = Is_vector_expr<T>::value;
 
 template<class T>
 struct Has_fd_or_complex_fd_element :
-	std::disjunction<
-		std::is_same<double, Value_t<T>>,
-		std::is_same<float, Value_t<T>>,
+	std::disjunction<std::is_same<double, Value_t<T>>, std::is_same<float, Value_t<T>>,
 		std::is_same<std::complex<double>, Value_t<T>>,
 		std::is_same<std::complex<float>, Value_t<T>>>
 {};
@@ -273,4 +266,4 @@ inline constexpr bool is_row_major = std::is_same_v<Layout, Row_major>;
 template<class Layout>
 inline constexpr bool is_col_major = std::is_same_v<Layout, Col_major>;
 
-} // namespace la::internal
+} // namespace es_la::internal

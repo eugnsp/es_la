@@ -1,9 +1,9 @@
 #pragma once
 #include <es_la/base/expression.hpp>
-#include <es_la/base/traits.hpp>
+#include <es_la/base/type_traits.hpp>
 #include <es_la/expr/functor.hpp>
 
-namespace la
+namespace es_la
 {
 namespace internal
 {

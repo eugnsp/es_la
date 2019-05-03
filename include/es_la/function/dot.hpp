@@ -2,8 +2,13 @@
 #include "../config.hpp"
 #include "../base/forward.hpp"
 
-namespace la
+namespace es_la
 {
+inline double dot(double x, double y)
+{
+	return x * y;
+}
+
 // TODO : static_asserts
 template<class Left, class Right>
 auto dot(const Expression<Left>& left, const Expression<Right>& right)

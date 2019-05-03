@@ -1,13 +1,14 @@
 #pragma once
 #include "../config.hpp"
 #include "base.hpp"
-#include "traits.hpp"
+#include <es_la/base/type_traits.hpp>
 #include "expression.hpp"
 //#include "extended.hpp"
 #include <es_la/base/ct_shape.hpp>
 #include <es_la/base/shape.hpp>
 #include <es_la/storage/storage.hpp>
 #include "matrix_base_static.hpp"
+
 #include <array>
 #include <cstddef>
 #include <initializer_list>
@@ -15,7 +16,7 @@
 #include <type_traits>
 #include <cassert>
 
-namespace la::internal
+namespace es_la::internal
 {
 constexpr std::size_t zero_or_static_size(std::size_t size)
 {
@@ -72,7 +73,7 @@ public:
 
 	Matrix_base_dynamic& operator=(Matrix_base_dynamic&& other)
 	{
-		assert(rows() == other.rows() && cols() == other.cols());
+		//assert(rows() == other.rows() && cols() == other.cols());
 		swap(other);
 		return *this;
 	}
@@ -81,7 +82,7 @@ public:
 	Value& operator[](std::size_t);
 
 	template<bool is_vector = (ct_cols == 1), typename = std::enable_if_t<is_vector>>
-	Value operator[](std::size_t) const;
+	const Value& operator[](std::size_t) const;
 
 	Value& operator()(std::size_t row, std::size_t col)
 	{
@@ -90,7 +91,7 @@ public:
 		return data_[linear_index(row, col)];
 	}
 
-	Value operator()(std::size_t row, std::size_t col) const
+	const Value& operator()(std::size_t row, std::size_t col) const
 	{
 		MATHLA_ASSERT(row < rows());
 		MATHLA_ASSERT(col < cols());
@@ -122,7 +123,7 @@ auto Matrix_base_dynamic<ct_rows, ct_cols, Derived, Layout>::operator[](std::siz
 template<std::size_t ct_rows, std::size_t ct_cols, class Derived, class Layout>
 template<bool is_vector, typename>
 auto Matrix_base_dynamic<ct_rows, ct_cols, Derived, Layout>::operator[](std::size_t index) const
-	-> Value
+	-> const Value&
 {
 	return (*this)(index, 0);
 }

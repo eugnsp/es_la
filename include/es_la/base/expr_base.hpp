@@ -1,6 +1,6 @@
 #pragma once
 #include "forward.hpp"
-#include "traits.hpp"
+#include "type_traits.hpp"
 #include "base.hpp"
 #include "range_slice.hpp"
 #include "assign.hpp"
@@ -8,13 +8,13 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<class T_Derived, class TAccess_tag>
 class Expr_base;
 
 template<class T_Derived>
-class Expr_base<T_Derived, Read_only_tag> : public Base<T_Derived>
+class Expr_base<T_Derived, Read_only> : public Base<T_Derived>
 {
 private:
 	// TODO
@@ -229,12 +229,12 @@ public:
 //////////////////////////////////////////////////////////////////////////
 
 template<class T_Derived>
-class Expr_base<T_Derived, Read_write_tag> : public Expr_base<T_Derived, Read_only_tag>
+class Expr_base<T_Derived, Read_write> : public Expr_base<T_Derived, Read_only>
 {
 	static_assert(!std::is_const_v<T_Derived>, "");
 
 private:
-	using Base = Expr_base<T_Derived, Read_only_tag>;
+	using Base = Expr_base<T_Derived, Read_only>;
 
 public:
 	using typename Base::Value;
@@ -380,8 +380,8 @@ public:
 	auto view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols)
 	{
 		return view(
-			Range<la::dynamic, la::dynamic>{start_row, rows},
-			Range<la::dynamic, la::dynamic>{start_col, cols});
+			Range<es_la::dynamic, es_la::dynamic>{start_row, rows},
+			Range<es_la::dynamic, es_la::dynamic>{start_col, cols});
 	}
 
 	// Column views

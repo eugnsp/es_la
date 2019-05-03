@@ -1,11 +1,12 @@
 #pragma once
 #include "forward.hpp"
-#include "traits.hpp"
+#include "type_traits.hpp"
+
 #include <array>
 #include <cstddef>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<class T_Derived>
 class Base
@@ -16,9 +17,10 @@ public:
 public:
 	std::size_t rows() const;
 	std::size_t cols() const;
+	std::array<std::size_t, 2> shape() const;
 
 	bool is_empty() const;
-	std::size_t size() const;
+	std::size_t size() const;	
 
 	T_Derived& self();
 	const T_Derived& self() const;
@@ -38,6 +40,12 @@ template<class T_Derived>
 inline std::size_t Base<T_Derived>::cols() const
 {
 	return self().cols();
+}
+
+template<class T_Derived>
+std::array<std::size_t, 2> Base<T_Derived>::shape() const
+{
+	return {rows(), cols()};
 }
 
 template<class T_Derived>

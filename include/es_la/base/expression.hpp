@@ -1,8 +1,8 @@
 #pragma once
-#include "traits.hpp"
+#include <es_la/base/type_traits.hpp>
 #include "expr_base.hpp"
 
-namespace la
+namespace es_la
 {
 template<class T_Derived>
 class Expression :

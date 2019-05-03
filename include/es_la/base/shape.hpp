@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<std::size_t ct_rows, std::size_t ct_cols>
 class Shape_base

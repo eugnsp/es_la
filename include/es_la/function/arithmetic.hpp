@@ -3,7 +3,7 @@
 #include "../base/forward.hpp"
 //#include <mkl_cblas.h>
 
-namespace la
+namespace es_la
 {
 #ifdef ESLA_USE_MKL
 // template<std::size_t t_size>

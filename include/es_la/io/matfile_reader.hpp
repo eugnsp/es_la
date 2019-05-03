@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace la
+namespace es_la
 {
 class Matfile_reader : private internal::Matfile_base
 {

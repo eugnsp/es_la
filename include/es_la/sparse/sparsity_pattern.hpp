@@ -1,6 +1,8 @@
 #pragma once
 //#include "util/Exception.h"
 //#include <es/la/sparse/sparse_matrix.hpp>
+#include <es_la/tags.hpp>
+
 #include <es_util/error.hpp>
 #include <es_util/function.hpp>
 #include <es_util/iterator.hpp>
@@ -13,7 +15,7 @@
 #include <utility>
 #include <vector>
 
-namespace la
+namespace es_la
 {
 
 template<typename T>

@@ -2,7 +2,7 @@
 #include <es_la/base/forward.hpp>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<std::size_t static_rows, std::size_t static_cols>
 struct Ct_shape

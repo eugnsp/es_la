@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-namespace la::internal
+namespace es_la::internal
 {
 enum class Matfile_data_types : std::uint32_t
 {

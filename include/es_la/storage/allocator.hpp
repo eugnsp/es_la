@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<typename T, std::size_t alignment>
 class Allocator

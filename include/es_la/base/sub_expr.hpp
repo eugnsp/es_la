@@ -8,10 +8,10 @@
 template<class T>
 class TD;
 
-namespace la::internal
+namespace es_la::internal
 {
 template<class Ex, class Rows, class Cols>
-class Sub_expr<Ex, Rows, Cols, Read_only_tag> : public Expression<Sub_expr_t<Ex, Rows, Cols>>
+class Sub_expr<Ex, Rows, Cols, Read_only> : public Expression<Sub_expr_t<Ex, Rows, Cols>>
 {
 private:
 	using Base = Expression<Sub_expr_t<Ex, Rows, Cols>>;
@@ -77,10 +77,10 @@ protected:
 };
 
 template<class Ex, class Rows, class Cols>
-class Sub_expr<Ex, Rows, Cols, Read_write_tag> : public Sub_expr<Ex, Rows, Cols, Read_only_tag>
+class Sub_expr<Ex, Rows, Cols, Read_write> : public Sub_expr<Ex, Rows, Cols, Read_only>
 {
 private:
-	using Base = Sub_expr<Ex, Rows, Cols, Read_only_tag>;
+	using Base = Sub_expr<Ex, Rows, Cols, Read_only>;
 
 public:
 	using Base::Base;

@@ -3,7 +3,7 @@
 #include "../base/forward.hpp"
 #include <es_util/numeric.hpp>
 
-namespace la
+namespace es_la
 {
 // TODO : static_asserts
 template<class Left, class Right>

@@ -1,9 +1,9 @@
 #pragma once
 #include <es_la/base/helper.hpp>
-#include <es_la/base/traits.hpp>
+#include <es_la/base/type_traits.hpp>
 #include <es_la/util/macros.hpp>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<class Left, class Right>
 struct Elementwise_func

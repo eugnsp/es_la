@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace la
+namespace es_la
 {
 
 template<class T_Derived>

@@ -40,7 +40,7 @@ inline void aligned_free(void* ptr)
 
 #	include <cstdlib>
 
-namespace la::internal
+namespace es_la::internal
 {
 inline void* aligned_malloc(std::size_t size, std::size_t alignment)
 {
@@ -67,7 +67,7 @@ inline void aligned_free(void* ptr)
 #define MATHLA_ALIGNED_REALLOC(ptr, size) mkl_realloc(ptr, size)
 #define MATHLA_ALIGNED_FREE(ptr) mkl_free(ptr)
 #else
-#	define MATHLA_ALIGNED_MALLOC_H
-#	define MATHLA_ALIGNED_MALLOC(size) aligned_alloc(MATHLA_ALIGNMENT, size)
-#	define MATHLA_ALIGNED_REALLOC(ptr, size) realloc(ptr, size)
-#	define MATHLA_ALIGNED_FREE(ptr) free(ptr)
+#define MATHLA_ALIGNED_MALLOC_H
+#define MATHLA_ALIGNED_MALLOC(size) aligned_alloc(MATHLA_ALIGNMENT, size)
+#define MATHLA_ALIGNED_REALLOC(ptr, size) realloc(ptr, size)
+#define MATHLA_ALIGNED_FREE(ptr) free(ptr)

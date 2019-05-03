@@ -1,9 +1,17 @@
 #pragma once
 #include <es_la/config.hpp>
-#include <cstddef>
 
-namespace la
+#include <cstddef>
+#include <type_traits>
+
+namespace es_la
 {
+struct Read_only
+{};
+
+struct Read_write
+{};
+
 #ifdef LA_USE_AUTO_EXTENT
 namespace internal
 {
@@ -37,7 +45,8 @@ struct Structural_symmetric
 {};
 struct Symmetric_upper
 {};
-struct Hermitian
+struct Symmetric_lower
 {};
-
-} // namespace la
+// struct Hermitian
+// {};
+} // namespace es_la

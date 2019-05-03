@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <utility>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<typename T, std::size_t align>
 class Storage<T, 0, align>

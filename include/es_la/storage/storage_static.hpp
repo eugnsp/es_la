@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<typename T>
 inline constexpr std::size_t get_default_alignment()

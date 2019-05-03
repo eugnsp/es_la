@@ -16,7 +16,7 @@
 
 #include <mkl.h>
 
-namespace la
+namespace es_la
 {
 // MAT-file class that writes data to Level 5 MAT-files
 class Matfile_writer : private internal::Matfile_base
@@ -49,7 +49,7 @@ public:
 
 	template<class Symmetry_tag_type>
 	void write(
-		const std::string& var_name, const la::Sparse_matrix<double, Symmetry_tag_type>& matrix)
+		const std::string& var_name, const Csr_matrix<double, Symmetry_tag_type>& matrix)
 	{
 		const MKL_INT n = matrix.n_cols();
 		auto nnz = matrix.nnz();

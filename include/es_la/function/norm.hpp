@@ -2,7 +2,7 @@
 #include <es_la/util/mkl.hpp>
 #include <cmath>
 
-namespace la
+namespace es_la
 {
 template<class TExpr>
 double norm2(const Expression<TExpr>& vec)

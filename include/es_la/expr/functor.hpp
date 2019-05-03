@@ -1,5 +1,6 @@
 #pragma once
-#include <es_la/base/traits.hpp>
+#include <es_la/base/type_traits.hpp>
+
 #include <utility>
 #include <cassert>
 
@@ -9,7 +10,7 @@
 #include <es_la/expr/functor/sub_func.hpp>
 #include <es_la/expr/functor/mul_func.hpp>
 
-namespace la::internal
+namespace es_la::internal
 {
 //////////////////////////////////////////////////////////////////////////
 /** Unary functors */

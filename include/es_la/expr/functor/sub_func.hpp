@@ -1,9 +1,10 @@
 #pragma once
-#include <es_la/base/traits.hpp>
+#include <es_la/base/type_traits.hpp>
 #include <es_la/expr/functor/elementwise_func.hpp>
+
 #include <utility>
 
-namespace la::internal
+namespace es_la::internal
 {
 template<class Left, class Right>
 struct Sub_func : public Elementwise_func<Left, Right>

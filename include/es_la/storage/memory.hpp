@@ -33,7 +33,7 @@ inline void mem_free(void* ptr) noexcept
 #		error MKL 2011.3.1 or later is required for alignment-preserving mkl_realloc()
 #	endif
 
-namespace la::internal
+namespace es_la::internal
 {
 inline void* mem_alloc(std::size_t size, std::size_t alignment)
 {

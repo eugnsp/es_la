@@ -1,14 +1,14 @@
 #pragma once
 #include <es_la/util/macros.hpp>
 #include "base.hpp"
-#include "traits.hpp"
+#include "type_traits.hpp"
 #include "helper.hpp"
 #include <es_la/util/mkl.hpp>
 
 #include <type_traits>
 #include <cassert>
 
-namespace la::internal
+namespace es_la::internal
 {
 // Default element-by-element assigment
 template<class To, class From, class = std::void_t<>>

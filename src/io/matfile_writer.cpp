@@ -14,7 +14,7 @@
 
 #include <mkl.h>
 
-namespace la
+namespace es_la
 {
 Matfile_writer::Matfile_writer(const std::string& file_name)
 {

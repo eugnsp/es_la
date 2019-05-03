@@ -23,7 +23,7 @@
 #endif
 
 #if ES_LA_USE_MKL
-namespace la::internal
+namespace es_la::internal
 {
 enum class Mkl_blas_layout : std::underlying_type_t<::CBLAS_LAYOUT>
 {
