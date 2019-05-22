@@ -24,61 +24,20 @@ enum class Matfile_data_types : std::uint32_t
 
 template<typename>
 struct Matfile_data_type;
-template<>
-struct Matfile_data_type<char>
-{
-	static constexpr auto value = Matfile_data_types::UTF8;
-};
-template<>
-struct Matfile_data_type<signed char>
-{
-	static constexpr auto value = Matfile_data_types::INT8;
-};
-template<>
-struct Matfile_data_type<unsigned char>
-{
-	static constexpr auto value = Matfile_data_types::UINT8;
-};
-template<>
-struct Matfile_data_type<std::int16_t>
-{
-	static constexpr auto value = Matfile_data_types::INT16;
-};
-template<>
-struct Matfile_data_type<std::uint16_t>
-{
-	static constexpr auto value = Matfile_data_types::UINT16;
-};
-template<>
-struct Matfile_data_type<std::int32_t>
-{
-	static constexpr auto value = Matfile_data_types::INT32;
-};
-template<>
-struct Matfile_data_type<std::uint32_t>
-{
-	static constexpr auto value = Matfile_data_types::UINT32;
-};
-template<>
-struct Matfile_data_type<std::int64_t>
-{
-	static constexpr auto value = Matfile_data_types::INT64;
-};
-template<>
-struct Matfile_data_type<std::uint64_t>
-{
-	static constexpr auto value = Matfile_data_types::UINT64;
-};
-template<>
-struct Matfile_data_type<float>
-{
-	static constexpr auto value = Matfile_data_types::SINGLE;
-};
-template<>
-struct Matfile_data_type<double>
-{
-	static constexpr auto value = Matfile_data_types::DOUBLE;
-};
+
+// clang-format off
+template<> struct Matfile_data_type<char> 			{ static constexpr auto value = Matfile_data_types::UTF8;   };
+template<> struct Matfile_data_type<signed char> 	{ static constexpr auto value = Matfile_data_types::INT8;   };
+template<> struct Matfile_data_type<unsigned char> 	{ static constexpr auto value = Matfile_data_types::UINT8;  };
+template<> struct Matfile_data_type<std::int16_t> 	{ static constexpr auto value = Matfile_data_types::INT16;  };
+template<> struct Matfile_data_type<std::uint16_t> 	{ static constexpr auto value = Matfile_data_types::UINT16; };
+template<> struct Matfile_data_type<std::int32_t> 	{ static constexpr auto value = Matfile_data_types::INT32;  };
+template<> struct Matfile_data_type<std::uint32_t> 	{ static constexpr auto value = Matfile_data_types::UINT32; };
+template<> struct Matfile_data_type<std::int64_t> 	{ static constexpr auto value = Matfile_data_types::INT64;  };
+template<> struct Matfile_data_type<std::uint64_t> 	{ static constexpr auto value = Matfile_data_types::UINT64; };
+template<> struct Matfile_data_type<float> 			{ static constexpr auto value = Matfile_data_types::SINGLE; };
+template<> struct Matfile_data_type<double> 		{ static constexpr auto value = Matfile_data_types::DOUBLE; };
+// clang-format on
 
 // MAT-file class types
 enum class Matfile_class_types : std::uint8_t
@@ -102,61 +61,20 @@ enum class Matfile_class_types : std::uint8_t
 
 template<typename>
 struct Matfile_class_type;
-template<>
-struct Matfile_class_type<std::int8_t>
-{
-	static constexpr auto value = Matfile_class_types::INT8;
-};
-template<>
-struct Matfile_class_type<std::uint8_t>
-{
-	static constexpr auto value = Matfile_class_types::UINT8;
-};
-template<>
-struct Matfile_class_type<std::int16_t>
-{
-	static constexpr auto value = Matfile_class_types::INT16;
-};
-template<>
-struct Matfile_class_type<std::uint16_t>
-{
-	static constexpr auto value = Matfile_class_types::UINT16;
-};
-template<>
-struct Matfile_class_type<std::int32_t>
-{
-	static constexpr auto value = Matfile_class_types::INT32;
-};
-template<>
-struct Matfile_class_type<std::uint32_t>
-{
-	static constexpr auto value = Matfile_class_types::UINT32;
-};
-template<>
-struct Matfile_class_type<std::int64_t>
-{
-	static constexpr auto value = Matfile_class_types::INT64;
-};
-template<>
-struct Matfile_class_type<std::uint64_t>
-{
-	static constexpr auto value = Matfile_class_types::UINT64;
-};
-template<>
-struct Matfile_class_type<float>
-{
-	static constexpr auto value = Matfile_class_types::SINGLE;
-};
-template<>
-struct Matfile_class_type<double>
-{
-	static constexpr auto value = Matfile_class_types::DOUBLE;
-};
-template<>
-struct Matfile_class_type<char>
-{
-	static constexpr auto value = Matfile_class_types::CHAR;
-};
+
+// clang-format off
+template<> struct Matfile_class_type<std::int8_t> 	{ static constexpr auto value = Matfile_class_types::INT8;   };
+template<> struct Matfile_class_type<std::uint8_t> 	{ static constexpr auto value = Matfile_class_types::UINT8;  };
+template<> struct Matfile_class_type<std::int16_t> 	{ static constexpr auto value = Matfile_class_types::INT16;  };
+template<> struct Matfile_class_type<std::uint16_t> { static constexpr auto value = Matfile_class_types::UINT16; };
+template<> struct Matfile_class_type<std::int32_t>	{ static constexpr auto value = Matfile_class_types::INT32;  };
+template<> struct Matfile_class_type<std::uint32_t>	{ static constexpr auto value = Matfile_class_types::UINT32; };
+template<> struct Matfile_class_type<std::int64_t>	{ static constexpr auto value = Matfile_class_types::INT64;  };
+template<> struct Matfile_class_type<std::uint64_t>	{ static constexpr auto value = Matfile_class_types::UINT64; };
+template<> struct Matfile_class_type<float> 		{ static constexpr auto value = Matfile_class_types::SINGLE; };
+template<> struct Matfile_class_type<double>		{ static constexpr auto value = Matfile_class_types::DOUBLE; };
+template<> struct Matfile_class_type<char> 			{ static constexpr auto value = Matfile_class_types::CHAR;   };
+// clang-format on
 
 class Matfile_base
 {
@@ -226,4 +144,4 @@ protected:
 	};
 };
 
-} // namespace la::internal
+} // namespace es_la::internal

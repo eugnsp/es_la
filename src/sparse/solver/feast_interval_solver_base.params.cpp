@@ -1,5 +1,9 @@
 #include <es_la/sparse/solver/feast_interval_solver_base.hpp>
 
+#include <mkl_types.h>
+
+#include <cstddef>
+
 namespace es_la::internal
 {
 Feast_interval_solver_base::Params::operator MKL_INT*()
@@ -9,12 +13,17 @@ Feast_interval_solver_base::Params::operator MKL_INT*()
 
 void Feast_interval_solver_base::Params::set_matrix_checker(bool flag)
 {
-	params_[26] = flag;
+	params_[26] = params_[27] = flag;
 }
 
 void Feast_interval_solver_base::Params::set_status_printer(bool flag)
 {
 	params_[0] = flag;
+}
+
+void Feast_interval_solver_base::Params::set_user_init_guess(bool flag)
+{
+	params_[4] = flag;
 }
 
 std::size_t Feast_interval_solver_base::Params::q_start_col() const

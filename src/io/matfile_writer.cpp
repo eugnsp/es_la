@@ -1,11 +1,11 @@
-#include <es_la/io/matfile_writer.hpp>
-#include <es_la/dense.hpp>
-#include <es_la/sparse.hpp>
-#include <es_util/time.hpp>
-#include <es_util/type_traits.hpp>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <es_la/dense.hpp>
+#include <es_la/io/matfile_writer.hpp>
+#include <es_la/sparse.hpp>
+#include <es_util/time.hpp>
+#include <es_util/type_traits.hpp>
 #include <fstream>
 #include <stdexcept>
 #include <string>
@@ -300,4 +300,4 @@ void Matfile_writer::write_array_name_subelement(const std::string& name)
 // 		write_zero_padding(data_size_in_bytes);
 // 	}
 // }
-} // namespace la
+} // namespace es_la

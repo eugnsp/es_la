@@ -1,32 +1,23 @@
 #pragma once
-#include <es_la/sparse/helpers.hpp>
-#include <es_la/type_traits.hpp>
+#include <es_la/dense/type_traits.hpp>
+#include <es_la/sparse/mkl_sparse_matrix.hpp>
 
-#include <es_util/type_traits.hpp>
-
-#include <mkl_spblas.h>
-
-#include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 namespace es_la
 {
 template<class Matrix>
-class Mkl_sparse_matrix_ext :
-	public Mkl_sparse_matrix<es_util::Remove_cvref<Matrix>,
-		internal::Access_tag_by_constness<Matrix>>
+class Mkl_sparse_matrix_ext : public Mkl_sparse_matrix<std::remove_reference_t<Matrix>>
 {
 private:
-	using Base =
-		Mkl_sparse_matrix<es_util::Remove_cvref<Matrix>, internal::Access_tag_by_constness<Matrix>>;
+	using Base = Mkl_sparse_matrix<std::remove_reference_t<Matrix>>;
 
 public:
-	template<class M>
-	Mkl_sparse_matrix_ext(M&& matrix) : matrix_(std::forward<M>(matrix))
+	template<class Matrix_f>
+	Mkl_sparse_matrix_ext(Matrix_f&& matrix) : matrix_(std::forward<Matrix_f>(matrix))
 	{
-		const auto status = internal::mkl_sparse_create(handle_, matrix_);
-		if (status != ::sparse_status_t::SPARSE_STATUS_SUCCESS)
-			throw std::runtime_error(internal::mkl_sparse_status_string(status));
+		ES_LA_CALL_MKL_SPARSE(internal::mkl_sparse_create, handle_, matrix_);
 	}
 
 private:

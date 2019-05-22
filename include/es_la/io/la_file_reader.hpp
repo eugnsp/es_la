@@ -1,11 +1,11 @@
 #pragma once
-#include <es_la/io/la_file.hpp>
-#include <es_la/dense.hpp>
-#include <es_util/time.hpp>
 #include <cassert>
 #include <cstddef>
-#include <string>
+#include <es_la/dense.hpp>
+#include <es_la/io/la_file.hpp>
+#include <es_util/time.hpp>
 #include <fstream>
+#include <string>
 
 namespace es_la
 {
@@ -58,4 +58,4 @@ private:
 private:
 	std::ifstream file_;
 };
-} // namespace la
+} // namespace es_la

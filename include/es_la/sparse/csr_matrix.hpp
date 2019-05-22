@@ -1,11 +1,11 @@
 #pragma once
+#include "sparsity_pattern.hpp"
 #include <es_la/sparse/csr_pattern.hpp>
 #include <es_la/sparse/forward.hpp>
-#include "sparsity_pattern.hpp"
 
-#include <es_la/base/extended.hpp>
-#include <es_la/base/matrix.hpp>
-#include <es_la/tags.hpp>
+//#include <es_la/base/extended.hpp>
+#include <es_la/dense/matrix.hpp>
+#include <es_la/dense/tags.hpp>
 
 #include <algorithm>
 #include <type_traits>
@@ -13,15 +13,17 @@
 
 namespace es_la
 {
-template<typename Value_, class Symmetry_tag_, typename Index_>
-class Csr_matrix : public Csr_pattern<Symmetry_tag_, Index_>
+template<typename Value_, class Symmetry_, typename Index_>
+class Csr_matrix : public Csr_pattern<Symmetry_, Index_>
 {
+	static_assert(std::is_integral_v<Index_>, "Bad index type");
+
 private:
-	using Base = Csr_pattern<Symmetry_tag_, Index_>;
+	using Base = Csr_pattern<Symmetry_, Index_>;
 
 public:
 	using Value = Value_;
-	using Symmetry_tag = Symmetry_tag_;
+	using Symmetry = Symmetry_;
 	using Index = Index_;
 
 public:
@@ -115,7 +117,7 @@ public:
 
 	void zero()
 	{
-		values_.zero();
+		values_ = 0;
 	}
 
 	void resize(Index rows, Index cols)
@@ -124,7 +126,7 @@ public:
 		cols_ = cols;
 	}
 
-	void set_sparsity_pattern(const Sparsity_pattern<Symmetry_tag>& pattern)
+	void set_sparsity_pattern(const Sparsity_pattern<Symmetry>& pattern)
 	{
 		assert(pattern.n_rows() == rows_);
 
@@ -156,7 +158,7 @@ public:
 #endif
 	}
 
-	void assign_pattern(const Csr_pattern<Symmetry_tag, Index>& pattern)
+	void assign_pattern(const Csr_pattern<Symmetry, Index>& pattern)
 	{
 		Base::operator=(pattern);
 		values_.resize(pattern.nnz());
@@ -198,10 +200,10 @@ public:
 	}
 
 private:
-	using Base::row_indices_;
 	using Base::col_indices_;
-	using Base::rows_;
 	using Base::cols_;
+	using Base::row_indices_;
+	using Base::rows_;
 
 	Vector_x<Value> values_;
 };

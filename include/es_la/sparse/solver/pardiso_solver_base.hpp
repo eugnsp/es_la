@@ -45,4 +45,4 @@ struct Pardiso_solver_base
 
 	static std::string pardiso_error_string(MKL_INT);
 };
-} // namespace la
+} // namespace es_la::internal

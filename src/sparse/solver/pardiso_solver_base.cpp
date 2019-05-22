@@ -1,22 +1,11 @@
 #include <es_la/sparse/solver/pardiso_solver_base.hpp>
 
+#include <mkl_types.h>
+
+#include <string>
+
 namespace es_la::internal
 {
-Pardiso_solver_base::Params::operator MKL_INT*()
-{
-	return params_;
-}
-
-void Pardiso_solver_base::Params::set_matrix_checker(bool enable)
-{
-	params_[26] = enable;
-}
-
-void Pardiso_solver_base::Params::set_zero_based_indexing()
-{
-	params_[34] = 1;
-}
-
 std::string Pardiso_solver_base::pardiso_error_string(MKL_INT error)
 {
 	std::string str = "PARDISO error " + std::to_string(error) + ": ";

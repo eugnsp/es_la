@@ -1,8 +1,7 @@
 #pragma once
-#include <es_la/dense.hpp>
+#include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/solver/pardiso_solver_base.hpp>
 #include <es_la/sparse/type_traits.hpp>
-#include <es_la/type_traits.hpp>
 
 #include <mkl_pardiso.h>
 #include <mkl_types.h>
@@ -24,10 +23,9 @@ public:
 
 private:
 	using Value = typename Sparse_matrix::Value;
-	using Vector = Vector_x<Value>;
 	using Symmetry_tag = typename Sparse_matrix_::Symmetry_tag;
 
-	static_assert(internal::is_real_or_complex_float_or_double<Value>);
+	static_assert(internal::is_fd_cfd<Value>);
 
 public:
 	Pardiso_solver(const Sparse_matrix& matrix) : matrix_(matrix)
@@ -59,7 +57,7 @@ public:
 	template<class Dense_matrix>
 	void analyze_factorize_solve(const Dense_matrix& rhs, Dense_matrix& solution)
 	{
-		assert(rhs.shape() == solution.shape());
+		assert(rhs.rows() == solution.rows() && rhs.cols() == solution.cols());
 
 		const auto n_rhs = is_col_major<Dense_matrix> ? rhs.cols() : rhs.rows();
 		call_pardiso(Phase::ANALYZE_FACTORIZE_SOLVE, rhs.data(), solution.data(), n_rhs);
@@ -73,7 +71,7 @@ public:
 	template<class Dense_matrix>
 	void factorize_solve(const Dense_matrix& rhs, Dense_matrix& solution)
 	{
-		assert(rhs.shape() == solution.shape());
+		assert(rhs.rows() == solution.rows() && rhs.cols() == solution.cols());
 
 		const auto n_rhs = is_col_major<Dense_matrix> ? rhs.cols() : rhs.rows();
 		call_pardiso(Phase::FACTORIZE_SOLVE, rhs.data(), solution.data(), n_rhs);
@@ -82,15 +80,15 @@ public:
 	template<class Dense_matrix>
 	void solve(const Dense_matrix& rhs, Dense_matrix& solution)
 	{
-		assert(rhs.shape() == solution.shape());
+		assert(rhs.rows() == solution.rows() && rhs.cols() == solution.cols());
 
 		const auto n_rhs = is_col_major<Dense_matrix> ? rhs.cols() : rhs.rows();
 		call_pardiso(Phase::SOLVE, rhs.data(), solution.data(), n_rhs);
 	}
 
 private:
-	void call_pardiso(Phase phase, const Value* const rhs = nullptr,
-		Value* const solution = nullptr, const std::size_t n_rhss = 1)
+	void call_pardiso(
+		Phase phase, const Value* const rhs = nullptr, Value* const solution = nullptr, const std::size_t n_rhss = 1)
 	{
 		constexpr auto matrix_type = static_cast<MKL_INT>(pardiso_matrix_type());
 		const auto n_rhs = static_cast<MKL_INT>(n_rhss);
@@ -99,12 +97,10 @@ private:
 		const MKL_INT n_equations = matrix_.cols();
 
 		MKL_INT error = 0;
-
-		::pardiso(handle_, &max_factors, &matrix_number, &matrix_type,
-			reinterpret_cast<const MKL_INT*>(&phase), &n_equations, matrix_.values(),
-			reinterpret_cast<const MKL_INT*>(matrix_.row_indices()),
-			reinterpret_cast<const MKL_INT*>(matrix_.col_indices()), nullptr, &n_rhs, params_,
-			&message_level_, const_cast<Value*>(rhs), solution, &error);
+		::pardiso(handle_, &max_factors, &matrix_number, &matrix_type, reinterpret_cast<const MKL_INT*>(&phase),
+			&n_equations, matrix_.values(), reinterpret_cast<const MKL_INT*>(matrix_.row_indices()),
+			reinterpret_cast<const MKL_INT*>(matrix_.col_indices()), nullptr, &n_rhs, params_, &message_level_,
+			const_cast<Value*>(rhs), solution, &error);
 
 		if (error)
 			throw std::runtime_error(pardiso_error_string(error));
@@ -112,7 +108,7 @@ private:
 
 	static constexpr Matrix_type pardiso_matrix_type()
 	{
-		if constexpr (!internal::is_complex_float_or_double<Value>)
+		if constexpr (!internal::is_cfd<Value>)
 		{
 			if constexpr (internal::is_symmetric<Sparse_matrix>)
 				return is_positive_definite_ ? Matrix_type::REAL_SYMMETRIC_POS_DEFINITE

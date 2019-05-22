@@ -1,14 +1,10 @@
 #pragma once
-#include "../../base/matrix.hpp"
-#include "../sparse_matrix.hpp"
-#include <es_la/sparse/solver/pardiso_solver.hpp>
+#include <es_la/core/type_traits.hpp>
 
-#include <mkl_solvers_ee.h>
 #include <mkl_types.h>
 
-#include <cassert>
+#include <complex>
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -24,6 +20,7 @@ protected:
 
 		void set_matrix_checker(bool = true);
 		void set_status_printer(bool = true);
+		void set_user_init_guess(bool = true);
 
 		// Returns the index of the first column of Q for RCI routines
 		std::size_t q_start_col() const;
@@ -67,30 +64,18 @@ protected:
 protected:
 	Feast_interval_solver_base();
 
-protected:
+#define ES_LA_MKL_FEAST_RCI(T)                                                                                         \
+	Status mkl_feast_rci(Job&, MKL_UINT n, Add_complex<T>& ze, T* work1, Add_complex<T>* work2, T* work3, T* work4,    \
+		Remove_complex<T>& eps, MKL_UINT& n_loops,                                                                     \
+		std::pair<Remove_complex<T>, Remove_complex<T>> eigen_values_interval, MKL_UINT n_eigen_values0,               \
+		Remove_complex<T>* eigen_values, T* eigen_vectors, MKL_UINT& n_eigen_values, Remove_complex<T>* residues);
+
+	ES_LA_MKL_FEAST_RCI(float)
+	ES_LA_MKL_FEAST_RCI(double)
+	ES_LA_MKL_FEAST_RCI(std::complex<float>)
+	ES_LA_MKL_FEAST_RCI(std::complex<double>)
+
 	static std::string error_string(Status);
-
-	Status mkl_feast_rci(Job&, MKL_UINT n, std::complex<float>& ze, float* work1,
-		std::complex<float>* work2, float* work3, float* work4, float& eps, MKL_UINT& n_loops,
-		std::pair<float, float> eigen_values_interval, MKL_UINT n_eigen_values0,
-		float* eigen_values, float* eigen_vectors, MKL_UINT& n_eigen_values, float* residues);
-
-	Status mkl_feast_rci(Job&, MKL_UINT n, std::complex<double>& ze, double* work1,
-		std::complex<double>* work2, double* work3, double* work4, double& eps, MKL_UINT& n_loops,
-		std::pair<double, double> eigen_values_interval, MKL_UINT n_eigen_values0,
-		double* eigen_values, double* eigen_vectors, MKL_UINT& n_eigen_values, double* residues);
-
-	Status mkl_feast_rci(Job&, MKL_UINT n, std::complex<float>& ze, std::complex<float>* work1,
-		std::complex<float>* work2, std::complex<float>* work3, std::complex<float>* work4,
-		float& eps, MKL_UINT& n_loops, std::pair<float, float> eigen_values_interval,
-		MKL_UINT n_eigen_values0, float* eigen_values, std::complex<float>* eigen_vectors,
-		MKL_UINT& n_eigen_values, float* residues);
-
-	Status mkl_feast_rci(Job&, MKL_UINT n, std::complex<double>& ze, std::complex<double>* work1,
-		std::complex<double>* work2, std::complex<double>* work3, std::complex<double>* work4,
-		double& eps, MKL_UINT& n_loops, std::pair<double, double> eigen_values_interval,
-		MKL_UINT n_eigen_values0, double* eigen_values, std::complex<double>* eigen_vectors,
-		MKL_UINT& n_eigen_values, double* residues);
 
 protected:
 	Params params_;

@@ -1,9 +1,9 @@
 #pragma once
-#include <es_la/io/matfile_base.hpp>
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <es_la/io/matfile_base.hpp>
 #include <fstream>
 #include <stdexcept>
 #include <string>
@@ -90,14 +90,11 @@ private:
 
 		header_text_.assign(header.text, sizeof(header.text));
 		header_text_.erase(
-			std::find_if(
-				header_text_.rbegin(), header_text_.rend(), [](char ch) { return ch != ' '; })
-				.base(),
+			std::find_if(header_text_.rbegin(), header_text_.rend(), [](char ch) { return ch != ' '; }).base(),
 			header_text_.end());
 	}
 
-	void read_array_flags_subelement(
-		internal::Matfile_class_types& class_type, Flags& flags, std::size_t& nnz)
+	void read_array_flags_subelement(internal::Matfile_class_types& class_type, Flags& flags, std::size_t& nnz)
 	{
 		Array_flags array_flags;
 		read_raw(array_flags);
@@ -120,4 +117,4 @@ private:
 	std::ifstream file_;
 	std::string header_text_;
 };
-} // namespace la
+} // namespace es_la

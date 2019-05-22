@@ -1,10 +1,10 @@
 #pragma once
-#include <es_la/sparse/forward.hpp>
 #include "sparsity_pattern.hpp"
+#include <es_la/sparse/forward.hpp>
 
-#include <es_la/base/extended.hpp>
-#include <es_la/base/matrix.hpp>
-#include <es_la/tags.hpp>
+//#include <es_la/base/extended.hpp>
+#include <es_la/dense/tags.hpp>
+#include <es_la/dense/matrix.hpp>
 
 #include <algorithm>
 #include <type_traits>
@@ -31,37 +31,37 @@ public:
 	// 	cols_ = cols;
 	// }
 
-// 	void set_sparsity_pattern(const Sparsity_pattern<Symmetry_tag>& pattern)
-// 	{
-// 		assert(pattern.n_rows() == rows_);
+	// 	void set_sparsity_pattern(const Sparsity_pattern<Symmetry_tag>& pattern)
+	// 	{
+	// 		assert(pattern.n_rows() == rows_);
 
-// 		row_indices_.clear();
-// 		col_indices_.clear();
+	// 		row_indices_.clear();
+	// 		col_indices_.clear();
 
-// 		row_indices_.reserve(rows_ + 1);
-// 		col_indices_.reserve(pattern.nnz());
+	// 		row_indices_.reserve(rows_ + 1);
+	// 		col_indices_.reserve(pattern.nnz());
 
-// 		std::size_t index = 0;
-// 		for (auto& row : pattern.rows())
-// 		{
-// 			assert(std::is_sorted(row.begin(), row.end()));
+	// 		std::size_t index = 0;
+	// 		for (auto& row : pattern.rows())
+	// 		{
+	// 			assert(std::is_sorted(row.begin(), row.end()));
 
-// 			col_indices_.insert(col_indices_.end(), row.begin(), row.end());
-// 			row_indices_.push_back(index);
+	// 			col_indices_.insert(col_indices_.end(), row.begin(), row.end());
+	// 			row_indices_.push_back(index);
 
-// 			index += row.size();
-// 		}
+	// 			index += row.size();
+	// 		}
 
-// 		col_indices_.shrink_to_fit();
-// 		row_indices_.push_back(index);
-// 		values_.resize(col_indices_.size());
+	// 		col_indices_.shrink_to_fit();
+	// 		row_indices_.push_back(index);
+	// 		values_.resize(col_indices_.size());
 
-// 		assert(row_indices_.size() == rows_ + 1);
+	// 		assert(row_indices_.size() == rows_ + 1);
 
-// #ifndef NDEBUG
-// 		//		checkStructure();
-// #endif
-// 	}
+	// #ifndef NDEBUG
+	// 		//		checkStructure();
+	// #endif
+	// 	}
 
 	// template<typename Value2>
 	// void set_sparsity_pattern(const Csr_matrix<Value2, Symmetry_tag, Index>& matrix)
