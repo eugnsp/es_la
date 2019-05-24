@@ -16,6 +16,10 @@ template<class Expr, class Rows, class Cols, class Category>
 struct Value_trait_impl<View<Expr, Rows, Cols, Category>> : Value_trait<Expr>
 {};
 
+template<class Expr, class Category>
+struct Value_trait_impl<Transposed_view<Expr, Category>> : Value_trait<Expr>
+{};
+
 template<class Expr1, class Expr2, template<class, class> class Fn>
 struct Value_trait_impl<Binary_expr<Expr1, Expr2, Fn>>
 {

@@ -75,11 +75,9 @@ void rows_convolution(
 	es_la::Vector_xd z(y.cols());
 	for (std::size_t row = 0; row < y.rows(); ++row)
 	{
-		auto yr = y.row_view(row);
-		ES_LA_CALL_MKL_VSL(::vsldConvExecX1D, task, yr.data(), yr.col_inc(), z.data(), 1);
-		// TODO : use transposed view
-		for (std::size_t i = 0; i < y.row_view(row).size(); ++i)
-			yr(0, i) = z[i];
+		auto yr = y.row_view(row).tr_view();
+		ES_LA_CALL_MKL_VSL(::vsldConvExecX1D, task, yr.data(), yr.row_inc(), z.data(), 1);
+		yr = z;
 	}
 
 	ES_LA_CALL_MKL_VSL(::vslConvDeleteTask, &task);

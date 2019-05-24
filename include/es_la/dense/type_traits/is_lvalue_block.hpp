@@ -25,6 +25,10 @@ template<class Expr, auto ct_begin1, auto ct_size1, auto ct_begin2, auto ct_size
 struct Is_lvalue_block_trait_impl<View<Expr, Range<ct_begin1, ct_size1>, Range<ct_begin2, ct_size2>, Lvalue>> :
 	std::true_type
 {};
+
+template<class Expr>
+struct Is_lvalue_block_trait_impl<Transposed_view<Expr, Lvalue>> : std::true_type
+{};
 } // namespace internal
 
 template<class Expr>

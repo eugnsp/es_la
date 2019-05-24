@@ -19,7 +19,7 @@ public:
 	static constexpr auto ct_cols = ct_cols_value<Expr2>;
 
 public:
-	static void check_sizes(const Expr1& expr1, const Expr2& expr2)
+	static void check_sizes([[maybe_unused]] const Expr1& expr1, [[maybe_unused]] const Expr2& expr2)
 	{
 		assert(expr1.cols() == expr2.rows());
 	}

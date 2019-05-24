@@ -17,6 +17,9 @@ class Matrix;
 template<class Expr, class Rows, class Cols, class Category>
 class View;
 
+template<class Expr, class Category>
+class Transposed_view;
+
 using Matrix_xd = Matrix<double, dynamic, dynamic>;
 using Matrix_2d = Matrix<double, std::size_t{2}, std::size_t{2}>;
 using Matrix_3d = Matrix<double, std::size_t{3}, std::size_t{3}>;

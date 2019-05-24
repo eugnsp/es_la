@@ -377,6 +377,24 @@ public:
 		return cols_view(start_col, cols);
 	}
 
+	//////////////////////////////////////////////////////////////////////
+	//* Transposed view */
+
+	auto tr_view()
+	{
+		return Transposed_view<Expr, Category>{self()};
+	}
+
+	auto tr_view() const
+	{
+		return Transposed_view<const Expr, Category>{self()};
+	}
+
+	auto tr_cview() const
+	{
+		return tr_view();
+	}
+
 	// template<std::size_t t_size>
 	// auto col(Vector<std::size_t, t_size> indices)
 	// {

@@ -206,7 +206,7 @@ public:
 	}
 
 private:
-	static void debug_check_index(std::size_t row, std::size_t col)
+	static void debug_check_index([[maybe_unused]] std::size_t row, [[maybe_unused]] std::size_t col)
 	{
 		if constexpr (std::is_same_v<Symmetry_tag, Symmetric_upper>)
 			assert(row <= col);

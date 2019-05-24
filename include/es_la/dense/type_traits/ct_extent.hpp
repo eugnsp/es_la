@@ -27,6 +27,16 @@ template<class Expr, class Rows, class Cols, class Category>
 struct Ct_cols_trait<View<Expr, Rows, Cols, Category>> : Ct_size_trait<Cols>
 {};
 
+//////////////////////////////////////////////////////////////////////
+
+template<class Expr, class Category>
+struct Ct_rows_trait<Transposed_view<Expr, Category>> : Ct_cols_trait<Expr>
+{};
+
+template<class Expr, class Category>
+struct Ct_cols_trait<Transposed_view<Expr, Category>> : Ct_rows_trait<Expr>
+{};
+
 ///////////////////////////////////////////////////////////////////////
 
 template<class Expr, typename Scalar, class Fn>

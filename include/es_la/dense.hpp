@@ -9,4 +9,5 @@
 #include <es_la/dense/random_matrix.hpp>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
+#include <es_la/dense/view/transposed_view.hpp>
 #include <es_la/dense/view/view.hpp>

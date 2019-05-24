@@ -7,9 +7,9 @@
 
 namespace es_la
 {
-template<typename T = float, class Expr, class Category, class Col_titles, class Row_titles>
+template<typename T = float, class Expr, class Category, class Row_titles, class Col_titles>
 void write_gnuplot_binary(
-	const std::string& file_name, const Dense<Expr, Category>& expr, Col_titles col_titles, Row_titles row_titles)
+	const std::string& file_name, const Dense<Expr, Category>& expr, Row_titles row_titles, Col_titles col_titles)
 {
 	std::ofstream file;
 	file.exceptions(std::ofstream::failbit | std::ofstream::badbit);

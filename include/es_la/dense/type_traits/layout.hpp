@@ -27,6 +27,10 @@ struct Layout_trait_impl<Matrix<Value, ct_rows, ct_cols, Layout>>
 template<class Expr, class Rows, class Cols, class Category>
 struct Layout_trait_impl<View<Expr, Rows, Cols, Category>> : Layout_trait<Expr>
 {};
+
+// template<class Expr, class Category>
+// struct Layout_trait_impl<Transposed_view<Expr, Category>> : Layout_trait<Expr>
+// {};
 }
 
 template<class Expr>
