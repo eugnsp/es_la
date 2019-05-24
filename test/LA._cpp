@@ -1,0 +1,223 @@
+// void test_copy_assignments()
+// {
+// 	Matrix_d<2, 2> m1({1.1, 2.2, 3.3, 4.4});
+// 	Matrix_d<2, 2> m1_copy;
+// 	m1_copy = m1;
+// 	REQUIRE(matrix_elements(m1_copy, {1.1, 2.2, 3.3, 4.4}));
+//
+// 	Matrix_d<2, 0> m_sd(2, {1.1, 2.2, 3.3, 4.4});
+// 	Matrix_d<2, 0> m_sd2(2);
+// 	m_sd2 = m_sd;
+// 	REQUIRE(matrix_elements(m_sd2, {1.1, 2.2, 3.3, 4.4}));
+//
+// 	Matrix_d<0, 2> m_ds(2, {1.1, 2.2, 3.3, 4.4});
+// 	Matrix_d<0, 2> m_ds2(2);
+// 	m_ds2 = m_ds;
+// 	REQUIRE(matrix_elements(m_ds2, {1.1, 2.2, 3.3, 4.4}));
+//
+// 	Matrix_xd m_dd(2, 2, {1.1, 2.2, 3.3, 4.4});
+// 	Matrix_xd m_dd2(2, 2);
+// 	m_dd2 = m_dd;
+// 	REQUIRE(matrix_elements(m_dd2, {1.1, 2.2, 3.3, 4.4}));
+// }
+//
+// void test_move_assignments()
+// {
+// 	Matrix_d<2, 0> m_sd(2, {1.1, 2.2, 3.3, 43.4});
+// 	Matrix_d<2, 0> m_sd2(2);
+// 	auto m_sd_data = m_sd.data();
+// 	m_sd2 = std::move(m_sd);
+// 	REQUIRE(m_sd2.data() == m_sd_data);
+// 	REQUIRE(matrix_elements(m_sd2, {1.1, 2.2, 3.3, 43.4}));
+//
+// 	Matrix_d<0, 2> m_ds(2, {21.1, 2.2, 3.3, 4.4});
+// 	Matrix_d<0, 2> m_ds2(2);
+// 	auto m_ds_data = m_ds.data();
+// 	m_ds2 = std::move(m_ds);
+// 	REQUIRE(m_ds2.data() == m_ds_data);
+// 	REQUIRE(matrix_elements(m_ds2, {21.1, 2.2, 3.3, 4.4}));
+//
+// 	Matrix_xd m_dd(2, 2, {15.1, 2.2, 3.3, 4.4});
+// 	Matrix_xd m_dd2(2, 2);
+// 	auto m_dd_data = m_dd.data();
+// 	m_dd2 = std::move(m_dd);
+// 	REQUIRE(m_dd2.data() == m_dd_data);
+// 	REQUIRE(matrix_elements(m_dd2, {15.1, 2.2, 3.3, 4.4}));
+// }
+//
+// void test_unary_expr()
+// {
+// 	Matrix_d<2, 3> m1{1., 2., 3., 4., 5., 6.};
+// 	Matrix_xd m2(2, 3, {1., 2., 3., 4., 5., 6.});
+// 	Matrix<int, 1, 3> m3{1, 2, -3};
+//
+// 	auto ue1i = 3 * m1;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue1i)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(ue1i)>);
+// 	REQUIRE(ue1i.n_rows() == 2 && ue1i.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue1i, {3., 6., 9., 12., 15., 18.}));
+//
+// 	auto ue1d = 1.1 * m1;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue1d)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(ue1d)>);
+// 	REQUIRE(ue1d.n_rows() == 2 && ue1d.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue1d, {1.1, 2.2, 3.3, 4.4, 5.5, 6.6}));
+//
+// 	auto ue2d = 1.1 * m2;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue2d)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(ue2d)>);
+// 	REQUIRE(ue2d.n_rows() == 2 && ue2d.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue2d, {1.1, 2.2, 3.3, 4.4, 5.5, 6.6}));
+//
+// 	auto ue1i2 = m1 / 2;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue1i2)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(ue1i2)>);
+// 	REQUIRE(ue1i2.n_rows() == 2 && ue1i2.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue1i2, {.5, 1., 1.5, 2., 2.5, 3.}));
+//
+// 	auto ue1d2 = m1 / 2.;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue1d2)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(ue1d2)>);
+// 	REQUIRE(ue1d2.n_rows() == 2 && ue1d2.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue1d2, {.5, 1., 1.5, 2., 2.5, 3.}));
+//
+// 	auto ue2d2 = m2 / 2.;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue2d2)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(ue2d2)>);
+// 	REQUIRE(ue2d2.n_rows() == 2 && ue2d2.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue2d2, {.5, 1., 1.5, 2., 2.5, 3.}));
+//
+// 	auto ue3 = m3 / 2;
+// 	REQUIRE_STATIC(is_unary_expr_v<decltype(ue3)>);
+// 	REQUIRE_STATIC(is_int_value_v<decltype(ue3)>);
+// 	REQUIRE(ue3.n_rows() == 1 && ue3.n_cols() == 3);
+// 	REQUIRE(matrix_elements(ue3, {0, 1, -1}));
+// }
+//
+// void test_binary_add_expr()
+// {
+// 	Matrix_d<2, 3> m1{1., 2., 3., 4., 5., 6.};
+// 	Matrix_d<2, 3> m2{1., 2., 3., 4., 5., 6.};
+// 	Matrix_d<2, 0> m3(3, {1., 2., 3., 4., 5., 6.});
+// 	Matrix_d<0, 3> m4(2, {1., 2., 3., 4., 5., 6.});
+// 	Matrix_xd m5(2, 3, {1., 2., 3., 4., 5., 6.});
+// 	Matrix<int, 2, 3> m6{1, 2, 3, 4, 5, 6};
+//
+// 	auto be12 = m1 + m2;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be12)>);
+// 	REQUIRE(be12.n_rows() == 2 && be12.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be12, {2., 4., 6., 8., 10., 12.}));
+//
+// 	auto be13 = m1 + m3;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be13)>);
+// 	REQUIRE(be13.n_rows() == 2 && be13.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be13, {2., 4., 6., 8., 10., 12.}));
+//
+// 	auto be34 = m3 + m4;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be34)>);
+// 	REQUIRE(be34.n_rows() == 2 && be34.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be34, {2., 4., 6., 8., 10., 12.}));
+//
+// 	auto be35 = m3 + m5;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be35)>);
+// 	REQUIRE(be35.n_rows() == 2 && be35.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be35, {2., 4., 6., 8., 10., 12.}));
+//
+// 	auto be16 = m1 + m6;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be16)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(be16)>);
+// 	REQUIRE(be16.n_rows() == 2 && be16.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be16, {2., 4., 6., 8., 10., 12.}));
+// }
+//
+// void test_binary_sub_expr()
+// {
+// 	Matrix_d<2, 3> m1{1., 2., 3., 4., 5., 6.};
+// 	Matrix_d<2, 3> m2{1., 2., 3., 4., 5., 6.};
+// 	Matrix_d<2, 0> m3(3, {1., 2., 3., 4., 5., 6.});
+// 	Matrix_d<0, 3> m4(2, {1., 2., 3., 4., 5., 6.});
+// 	Matrix_xd m5(2, 3, {1., 2., 3., 4., 5., 6.});
+// 	Matrix<int, 2, 3> m6{2, 3, 4, 5, 6, 7};
+//
+// 	auto be12 = m1 - m2;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be12)>);
+// 	REQUIRE(be12.n_rows() == 2 && be12.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be12, {0., 0., 0., 0., 0., 0.}));
+//
+// 	auto be13 = m1 - m3;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be13)>);
+// 	REQUIRE(be13.n_rows() == 2 && be13.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be13, {0., 0., 0., 0., 0., 0.}));
+//
+// 	auto be34 = m3 - m4;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be34)>);
+// 	REQUIRE(be34.n_rows() == 2 && be34.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be34, {0., 0., 0., 0., 0., 0.}));
+//
+// 	auto be35 = m3 - m5;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be35)>);
+// 	REQUIRE(be35.n_rows() == 2 && be35.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be35, {0., 0., 0., 0., 0., 0.}));
+//
+// 	auto be16 = m1 - m6;
+// 	REQUIRE_STATIC(is_bin_expr_v<decltype(be16)>);
+// 	REQUIRE_STATIC(is_double_value_v<decltype(be16)>);
+// 	REQUIRE(be16.n_rows() == 2 && be16.n_cols() == 3);
+// 	REQUIRE(matrix_elements(be16, {-1., -1., -1., -1., -1., -1.}));
+// }
+//
+// void test_binary_prod_expr()
+// {
+// 	Matrix_d<2, 3> m1{1., 2., 3., 4., 5., 6.};
+// 	Matrix_d<3, 4> m2{1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12.};
+// 	Matrix_d<3, 0> m3(4, {1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12.});
+// 	Matrix_xd m4(2, 3, {1., 2., 3., 4., 5., 6.});
+//
+// 	auto be12 = m1 * m2;
+// 	REQUIRE(be12.n_rows() == 2 && be12.n_cols() == 4);
+// 	REQUIRE(matrix_elements(be12, {22., 28., 49., 64., 76., 100., 103., 136.}));
+//
+// 	auto be13 = m1 * m3;
+// 	REQUIRE(be13.n_rows() == 2 && be13.n_cols() == 4);
+// 	REQUIRE(matrix_elements(be13, {22., 28., 49., 64., 76., 100., 103., 136.}));
+//
+// 	auto be43 = m4 * m3;
+// 	REQUIRE(be43.n_rows() == 2 && be43.n_cols() == 4);
+// 	REQUIRE(matrix_elements(be43, {22., 28., 49., 64., 76., 100., 103., 136.}));
+// }
+//
+// void test_view()
+// {
+// 	Matrix_d<3, 3> m1{1., 2., 3., 4., 5., 6., 7., 8., 9.};
+// 	//auto v1s =
+//
+// 	Matrix_xd m2(3, 3, {1., 2., 3., 4., 5., 6., 7., 8., 9.});
+//
+// //	auto v1 = m1.view(0, 2, 0, 2);
+// //	auto v2 = v1.view(0, 1, 1, 1);
+// }
+
+//////////////////////////////////////////////////////////////////////////
+
+//void f1
+
+// template<std::size_t n>
+// void f(const double (&)[n])
+// {
+//
+// }
+
+
+// 	// ax + by expressions
+// 	{
+// 		Matrix_d<2, 2> m_ss{1., 2., 3., 4.};
+// 		Matrix_d<2, 2> m_ss2{2., 4., 6., 8.};
+//
+// 		auto b = 2. * m_ss + m_ss2;
+// 		REQUIRE(matrix_elements(b, {4., 8., 12., 16.}));
+// 	}
+//
+// 	//////////////////////////////////////////////////////////////////////////
+// 	/** View class */
+//
+// 	test_view();
