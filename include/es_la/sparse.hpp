@@ -1,4 +1,5 @@
 #pragma once
+#include <es_la/core/mkl_destructor.h>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/csr_matrix.hpp>

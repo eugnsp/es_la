@@ -1,4 +1,5 @@
 #pragma once
+#include <es_la/core/mkl_destructor.h>
 #include <es_la/dense/expr/binary_expr.hpp>
 #include <es_la/dense/expr/binary_expr.operators.hpp>
 #include <es_la/dense/expr/scalar_expr.hpp>
