@@ -14,14 +14,12 @@
 
 namespace es_la::internal
 {
-template<std::size_t alignment>
-[[gnu::assume_aligned(alignment)]] void* mem_alloc(std::size_t size)
+[[nodiscard]] inline void* mem_alloc(std::size_t size, std::size_t alignment)
 {
 	return ::mkl_malloc(size, static_cast<int>(alignment));
 }
 
-template<std::size_t alignment>
-[[gnu::assume_aligned(alignment)]] void* mem_realloc(void* ptr, std::size_t size)
+[[nodiscard]] inline void* mem_realloc(void* ptr, std::size_t size, std::size_t alignment)
 {
 	const auto new_ptr = ::mkl_realloc(ptr, size);
 

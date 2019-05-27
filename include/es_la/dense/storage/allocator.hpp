@@ -1,8 +1,9 @@
 #pragma once
-//#include "../config.hpp"
-#include <cstddef>
 #include <es_la/dense/storage/memory.hpp>
+
 #include <es_util/type_traits.hpp>
+
+#include <cstddef>
 #include <new>
 #include <stdexcept>
 #include <type_traits>
@@ -16,7 +17,7 @@ private:
 	static constexpr auto max_size = static_cast<std::size_t>(-1) / sizeof(T);
 
 public:
-	[[gnu::assume_aligned(alignment)]] static T* allocate(std::size_t size)
+	[[nodiscard, gnu::malloc, gnu::assume_aligned(alignment)]] static T* allocate(std::size_t size)
 	{
 		if (size == 0)
 			return nullptr;
@@ -24,14 +25,14 @@ public:
 		if (size > max_size)
 			throw std::bad_array_new_length();
 
-		auto ptr = mem_alloc<alignment>(size * sizeof(T));
+		auto ptr = es_la::internal::mem_alloc(size * sizeof(T), alignment);
 		if (!ptr)
 			throw std::bad_alloc();
 
 		return static_cast<T*>(ptr);
 	}
 
-	[[gnu::assume_aligned(alignment)]] static T* reallocate(T* old_ptr, std::size_t size)
+	[[nodiscard, gnu::assume_aligned(alignment)]] static T* reallocate(T* old_ptr, std::size_t size)
 	{
 		static_assert(es_util::is_trivially_relocatable<T>);
 
@@ -47,7 +48,7 @@ public:
 		if (size > max_size)
 			throw std::bad_array_new_length();
 
-		auto ptr = mem_realloc<alignment>(old_ptr, size * sizeof(T));
+		auto ptr = es_la::internal::mem_realloc(old_ptr, size * sizeof(T), alignment);
 		if (!ptr)
 			throw std::bad_alloc();
 
@@ -56,7 +57,7 @@ public:
 
 	static void deallocate(T* ptr) noexcept
 	{
-		mem_free(ptr);
+		es_la::internal::mem_free(ptr);
 	}
 };
 } // namespace es_la::internal

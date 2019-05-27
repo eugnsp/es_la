@@ -22,6 +22,30 @@ void run()
 	std::cout << "OK" << std::endl;
 }
 
+struct Non_trivial
+{
+	Non_trivial()
+	{}
+
+	Non_trivial(int i) : i(i)
+	{}
+
+	~Non_trivial()
+	{}
+
+	bool operator!=(Non_trivial nt) const
+	{
+		return i != nt.i;
+	}
+
+	bool operator==(Non_trivial nt) const
+	{
+		return i == nt.i;
+	}
+
+	int i = 0;
+};
+
 int main()
 {
 	try
@@ -35,9 +59,12 @@ int main()
 		//* Matrix class constructors */
 
 		run<Matrix_constructor_default, int>();
+		run<Matrix_constructor_default, Non_trivial>();
 		run<Matrix_constructor_size, int>();
+		run<Matrix_constructor_size, Non_trivial>();
 		run<Matrix_constructor_size_values, int>();
 		run<Matrix_constructor_copy, int>();
+		run<Matrix_constructor_copy, Non_trivial>();
 		run<Matrix_constructor_move, int>();
 		run<Matrix_constructor_expr, int>();
 		run<Matrix_deduction_guides, int>();

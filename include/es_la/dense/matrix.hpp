@@ -18,8 +18,6 @@ class Matrix :
 {
 	static_assert(!std::is_const_v<Value>);
 	static_assert(!std::is_reference_v<Value>);
-	//static_assert(std::is_trivial_v<Value>);
-	static_assert(std::is_trivially_destructible_v<Value>);
 
 private:
 	using Base = internal::Matrix_base<internal::ct_extent_dynamic_or_size_t(t_rows),

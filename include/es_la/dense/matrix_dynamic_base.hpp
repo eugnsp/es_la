@@ -30,10 +30,12 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	//* Constructor */
 
-	Matrix_dynamic_base() : Matrix_dynamic_base(ct_extent_static_or_zero(ct_rows), ct_extent_static_or_zero(ct_cols), Internal{})
+	Matrix_dynamic_base() :
+		Matrix_dynamic_base(Internal{}, ct_extent_static_or_zero(ct_rows), ct_extent_static_or_zero(ct_cols))
 	{}
 
-	Matrix_dynamic_base(const Matrix_dynamic_base& matrix) : Matrix_dynamic_base(matrix.rows(), matrix.cols(), Internal{})
+	Matrix_dynamic_base(const Matrix_dynamic_base& matrix) :
+		Matrix_dynamic_base(Internal{}, matrix.rows(), matrix.cols())
 	{
 		this->assign_expr(matrix);
 	}
@@ -44,9 +46,14 @@ public:
 	}
 
 	template<class Expr2>
-	Matrix_dynamic_base(const Expression<Expr2>& expr) : Matrix_dynamic_base(expr.rows(), expr.cols(), Internal{})
+	Matrix_dynamic_base(const Expression<Expr2>& expr) : Matrix_dynamic_base(Internal{}, expr.rows(), expr.cols())
 	{
 		this->assign_expr(expr);
+	}
+
+	~Matrix_dynamic_base()
+	{
+		std::destroy_n(data_.data(), this->size());
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -123,8 +130,23 @@ protected:
 	//////////////////////////////////////////////////////////////////////
 	//* Constructor */
 
-	Matrix_dynamic_base(std::size_t rows, std::size_t cols, Internal) : Shape_base(rows, cols), data_(rows * cols)
-	{}
+	Matrix_dynamic_base(Internal, std::size_t rows, std::size_t cols) : Shape_base(rows, cols), data_(rows * cols)
+	{
+		std::uninitialized_default_construct_n(data_.data(), this->size());
+	}
+
+	Matrix_dynamic_base(Internal, std::size_t rows, std::size_t cols, const Value& value) :
+		Shape_base(rows, cols), data_(rows * cols)
+	{
+		std::uninitialized_fill_n(data_.data(), this->size(), value);
+	}
+
+	Matrix_dynamic_base(Internal, std::size_t rows, std::size_t cols, std::initializer_list<Value> values) :
+		Shape_base(rows, cols), data_(rows * cols)
+	{
+		assert(values.size() == this->size());
+		std::uninitialized_copy_n(values.begin(), this->size(), data_.data());
+	}
 
 	///////////////////////////////////////////////////////////////////////
 	//* Modifiers */

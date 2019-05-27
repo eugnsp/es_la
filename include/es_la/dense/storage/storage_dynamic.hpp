@@ -3,6 +3,7 @@
 #include <es_la/dense/storage/storage_static.hpp>
 
 #include <cstddef>
+#include <memory>
 #include <utility>
 
 namespace es_la::internal
@@ -14,8 +15,7 @@ private:
 	using Alloc = Allocator<T, alignment>;
 
 public:
-	Storage() noexcept : data_(nullptr), capacity_(0)
-	{}
+	Storage() = default;
 
 	explicit Storage(std::size_t size) : capacity_(size)
 	{
@@ -78,9 +78,9 @@ public:
 	}
 
 protected:
-	T* data_;
+	T* data_ = nullptr;
 
 private:
-	std::size_t capacity_;
+	std::size_t capacity_ = 0;
 };
 } // namespace es_la::internal

@@ -40,8 +40,8 @@ public:
 	explicit constexpr Matrix_base(const std::array<Value, ct_rows * ct_cols>& values) : data_{values}
 	{}
 
-	explicit constexpr Matrix_base(const Value (&values)[ct_rows * ct_cols]) : Matrix_base(es_util::to_array(values))
-	{}
+	//explicit constexpr Matrix_base(const Value (&values)[ct_rows * ct_cols]) : Matrix_base(es_util::to_array(values))
+	//{}
 
 	template<class Expr2>
 	explicit Matrix_base(const Expression<Expr2>& expr)

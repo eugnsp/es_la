@@ -7,7 +7,6 @@
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/utility.hpp>
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -28,19 +27,14 @@ public:
 public:
 	using Base::Base;
 
-	explicit Matrix_base(std::size_t cols) : Base(ct_rows, cols, Internal{})
+	explicit Matrix_base(std::size_t cols) : Base(Internal{}, ct_rows, cols)
 	{}
 
-	Matrix_base(std::size_t cols, const Value& value) : Matrix_base(cols)
-	{
-		std::fill(data_.data(), data_.data() + this->size(), value);
-	}
+	Matrix_base(std::size_t cols, const Value& value) : Matrix_base(Internal{}, ct_rows, cols, value)
+	{}
 
-	Matrix_base(std::size_t cols, std::initializer_list<Value> values) : Matrix_base(cols)
-	{
-		assert(values.size() == this->size());
-		std::copy(values.begin(), values.end(), data_.data());
-	}
+	Matrix_base(std::size_t cols, std::initializer_list<Value> values) : Matrix_base(Internal{}, ct_rows, cols, values)
+	{}
 
 	Matrix_base(std::initializer_list<Value> values) : Matrix_base(values.size() / ct_rows, values)
 	{
@@ -74,19 +68,14 @@ public:
 public:
 	using Base::Base;
 
-	explicit Matrix_base(std::size_t rows = 0) : Base(rows, t_cols, Internal{})
+	explicit Matrix_base(std::size_t rows = 0) : Base(Internal{}, rows, t_cols)
 	{}
 
-	Matrix_base(std::size_t rows, const Value& value) : Matrix_base(rows)
-	{
-		std::fill(data_.data(), data_.data() + this->size(), value);
-	}
+	Matrix_base(std::size_t rows, const Value& value) : Base(Internal{}, rows, t_cols, value)
+	{}
 
-	Matrix_base(std::size_t rows, std::initializer_list<Value> values) : Matrix_base(rows)
-	{
-		assert(values.size() == this->size());
-		std::copy(values.begin(), values.end(), data_.data());
-	}
+	Matrix_base(std::size_t rows, std::initializer_list<Value> values) : Base(Internal{}, rows, t_cols, values)
+	{}
 
 	Matrix_base(std::initializer_list<Value> values) : Matrix_base(values.size() / t_cols, values)
 	{
@@ -120,22 +109,17 @@ public:
 public:
 	using Base::Base;
 
-	Matrix_base(std::size_t rows, std::size_t cols) : Base(rows, cols, Internal{})
+	Matrix_base(std::size_t rows, std::size_t cols) : Base(Internal{}, rows, cols)
 	{}
 
 	Matrix_base() : Matrix_base(0, 0)
 	{}
 
-	Matrix_base(std::size_t rows, std::size_t cols, const Value& value) : Matrix_base(rows, cols)
-	{
-		std::fill(data_.data(), data_.data() + this->size(), value);
-	}
+	Matrix_base(std::size_t rows, std::size_t cols, const Value& value) : Base(Internal{}, rows, cols, value)
+	{}
 
-	Matrix_base(std::size_t rows, std::size_t cols, std::initializer_list<Value> values) : Matrix_base(rows, cols)
-	{
-		assert(values.size() == this->size());
-		std::copy(values.begin(), values.end(), data_.data());
-	}
+	Matrix_base(std::size_t rows, std::size_t cols, std::initializer_list<Value> values) : Base(Internal{}, rows, cols, values)
+	{}
 
 	using Base::operator=;
 
