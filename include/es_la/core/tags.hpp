@@ -1,17 +1,15 @@
 #pragma once
+#include <cstddef>
 
 namespace es_la
 {
 namespace internal
 {
-enum class Dynamic_extent
-{};
-
 struct Internal
 {};
 }
 
-inline constexpr auto dynamic = internal::Dynamic_extent{};
+inline constexpr std::size_t dynamic = -1;
 
 struct Rvalue
 {};

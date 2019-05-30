@@ -16,7 +16,7 @@
 
 namespace es_la::internal
 {
-template<auto ct_rows, auto ct_cols, class Expr, class Layout>
+template<std::size_t ct_rows, std::size_t ct_cols, class Expr, class Layout>
 class Matrix_dynamic_base : public Dense<Expr, Lvalue>, public Shape<ct_rows, ct_cols, Layout>
 {
 private:

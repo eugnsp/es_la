@@ -9,7 +9,7 @@
 
 namespace es_la::internal
 {
-template<auto ct_rows, auto ct_cols, class Layout>
+template<std::size_t ct_rows, std::size_t ct_cols, class Layout>
 class Shape : public Shape_base<ct_rows, ct_cols>
 {
 private:

@@ -5,16 +5,16 @@
 
 #include <es_util/type_traits.hpp>
 
+#include <cstddef>
+
 namespace es_la
 {
-template<typename T, auto ct_rows, auto ct_cols, class Layout>
-struct Ct_rows_trait<Matrix<T, ct_rows, ct_cols, Layout>> :
-	es_util::Std_integral_constant<internal::ct_extent_dynamic_or_size_t(ct_rows)>
+template<typename T, std::size_t ct_rows, std::size_t ct_cols, class Layout>
+struct Ct_rows_trait<Matrix<T, ct_rows, ct_cols, Layout>> : es_util::Std_integral_constant<ct_rows>
 {};
 
-template<typename T, auto ct_rows, auto ct_cols, class Layout>
-struct Ct_cols_trait<Matrix<T, ct_rows, ct_cols, Layout>> :
-	es_util::Std_integral_constant<internal::ct_extent_dynamic_or_size_t(ct_cols)>
+template<typename T, std::size_t ct_rows, std::size_t ct_cols, class Layout>
+struct Ct_cols_trait<Matrix<T, ct_rows, ct_cols, Layout>> : es_util::Std_integral_constant<ct_cols>
 {};
 
 ///////////////////////////////////////////////////////////////////////
@@ -69,13 +69,11 @@ struct Ct_cols_trait<Random_matrix<Random_distribution, Random_generator>> : es_
 
 ///////////////////////////////////////////////////////////////////////
 
-template<auto ct_begin, auto ct_size>
-struct Ct_size_trait<internal::Range<ct_begin, ct_size>> :
-	es_util::Std_integral_constant<internal::ct_extent_dynamic_or_size_t(ct_size)>
+template<std::size_t ct_begin, std::size_t ct_size>
+struct Ct_size_trait<internal::Range<ct_begin, ct_size>> : es_util::Std_integral_constant<ct_size>
 {};
 
 template<std::size_t ct_size>
-struct Ct_size_trait<internal::Slice<ct_size>> :
-	es_util::Std_integral_constant<internal::ct_extent_dynamic_or_size_t(ct_size)>
+struct Ct_size_trait<internal::Slice<ct_size>> : es_util::Std_integral_constant<ct_size>
 {};
 } // namespace es_la

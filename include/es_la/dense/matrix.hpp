@@ -11,17 +11,14 @@
 
 namespace es_la
 {
-template<typename Value, auto t_rows, auto t_cols, class Layout>
-class Matrix :
-	public internal::Matrix_base<internal::ct_extent_dynamic_or_size_t(t_rows),
-		internal::ct_extent_dynamic_or_size_t(t_cols), Matrix<Value, t_rows, t_cols, Layout>, Layout>
+template<typename Value, std::size_t ct_rows, std::size_t ct_cols, class Layout>
+class Matrix : public internal::Matrix_base<ct_rows, ct_cols, Matrix<Value, ct_rows, ct_cols, Layout>, Layout>
 {
 	static_assert(!std::is_const_v<Value>);
 	static_assert(!std::is_reference_v<Value>);
 
 private:
-	using Base = internal::Matrix_base<internal::ct_extent_dynamic_or_size_t(t_rows),
-		internal::ct_extent_dynamic_or_size_t(t_cols), Matrix<Value, t_rows, t_cols, Layout>, Layout>;
+	using Base = internal::Matrix_base<ct_rows, ct_cols, Matrix<Value, ct_rows, ct_cols, Layout>, Layout>;
 
 public:
 	///////////////////////////////////////////////////////////////////////

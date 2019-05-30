@@ -15,7 +15,7 @@
 
 namespace es_la::internal
 {
-template<auto ct_rows, class Derived, class Layout>
+template<std::size_t ct_rows, class Derived, class Layout>
 class Matrix_base<ct_rows, dynamic, Derived, Layout> : public Matrix_dynamic_base<ct_rows, dynamic, Derived, Layout>
 {
 private:
@@ -56,7 +56,7 @@ protected:
 	using Base::data_;
 };
 
-template<auto t_cols, class Derived, class Layout>
+template<std::size_t t_cols, class Derived, class Layout>
 class Matrix_base<dynamic, t_cols, Derived, Layout> : public Matrix_dynamic_base<dynamic, t_cols, Derived, Layout>
 {
 private:

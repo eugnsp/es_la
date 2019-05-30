@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "type_string.hpp"
+#include "non_trivial.hpp"
 
 #include "matrix_constructor.hpp"
 #include "matrix_view.hpp"
@@ -22,32 +23,16 @@ void run()
 	std::cout << "OK" << std::endl;
 }
 
-struct Non_trivial
-{
-	Non_trivial()
-	{}
-
-	Non_trivial(int i) : i(i)
-	{}
-
-	~Non_trivial()
-	{}
-
-	bool operator!=(Non_trivial nt) const
-	{
-		return i != nt.i;
-	}
-
-	bool operator==(Non_trivial nt) const
-	{
-		return i == nt.i;
-	}
-
-	int i = 0;
-};
-
 int main()
 {
+
+int a[2] = {1,2};
+
+auto [x,y] = a; // creates e[2], copies a into e, then x refers to e[0], y refers to e[1]
+//auto& [xr, yr] = a;
+
+std::cout << type_string<decltype(x)>() << std::endl;
+
 	try
 	{
 		///////////////////////////////////////////////////////////////////////
@@ -66,6 +51,7 @@ int main()
 		run<Matrix_constructor_copy, int>();
 		run<Matrix_constructor_copy, Non_trivial>();
 		run<Matrix_constructor_move, int>();
+		run<Matrix_constructor_move, Non_trivial>();
 		run<Matrix_constructor_expr, int>();
 		run<Matrix_deduction_guides, int>();
 

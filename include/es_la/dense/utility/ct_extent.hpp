@@ -1,79 +1,45 @@
 #pragma once
-#include <es_la/dense/tags.hpp>
+#include <es_la/core/tags.hpp>
 
 #include <cstddef>
 #include <type_traits>
 
 namespace es_la::internal
 {
-template<class Ext1, class Ext2>
-constexpr bool is_ct_extent_dynamic_or_eq([[maybe_unused]] Ext1 ext1, [[maybe_unused]] Ext2 ext2)
+constexpr bool is_ct_extent_dynamic_or_eq(std::size_t ext1, std::size_t ext2)
 {
-	if constexpr (std::is_same_v<Ext1, Dynamic_extent> || std::is_same_v<Ext2, Dynamic_extent>)
-		return true;
-	else
-		return static_cast<std::size_t>(ext1) == static_cast<std::size_t>(ext2);
+	return ext1 == dynamic || ext2 == dynamic || ext1 == ext2;
 }
 
-template<class Ext1, class Ext2>
-constexpr bool is_ct_extent_dynamic_or_less([[maybe_unused]] Ext1 ext1, [[maybe_unused]] Ext2 y)
+constexpr bool is_ct_extent_dynamic_or_less(std::size_t ext1, std::size_t ext2)
 {
-	if constexpr (std::is_same_v<Ext1, Dynamic_extent> || std::is_same_v<Ext2, Dynamic_extent>)
-		return true;
-	else
-		return static_cast<std::size_t>(ext1) < static_cast<std::size_t>(y);
+	return ext1 == dynamic || ext2 == dynamic || ext1 < ext2;
 }
 
-template<class Ext1, class Ext2>
-constexpr bool is_ct_extent_dynamic_or_less_equal(Ext1 ext1, Ext2 ext2)
+constexpr bool is_ct_extent_dynamic_or_less_equal(std::size_t ext1, std::size_t ext2)
 {
-	return is_ct_extent_dynamic_or_eq(ext1, ext2) || is_ct_extent_dynamic_or_less(ext1, ext2);
+	return ext1 == dynamic || ext2 == dynamic || ext1 <= ext2;
 }
 
-template<class Ext>
-constexpr bool is_ct_extent_static_and_eq([[maybe_unused]] Ext ext1, std::size_t ext2)
+constexpr bool is_ct_extent_static_and_eq(std::size_t ext1, std::size_t ext2)
 {
-	if constexpr (std::is_same_v<Ext, Dynamic_extent>)
-		return false;
-	else
-		return static_cast<std::size_t>(ext1) == ext2;
+	return ext1 != dynamic && ext2 != dynamic && ext1 == ext2;
 }
 
 ///////////////////////////////////////////////////////////////////////
 
-template<class Ext>
-constexpr std::size_t ct_extent_static_or_zero([[maybe_unused]] Ext ext)
+constexpr std::size_t ct_extent_static_or_zero(std::size_t ext)
 {
-	if constexpr (std::is_same_v<Ext, Dynamic_extent>)
-		return 0;
-	else
-		return static_cast<std::size_t>(ext);
+	return (ext == dynamic) ? 0 : ext;
 }
 
-template<class Ext>
-constexpr auto ct_extent_dynamic_or_size_t([[maybe_unused]] Ext ext)
+constexpr auto ct_extent_static(std::size_t ext1, std::size_t ext2)
 {
-	if constexpr (std::is_same_v<Ext, Dynamic_extent>)
-		return dynamic;
-	else
-		return static_cast<std::size_t>(ext);
+	return (ext1 == dynamic) ? ext2 : ext1;
 }
 
-template<class Ext1, class Ext2>
-constexpr auto ct_extent_static([[maybe_unused]] Ext1 ext1, [[maybe_unused]] Ext2 ext2)
+constexpr auto ct_extent_mul(std::size_t ext1, std::size_t ext2)
 {
-	if constexpr (!std::is_same_v<Ext1, Dynamic_extent>)
-		return ext1;
-	else
-		return ext2;
-}
-
-template<class Ext1, class Ext2>
-constexpr auto ct_extent_mul([[maybe_unused]] Ext1 ext1, [[maybe_unused]] Ext2 ext2)
-{
-	if constexpr (std::is_same_v<Ext1, Dynamic_extent> || std::is_same_v<Ext2, Dynamic_extent>)
-		return dynamic;
-	else
-		return ext1 * ext2;
+	return (ext1 == dynamic || ext2 == dynamic) ? dynamic : ext1 * ext2;
 }
 } // namespace es_la::internal

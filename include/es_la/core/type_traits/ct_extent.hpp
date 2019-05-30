@@ -14,12 +14,6 @@ struct Ct_cols_trait;
 template<class Expr>
 struct Ct_size_trait;
 
-template<auto ct_extent>
-inline constexpr bool is_dynamic_extent = std::is_same_v<decltype(ct_extent), internal::Dynamic_extent>;
-
-template<auto ct_extent>
-inline constexpr bool is_static_extent = !is_dynamic_extent<ct_extent>;
-
 template<class Expr>
 inline constexpr auto ct_rows_value = Ct_rows_trait<Expr>::value;
 

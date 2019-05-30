@@ -7,11 +7,8 @@
 
 namespace es_la::internal
 {
-template<auto ct_rows, auto ct_cols>
-class Shape_base;
-
 template<std::size_t ct_rows, std::size_t ct_cols>
-class Shape_base<ct_rows, ct_cols>
+class Shape_base
 {
 public:
 	static constexpr std::size_t rows()
@@ -38,7 +35,7 @@ private:
 	static constexpr std::size_t cols_ = ct_cols;
 };
 
-template<auto ct_rows>
+template<std::size_t ct_rows>
 class Shape_base<ct_rows, dynamic>
 {
 public:
@@ -74,7 +71,7 @@ private:
 	std::size_t cols_;
 };
 
-template<auto ct_cols>
+template<std::size_t ct_cols>
 class Shape_base<dynamic, ct_cols>
 {
 public:

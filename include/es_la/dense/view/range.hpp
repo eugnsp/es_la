@@ -9,7 +9,7 @@
 namespace es_la::internal
 {
 template<std::size_t ct_start, std::size_t ct_size>
-class Range<ct_start, ct_size>
+class Range
 {
 	static_assert(ct_size > 0);
 

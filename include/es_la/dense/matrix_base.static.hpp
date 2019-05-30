@@ -11,11 +11,8 @@
 
 namespace es_la::internal
 {
-template<auto ct_rows, auto ct_cols, class Expr, class Layout>
-class Matrix_base;
-
 template<std::size_t ct_rows, std::size_t ct_cols, class Expr, class Layout>
-class Matrix_base<ct_rows, ct_cols, Expr, Layout> : public Dense<Expr, Lvalue>, public Shape<ct_rows, ct_cols, Layout>
+class Matrix_base : public Dense<Expr, Lvalue>, public Shape<ct_rows, ct_cols, Layout>
 {
 private:
 	using Dense_base = Dense<Expr, Lvalue>;
