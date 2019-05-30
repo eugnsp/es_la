@@ -41,7 +41,7 @@ public:
 	//{}
 
 	template<class Expr2>
-	explicit Matrix_base(const Expression<Expr2>& expr)
+	Matrix_base(const Expression<Expr2>& expr)
 	{
 		Dense_base::assign_expr(expr);
 	}
@@ -93,6 +93,16 @@ public:
 	{
 		static_assert(internal::is_vector_expr<Expr>, "Expression should be a vector");
 		return (*this)(index, 0);
+	}
+
+	constexpr Value& operator()(std::size_t index)
+	{
+		return (*this)[index];
+	}
+
+	constexpr const Value& operator()(std::size_t index) const
+	{
+		return (*this)[index];
 	}
 
 protected:

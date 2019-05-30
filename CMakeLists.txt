@@ -1,17 +1,16 @@
 cmake_minimum_required(VERSION 3.13)
 project(es_la VERSION 1.0 DESCRIPTION "Linear algebra library")
 
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native -fmax-errors=5")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG")
 
 file(GLOB_RECURSE ES_LA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library(es_la STATIC "${ES_LA_SRC}")
 target_include_directories(es_la PUBLIC "include")
+target_compile_features(es_la PUBLIC cxx_std_17)
+target_compile_options(es_la PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native 
+					   $<$<CONFIG:DEBUG>:-O0 -g> $<$<CONFIG:RELEASE>:-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG>)
 
 if (NOT TARGET es_util)
 	add_subdirectory("external/es_util")
@@ -30,3 +29,6 @@ target_link_libraries(es_la PUBLIC "${MKL_LIBRARIES}")
 add_executable(es_la_test "test/es_la_test.cpp")
 target_include_directories(es_la_test PUBLIC "/data/data1/dev/codes/lib/boost_1_69_0")
 target_link_libraries(es_la_test es_la)
+target_compile_features(es_la_test PUBLIC cxx_std_17)
+target_compile_options(es_la_test PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native 
+					   $<$<CONFIG:DEBUG>:-O0 -g> $<$<CONFIG:RELEASE>:-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG>)

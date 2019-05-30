@@ -88,6 +88,16 @@ public:
 		return self()(index, 0);
 	}
 
+	decltype(auto) operator()(std::size_t index)
+	{	
+		return (*this)[index];
+	}
+
+	decltype(auto) operator()(std::size_t index) const
+	{
+		return (*this)[index];
+	}
+
 	auto eval() const
 	{
 		constexpr auto rows = ct_rows_value<Expr>;

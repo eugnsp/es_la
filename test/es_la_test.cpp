@@ -25,14 +25,6 @@ void run()
 
 int main()
 {
-
-int a[2] = {1,2};
-
-auto [x,y] = a; // creates e[2], copies a into e, then x refers to e[0], y refers to e[1]
-//auto& [xr, yr] = a;
-
-std::cout << type_string<decltype(x)>() << std::endl;
-
 	try
 	{
 		///////////////////////////////////////////////////////////////////////
@@ -79,14 +71,10 @@ std::cout << type_string<decltype(x)>() << std::endl;
 
 		// auto z = (v1 + v2).view(0, 1, 0, 1);
 
-		es_la::Matrix<int, (std::size_t)2, (std::size_t)2> m1({1, 2, 3, 4});
-		es_la::Matrix<int, (std::size_t)2, (std::size_t)2> m2({5, 6, 7, 8});
-		es_la::Matrix<int, es_la::dynamic, es_la::dynamic> m3;
-		es_la::Matrix<int, es_la::dynamic, es_la::dynamic>& m4 = m3;
-		m3 = m1 + m2;
-		m3 = 0;
+		es_la::Matrix<int, 2, 2> m1({1, 2, 3, 4});
+		es_la::Matrix<int, 2, 2> m2({5, 6, 7, 8});
 
-		m3 = m4;
+		es_la::Matrix<int, 2, 2> m{m1 + m2};
 
 		// auto z1 = m1.rows_view(0, 2).cols_view<0, 2>();
 		// auto z2 = m1.row_view(0).col_view<2>();
