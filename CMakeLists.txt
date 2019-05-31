@@ -9,7 +9,7 @@ file(GLOB_RECURSE ES_LA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library(es_la STATIC "${ES_LA_SRC}")
 target_include_directories(es_la PUBLIC "include")
 target_compile_features(es_la PUBLIC cxx_std_17)
-target_compile_options(es_la PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native 
+target_compile_options(es_la PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native
 					   $<$<CONFIG:DEBUG>:-O0 -g> $<$<CONFIG:RELEASE>:-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG>)
 
 if (NOT TARGET es_util)
@@ -26,9 +26,14 @@ set(MKL_LIBRARIES "-Wl,--no-as-needed" mkl_intel_ilp64 mkl_sequential mkl_core p
 target_link_directories(es_la PUBLIC "${MKL_LIB}")
 target_link_libraries(es_la PUBLIC "${MKL_LIBRARIES}")
 
+enable_testing()
+
+find_package(Boost)
+
 add_executable(es_la_test "test/es_la_test.cpp")
-target_include_directories(es_la_test PUBLIC "/data/data1/dev/codes/lib/boost_1_69_0")
+if (Boost_FOUND)
+	target_include_directories(es_la_test PUBLIC "${Boost_INCLUDE_DIRS}")
+endif()
 target_link_libraries(es_la_test es_la)
-target_compile_features(es_la_test PUBLIC cxx_std_17)
-target_compile_options(es_la_test PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native 
-					   $<$<CONFIG:DEBUG>:-O0 -g> $<$<CONFIG:RELEASE>:-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG>)
+target_compile_options(es_la_test PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native -O0 -g)
+add_test(NAME es_la_test COMMAND es_la_test)
