@@ -32,8 +32,7 @@ using Value = Value_;
 ### `Matrix`
 **Constructors**
 
-1\. Specialization `Matrix<Value, ct_rows, ct_cols, Layout>` with
-`ct_rows != dynamic` and `ct_cols != dynamic`
+1\. Specialization `Matrix<Value, ct_rows, ct_cols, Layout>` with `ct_rows != dynamic` and `ct_cols != dynamic`
 
 ```cpp
 Matrix() = default;
@@ -60,7 +59,44 @@ Constructs the matrix with matrix elements contiguously initialized with the val
 *Parameters:*
 * `values` - the values to initialize matrix elements with.
 
+2\. Specialization `Matrix<Value, ct_rows, dynamic, Layout>` with `ct_rows != dynamic`
+
+```cpp
+Matrix() = default;
+```
+
+Default constructor. Constructs the empty matrix.
+
+```cpp
+explicit Matrix(std::size_t cols);
+```
+
+Constructs the matrix with `cols` columns and default constructed matrix elements.
+
+*Parameters:*
+* `cols` - the number of columns.
+
+```cpp
+Matrix(std::size_t cols, const Value& value);
+```
+
+Constructs the matrix with `cols` columns and matrix elements initialized with the copies of `value`.
+
+*Parameters:*
+* `cols` - the number of columns,
+* `value` - the value to initialize matrix elements with.
+
+```cpp
+Matrix(std::size_t cols, std::initializer_list<Value> values);
+```
+
+```cpp
+Matrix(std::initializer_list<Value> values);
+```
+
 ### `is_empty`, `rows`, `cols`, `size`, `capacity`
+
+1\. Specialization `Matrix<Value, ct_rows, ct_cols, Layout>` with `ct_rows != dynamic` and `ct_cols != dynamic`
 
 ```cpp
 static constexpr bool is_empty();
@@ -90,7 +126,7 @@ static constexpr std::size_t size();
 Returns the number of matrix elements (`= rows() * cols()`).
 
 ```cpp
-static constexpr std::size_t capacity() const;
+static constexpr std::size_t capacity();
 ```
 
 Returns the number of matrix elements (`= size()`).
