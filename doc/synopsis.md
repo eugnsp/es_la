@@ -42,7 +42,7 @@ public:
 
 	Value* data();
 	const Value* data() const;
-}
+};
 
 class Matrix<Value_, ct_rows, dynamic, Layout>
 {
@@ -74,7 +74,7 @@ public:
 
 	Value* data();
 	const Value* data() const;
-}
+};
 
 class Matrix<Value_, dynamic, ct_cols, Layout>
 {
@@ -106,7 +106,7 @@ public:
 
 	Value* data();
 	const Value* data() const;
-}
+};
 
 class Matrix<Value_, dynamic, dynamic, Layout>
 {
@@ -135,7 +135,7 @@ public:
 
 	Value* data();
 	const Value* data() const;
-}
+};
 ```
 
 [Detailed description](matrix.md)

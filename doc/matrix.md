@@ -94,6 +94,43 @@ Matrix(std::size_t cols, std::initializer_list<Value> values);
 Matrix(std::initializer_list<Value> values);
 ```
 
+3\. Specialization `Matrix<Value, dynamic, ct_cols, Layout>` with `ct_cols != dynamic`
+
+Similar to the previous specialization.
+
+4\. Specialization `Matrix<Value, dynamic, dynamic, Layout>`
+
+```cpp
+Matrix() = default;
+```
+
+Default constructor. Constructs the empty matrix.
+
+```cpp
+explicit Matrix(std::size_t rows, std::size_t cols);
+```
+
+Constructs the matrix with `rows` rows and `cols` columns and default constructed matrix elements.
+
+*Parameters:*
+* `rows` - the number of rows,
+* `cols` - the number of columns.
+
+```cpp
+Matrix(std::size_t rows, std::size_t cols, const Value& value);
+```
+
+Constructs the matrix with `rows` rows and `cols` columns and matrix elements initialized with the copies of `value`.
+
+*Parameters:*
+* `rows` - the number of rows,
+* `cols` - the number of columns,
+* `value` - the value to initialize matrix elements with.
+
+```cpp
+Matrix(std::size_t rows, std::size_t cols, std::initializer_list<Value> values);
+```
+
 ### `is_empty`, `rows`, `cols`, `size`, `capacity`
 
 1\. Specialization `Matrix<Value, ct_rows, ct_cols, Layout>` with `ct_rows != dynamic` and `ct_cols != dynamic`
@@ -102,7 +139,7 @@ Matrix(std::initializer_list<Value> values);
 static constexpr bool is_empty();
 ```
 
-Checks if the matrix has zero elements.
+Checks if the matrix has zero number of elements.
 
 *Return value:*
 `true` if the matrix is empty, and `false` otherwise.
@@ -129,23 +166,75 @@ Returns the number of matrix elements (`= rows() * cols()`).
 static constexpr std::size_t capacity();
 ```
 
-Returns the number of matrix elements (`= size()`).
+Returns the number of elements that the matrix has currently allocated space for (for a static matrix always `= size()`).
 
-<!--
-### `operator[]`
-**Retrieves the given element**
+2\. Specialization `Matrix<Value, ct_rows, dynamic, Layout>` with `ct_rows != dynamic`
 
 ```cpp
-Value operator[](Size index) const;
+bool is_empty() const;
+static constexpr std::size_t rows();
+std::size_t cols() const;
+std::size_t size() const;
+std::size_t capacity() const;
 ```
 
-Returns the element with the index `index`.
+3\. Specialization `Matrix<Value, dynamic, ct_cols, Layout>` with `ct_cols != dynamic`
+
+```cpp
+bool is_empty() const;
+std::size_t rows() const;
+static constexpr std::size_t cols();
+std::size_t size() const;
+std::size_t capacity() const;
+```
+
+4\. Specialization `Matrix<Value, dynamic, dynamic, Layout>`
+
+```cpp
+bool is_empty() const;
+std::size_t rows() const;
+std::size_t cols() const;
+std::size_t size() const;
+std::size_t capacity() const;
+```
+
+### `operator()`, `operator[]`
+**Retrieves the given matrix element**
+
+```cpp
+constexpr Value& operator()(std::size_t row, std::size_t col);
+constexpr const Value& operator()(std::size_t row, std::size_t col) const;
+```
+
+Returns the matrix element located in the row `row` and column `col`.
 
 *Parameters:*
-* `index` - index of the element to return.
+* `row` - row position of the element to return,
+* `col` - column position of the element to return.
 
-*Time complexity:* logarithmic in the size of the container, `O(log(size()))`.
+```cpp
+constexpr Value& operator()(std::size_t index);
+constexpr const Value& operator()(std::size_t index) const;
+constexpr Value& operator[](std::size_t index);
+constexpr const Value& operator[](std::size_t index) const;
+```
 
+Returns the matrix element located in the row `index` and column `0`. These functions can only be called for compile-time vectors (`ct_cols == 1`), otherwise a static assert violation will be generated.
+
+*Parameters:*
+* `index` - row position of the element to return.
+
+### `data`
+**Direct access to the underlying array**
+
+```cpp
+Value* data();
+const Value* data() const;
+```
+
+Returns the pointer to the underlying array serving as matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.
+
+<!--
 ### `get`
 **Retrieves all elements**
 
