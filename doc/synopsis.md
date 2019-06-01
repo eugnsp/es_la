@@ -40,8 +40,8 @@ public:
 	constexpr Value& operator[](std::size_t);
 	constexpr const Value& operator[](std::size_t) const;
 
-	Value* data();
-	const Value* data() const;
+	Value* data() noexcept;
+	const Value* data() const noexcept;
 };
 
 class Matrix<Value_, ct_rows, dynamic, Layout>

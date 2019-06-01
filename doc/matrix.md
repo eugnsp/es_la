@@ -18,6 +18,12 @@ class Matrix;
 
 Storage for matrix elements of static matrices (`ct_rows != dynamic` and `ct_cols != dynamic`) is allocated inside a `Matrix` object itself. Storage for matrix elements of dynamic matrices (`ct_rows == dynamic` or `ct_cols == dynamic`) is allocated dynamically.
 
+The following notation is user for specializations below:
+```cpp
+SS = Matrix<Value, ct_rows, ct_cols, Layout> with ct_rows != dynamic && ct_cols != dynamic
+SD = Matrix<Value, ct_rows, dynamic, Layout> with ct_rows != dynamic
+DS = Matrix<Value, dynamic, ct_cols, Layout> with ct_cols != dynamic
+DD = Matrix<Value, dynamic, dynamic, Layout>
 ---
 
 ## Member types
@@ -202,9 +208,16 @@ std::size_t capacity() const;
 **Retrieves the given matrix element**
 
 ```cpp
+// 1.
 constexpr Value& operator()(std::size_t row, std::size_t col);
 constexpr const Value& operator()(std::size_t row, std::size_t col) const;
+// 2.
+Value& operator()(std::size_t row, std::size_t col);
+const Value& operator()(std::size_t row, std::size_t col) const;
 ```
+
+1. For the specialization `SS`.
+2. For the specializations `SD`, `DS`, `DD`.
 
 Returns the matrix element located in the row `row` and column `col`.
 
@@ -213,11 +226,20 @@ Returns the matrix element located in the row `row` and column `col`.
 * `col` - column position of the element to return.
 
 ```cpp
+// 1.
 constexpr Value& operator()(std::size_t index);
 constexpr const Value& operator()(std::size_t index) const;
 constexpr Value& operator[](std::size_t index);
 constexpr const Value& operator[](std::size_t index) const;
+// 2.
+Value& operator()(std::size_t index);
+const Value& operator()(std::size_t index) const;
+Value& operator[](std::size_t index);
+const Value& operator[](std::size_t index) const;
 ```
+
+1. For the specialization `SS`.
+2. For the specializations `SD`, `DS`, `DD`.
 
 Returns the matrix element located in the row `index` and column `0`. These functions can only be called for compile-time vectors (`ct_cols == 1`), otherwise a static assert violation will be generated.
 
@@ -228,8 +250,8 @@ Returns the matrix element located in the row `index` and column `0`. These func
 **Direct access to the underlying array**
 
 ```cpp
-Value* data();
-const Value* data() const;
+Value* data() noexcept;
+const Value* data() const noexcept;
 ```
 
 Returns the pointer to the underlying array serving as matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.

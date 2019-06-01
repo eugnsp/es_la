@@ -67,12 +67,12 @@ public:
 		return data_[index];
 	}
 
-	[[gnu::assume_aligned(alignment)]] T* data()
+	[[gnu::assume_aligned(alignment)]] T* data() noexcept
 	{
 		return data_;
 	}
 
-	[[gnu::assume_aligned(alignment)]] const T* data() const
+	[[gnu::assume_aligned(alignment)]] const T* data() const noexcept
 	{
 		return data_;
 	}

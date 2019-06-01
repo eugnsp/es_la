@@ -73,12 +73,12 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	//* Element access */
 
-	Value* data()
+	Value* data() noexcept
 	{
 		return data_.data();
 	}
 
-	const Value* data() const
+	const Value* data() const noexcept
 	{
 		return data_.data();
 	}
