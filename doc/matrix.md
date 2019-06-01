@@ -18,12 +18,14 @@ class Matrix;
 
 Storage for matrix elements of static matrices (`ct_rows != dynamic` and `ct_cols != dynamic`) is allocated inside a `Matrix` object itself. Storage for matrix elements of dynamic matrices (`ct_rows == dynamic` or `ct_cols == dynamic`) is allocated dynamically.
 
-The following notation is user for specializations below:
+The following notation is used for specializations below:
 ```cpp
 SS = Matrix<Value, ct_rows, ct_cols, Layout> with ct_rows != dynamic && ct_cols != dynamic
 SD = Matrix<Value, ct_rows, dynamic, Layout> with ct_rows != dynamic
 DS = Matrix<Value, dynamic, ct_cols, Layout> with ct_cols != dynamic
 DD = Matrix<Value, dynamic, dynamic, Layout>
+```
+
 ---
 
 ## Member types
@@ -139,11 +141,15 @@ Matrix(std::size_t rows, std::size_t cols, std::initializer_list<Value> values);
 
 ### `is_empty`, `rows`, `cols`, `size`, `capacity`
 
-1\. Specialization `Matrix<Value, ct_rows, ct_cols, Layout>` with `ct_rows != dynamic` and `ct_cols != dynamic`
-
 ```cpp
+// 1.
 static constexpr bool is_empty();
+// 2.
+bool is_empty() const;
 ```
+
+1. For the specialization `SS`.
+2. For the specializations `SD`, `DS`, and `DD`.
 
 Checks if the matrix has zero number of elements.
 
@@ -151,58 +157,52 @@ Checks if the matrix has zero number of elements.
 `true` if the matrix is empty, and `false` otherwise.
 
 ```cpp
+// 1.
 static constexpr std::size_t rows();
+// 2.
+std::size_t rows() const;
 ```
+
+1. For the specializations `SS`, and `SD`.
+2. For the specializations `DS`, and `DD`.
 
 Returns the number of rows in the matrix.
 
 ```cpp
+// 1.
 static constexpr std::size_t cols();
+// 2.
+std::size_t cols() const;
 ```
+
+1. For the specializations `SS`, and `DS`.
+2. For the specializations `SD`, and `DD`.
 
 Returns the number of columns in the matrix.
 
 ```cpp
+// 1.
 static constexpr std::size_t size();
+// 2.
+std::size_t size() const;
 ```
+
+1. For the specialization `SS`.
+2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the number of matrix elements (`= rows() * cols()`).
 
 ```cpp
+// 1.
 static constexpr std::size_t capacity();
-```
-
-Returns the number of elements that the matrix has currently allocated space for (for a static matrix always `= size()`).
-
-2\. Specialization `Matrix<Value, ct_rows, dynamic, Layout>` with `ct_rows != dynamic`
-
-```cpp
-bool is_empty() const;
-static constexpr std::size_t rows();
-std::size_t cols() const;
-std::size_t size() const;
+// 2.
 std::size_t capacity() const;
 ```
 
-3\. Specialization `Matrix<Value, dynamic, ct_cols, Layout>` with `ct_cols != dynamic`
+1. For the specialization `SS` (`= size()`).
+2. For the specializations `SD`, `DS`, and `DD`.
 
-```cpp
-bool is_empty() const;
-std::size_t rows() const;
-static constexpr std::size_t cols();
-std::size_t size() const;
-std::size_t capacity() const;
-```
-
-4\. Specialization `Matrix<Value, dynamic, dynamic, Layout>`
-
-```cpp
-bool is_empty() const;
-std::size_t rows() const;
-std::size_t cols() const;
-std::size_t size() const;
-std::size_t capacity() const;
-```
+Returns the number of elements that the matrix has currently allocated space for.
 
 ### `operator()`, `operator[]`
 **Retrieves the given matrix element**
@@ -217,7 +217,7 @@ const Value& operator()(std::size_t row, std::size_t col) const;
 ```
 
 1. For the specialization `SS`.
-2. For the specializations `SD`, `DS`, `DD`.
+2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the matrix element located in the row `row` and column `col`.
 
@@ -239,7 +239,7 @@ const Value& operator[](std::size_t index) const;
 ```
 
 1. For the specialization `SS`.
-2. For the specializations `SD`, `DS`, `DD`.
+2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the matrix element located in the row `index` and column `0`. These functions can only be called for compile-time vectors (`ct_cols == 1`), otherwise a static assert violation will be generated.
 
