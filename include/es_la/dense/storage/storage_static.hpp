@@ -1,34 +1,26 @@
 #pragma once
-#include <algorithm>
+#include <es_la/dense/storage/memory.hpp>
+
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <type_traits>
 
 namespace es_la::internal
 {
-template<typename T>
-inline constexpr std::size_t get_default_alignment()
-{
-	if constexpr (std::is_arithmetic_v<T>)
-		return std::max(std::size_t{32}, alignof(T));
-	else
-		return alignof(T);
-}
-
-template<typename T, std::size_t static_size, std::size_t alignment = get_default_alignment<T>()>
+template<typename T, std::size_t ct_size, std::size_t alignment = get_alignment<T>()>
 class Storage
 {
 public:
 	Storage() = default;
 
-	constexpr Storage(const std::array<T, static_size>& values) :
-		Storage(values, std::make_index_sequence<static_size>{})
+	template<typename... Ts,
+		typename = std::enable_if_t<sizeof...(Ts) == ct_size && (std::is_convertible_v<Ts, T> && ...)>>
+	constexpr Storage(Ts&&... values) : data_{{std::forward<Ts>(values)...}}
 	{}
 
 	static constexpr std::size_t size() noexcept
 	{
-		return static_size;
+		return ct_size;
 	}
 
 	constexpr T& operator[](std::size_t index)
@@ -45,20 +37,15 @@ public:
 
 	[[gnu::assume_aligned(alignment)]] constexpr const T* data() const noexcept
 	{
-		return data_;
+		return data_.data();
 	}
 
 	[[gnu::assume_aligned(alignment)]] constexpr T* data() noexcept
 	{
-		return data_;
+		return data_.data();
 	}
 
-private:
-	template<std::size_t... Is>
-	constexpr Storage(const std::array<T, static_size>& values, std::index_sequence<Is...>) : data_{values[Is]...}
-	{}
-
 protected:
-	alignas(alignment) T data_[static_size];
+	alignas(alignment) std::array<T, ct_size> data_;
 };
 } // namespace es_la::internal

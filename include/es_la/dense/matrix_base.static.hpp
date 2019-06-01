@@ -1,13 +1,15 @@
 #pragma once
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/shape.hpp>
-#include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/storage/storage.hpp>
+#include <es_la/dense/type_traits.hpp>
 
 #include <es_util/array.hpp>
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
+#include <type_traits>
 
 namespace es_la::internal
 {
@@ -34,11 +36,11 @@ public:
 		Dense_base::assign_scalar(value);
 	}
 
-	explicit constexpr Matrix_base(const std::array<Value, ct_rows * ct_cols>& values) : data_{values}
+	template<typename... Values,
+		typename =
+			std::enable_if_t<sizeof...(Values) == ct_rows * ct_cols && (std::is_convertible_v<Values, Value> && ...)>>
+	explicit constexpr Matrix_base(Values&&... values) : data_{std::forward<Values>(values)...}
 	{}
-
-	//explicit constexpr Matrix_base(const Value (&values)[ct_rows * ct_cols]) : Matrix_base(es_util::to_array(values))
-	//{}
 
 	template<class Expr2>
 	Matrix_base(const Expression<Expr2>& expr)
@@ -57,8 +59,13 @@ public:
 	////////////////////////////////////////////////////////////////////////
 	//* Extents */
 
-	using Shape_base::cols;
 	using Shape_base::rows;
+	using Shape_base::cols;
+
+	static constexpr bool is_empty()
+	{
+		return rows() == 0 || cols() == 0;
+	}
 
 	static constexpr std::size_t size()
 	{

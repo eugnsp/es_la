@@ -9,8 +9,10 @@ file(GLOB_RECURSE ES_LA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library(es_la STATIC "${ES_LA_SRC}")
 target_include_directories(es_la PUBLIC "include")
 target_compile_features(es_la PUBLIC cxx_std_17)
-target_compile_options(es_la PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native
-					   $<$<CONFIG:DEBUG>:-O0 -g> $<$<CONFIG:RELEASE>:-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG>)
+target_compile_options(es_la PRIVATE
+	-Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native
+	$<$<CONFIG:DEBUG>:-O0 -g> 
+	$<$<CONFIG:RELEASE>:-Wno-unused-parameter -Wno-deprecated-declarations -O3 -DNDEBUG>)
 
 if (NOT TARGET es_util)
 	add_subdirectory("external/es_util")
@@ -36,4 +38,10 @@ if (Boost_FOUND)
 endif()
 target_link_libraries(es_la_test es_la)
 target_compile_options(es_la_test PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native -O0 -g)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+	target_compile_options(es_la PRIVATE -Wno-psabi)
+	target_compile_options(es_la_test PRIVATE -Wno-psabi)
+endif()
+
 add_test(NAME es_la_test COMMAND es_la_test)

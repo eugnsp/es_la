@@ -17,8 +17,8 @@ struct Block_view_lvalue_copy_constructor
 
 	void operator()()
 	{
-		es_la::Matrix<T, std::size_t{3}, std::size_t{3}, es_la::Col_major> m1({1, 2, 3, 4, 5, 6, 7, 8, 9});
-		const es_la::Matrix<T, std::size_t{3}, std::size_t{3}, es_la::Col_major> m2({1, 2, 3, 4, 5, 6, 7, 8, 9});
+		es_la::Matrix<T, 3, 3, es_la::Col_major> m1{1, 2, 3, 4, 5, 6, 7, 8, 9};
+		const es_la::Matrix<T, 3, 3, es_la::Col_major> m2{1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 		auto v1 = m1.view(1, 2, 1, 3);
 		auto v1c = v1;
@@ -41,8 +41,8 @@ struct Block_view_lvalue_size
 
 	void operator()()
 	{
-		es_la::Matrix<T, std::size_t{3}, std::size_t{4}, es_la::Col_major> m1c({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
-		es_la::Matrix<T, std::size_t{3}, std::size_t{4}, es_la::Row_major> m1r({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+		es_la::Matrix<T, 3, 4, es_la::Col_major> m1c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		es_la::Matrix<T, 3, 4, es_la::Row_major> m1r{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
 		auto v1c = m1c.view(1, 2, 1, 3);
 		assert(v1c.rows() == 2 && v1c.cols() == 3);
@@ -66,9 +66,9 @@ struct Block_view_lvalue_data
 
 	void operator()()
 	{
-		es_la::Matrix<T, std::size_t{3}, std::size_t{4}, es_la::Col_major> m1c({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
-		es_la::Matrix<T, std::size_t{3}, std::size_t{4}, es_la::Row_major> m1r({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
-		const es_la::Matrix<T, std::size_t{3}, std::size_t{4}, es_la::Col_major> m2c({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+		es_la::Matrix<T, 3, 4, es_la::Col_major> m1c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		es_la::Matrix<T, 3, 4, es_la::Row_major> m1r{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		const es_la::Matrix<T, 3, 4, es_la::Col_major> m2c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
 		auto v1c = m1c.view(1, 2, 1, 3);
 		static_assert(std::is_same_v<decltype(v1c(0, 0)), T&>);
@@ -106,8 +106,8 @@ struct Block_view_lvalue_const
 
 	void operator()()
 	{
-		es_la::Matrix<T, std::size_t{3}, std::size_t{3}> m1;
-		const es_la::Matrix<T, std::size_t{3}, std::size_t{3}> m1c{};
+		es_la::Matrix<T, 3, 3> m1;
+		const es_la::Matrix<T, 3, 3> m1c{};
 
 		auto v1 = m1.view(0, 1, 0, 1);
 		auto v1c = m1c.view(0, 1, 0, 1);

@@ -1,5 +1,7 @@
 # Linear algebra library
 
+:construction: Under construction.
+
 ## Synopsis
 
 This is a linear algebra library that is being developed mostly
@@ -26,3 +28,7 @@ elements are evaluated using MKL routines
 * [`es_util` library](https://github.com/eugnsp/es_util)
 
 Requires C++11/14/17 compiler.
+
+## Documentation
+
+See [here](doc/synopsis.md).

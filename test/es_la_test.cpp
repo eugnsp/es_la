@@ -39,7 +39,8 @@ int main()
 		run<Matrix_constructor_default, Non_trivial>();
 		run<Matrix_constructor_size, int>();
 		run<Matrix_constructor_size, Non_trivial>();
-		run<Matrix_constructor_size_values, int>();
+		run<Matrix_constructor_values, int>();
+		run<Matrix_constructor_init_list, int>();
 		run<Matrix_constructor_copy, int>();
 		run<Matrix_constructor_copy, Non_trivial>();
 		run<Matrix_constructor_move, int>();
@@ -58,44 +59,6 @@ int main()
 		///////////////////////////////////////////////////////////////////////
 		//* Binary expressions */
 
-		// es_la::Vector_xd v1(10, 1), v2(10, 2), v3(10);
-
-		// es_la::Csr_matrix<double> m1;
-		// es_la::Mkl_sparse_matrix_ext mat(m1);
-
-		//v1 = mat * v2;
-
-		// v1 = 3 * v2;
-		// v1 += v2;
-		// v1 += 5 * v2;
-
-		// auto z = (v1 + v2).view(0, 1, 0, 1);
-
-		es_la::Matrix<int, 2, 2> m1({1, 2, 3, 4});
-		es_la::Matrix<int, 2, 2> m2({5, 6, 7, 8});
-
-		es_la::Matrix<int, 2, 2> m{m1 + m2};
-
-		// auto z1 = m1.rows_view(0, 2).cols_view<0, 2>();
-		// auto z2 = m1.row_view(0).col_view<2>();
-
-		//std::cout << type_string<decltype(z1)>() << std::endl;
-		// auto y1 = z1.view(0, 1, 0, 1);
-		// std::cout << "z1: " << type_string<decltype(z1)>() << std::endl;
-		// std::cout << "y1: " << type_string<decltype(y1)>() << std::endl;
-
-		// m1 *= 2;
-
-		// const es_la::Matrix<int, 3, 3> m2;
-		// auto z2 = m2.view(0, 2, 0, 2);
-		// auto y2 = z2.view(0, 1, 0, 1);
-		// std::cout << "z2: " << type_string<decltype(z2)>() << std::endl;
-		// std::cout << "y2: " << type_string<decltype(y2)>() << std::endl;
-
-		// std::cout << z1(0, 0);
-		// z1 *= 5;
-		// m1 += z1;
-		// z1 += m1;
 	}
 	catch (const std::exception& ex)
 	{
