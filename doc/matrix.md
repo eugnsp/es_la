@@ -31,6 +31,7 @@ DD = Matrix<Value, dynamic, dynamic, Layout>
 ## Member types
 
 ```cpp
+// SS, SD, DS, and DD.
 using Value = Value_;
 ```
 ---
@@ -40,15 +41,37 @@ using Value = Value_;
 ### `Matrix`
 **Constructors**
 
-1\. Specialization `Matrix<Value, ct_rows, ct_cols, Layout>` with `ct_rows != dynamic` and `ct_cols != dynamic`
-
 ```cpp
+// SS.
 Matrix() = default;
 ```
 
-Default constructor. Constructs the matrix with default or value initialized matrix elements.
+Default constructor. Constructs the matrix with default or value initialized matrix elements
 
 ```cpp
+// SD, DS, and DD.
+Matrix() = default;
+```
+
+Default constructor. Constructs the empty matrix.
+
+```cpp
+// SD.
+Matrix(std::size_t cols);
+// DS.
+Matrix(std::size_t rows);
+// DD.
+Matrix(std::size_t rows, std::size_t cols);
+```
+
+Constructs the matrix with the given size and default constructed matrix elements.
+
+*Parameters:*
+* `rows` - the number of rows.
+* `cols` - the number of columns.
+
+```cpp
+// SS.
 explicit Matrix(const Value& value);
 ```
 
@@ -58,6 +81,23 @@ Constructs the matrix with matrix elements initialized with the copies of `value
 * `value` - the value to initialize matrix elements with.
 
 ```cpp
+// SD.
+Matrix(std::size_t cols, const Value& value);
+// DS.
+Matrix(std::size_t rows, const Value& value);
+// DD.
+Matrix(std::size_t rows, std::size_t cols, const Value& value);
+```
+
+Constructs the matrix with the given size and matrix elements initialized with the copies of `value`.
+
+*Parameters:*
+* `rows` - the number of rows,
+* `cols` - the number of columns,
+* `value` - the value to initialize matrix elements with.
+
+```cpp
+// SS.
 template<typename... Values>
 explicit constexpr Matrix(Values&&... values);
 ```
@@ -67,89 +107,41 @@ Constructs the matrix with matrix elements contiguously initialized with the val
 *Parameters:*
 * `values` - the values to initialize matrix elements with.
 
-2\. Specialization `Matrix<Value, ct_rows, dynamic, Layout>` with `ct_rows != dynamic`
-
 ```cpp
-Matrix() = default;
-```
-
-Default constructor. Constructs the empty matrix.
-
-```cpp
-explicit Matrix(std::size_t cols);
-```
-
-Constructs the matrix with `cols` columns and default constructed matrix elements.
-
-*Parameters:*
-* `cols` - the number of columns.
-
-```cpp
-Matrix(std::size_t cols, const Value& value);
-```
-
-Constructs the matrix with `cols` columns and matrix elements initialized with the copies of `value`.
-
-*Parameters:*
-* `cols` - the number of columns,
-* `value` - the value to initialize matrix elements with.
-
-```cpp
+// SD.
 Matrix(std::size_t cols, std::initializer_list<Value> values);
-```
-
-```cpp
-Matrix(std::initializer_list<Value> values);
-```
-
-3\. Specialization `Matrix<Value, dynamic, ct_cols, Layout>` with `ct_cols != dynamic`
-
-Similar to the previous specialization.
-
-4\. Specialization `Matrix<Value, dynamic, dynamic, Layout>`
-
-```cpp
-Matrix() = default;
-```
-
-Default constructor. Constructs the empty matrix.
-
-```cpp
-explicit Matrix(std::size_t rows, std::size_t cols);
-```
-
-Constructs the matrix with `rows` rows and `cols` columns and default constructed matrix elements.
-
-*Parameters:*
-* `rows` - the number of rows,
-* `cols` - the number of columns.
-
-```cpp
-Matrix(std::size_t rows, std::size_t cols, const Value& value);
-```
-
-Constructs the matrix with `rows` rows and `cols` columns and matrix elements initialized with the copies of `value`.
-
-*Parameters:*
-* `rows` - the number of rows,
-* `cols` - the number of columns,
-* `value` - the value to initialize matrix elements with.
-
-```cpp
+// DS.
+Matrix(std::size_t rows, std::initializer_list<Value> values);
+// DD.
 Matrix(std::size_t rows, std::size_t cols, std::initializer_list<Value> values);
 ```
 
-### `is_empty`, `rows`, `cols`, `size`, `capacity`
+Constructs the matrix with the given size and matrix elements initialized contiguously with the contents of the initializer list `values`. The size of the initializer list should be equal to the number of matrix elements.
+
+*Parameters:*
+* `rows` - the number of rows,
+* `cols` - the number of columns,
+* `values` - the initializer list to initialize the matrix elements with
 
 ```cpp
-// 1.
-static constexpr bool is_empty();
-// 2.
-bool is_empty() const;
+// SD, and DS.
+Matrix(std::initializer_list<Value> values);
 ```
 
-1. For the specialization `SS`.
-2. For the specializations `SD`, `DS`, and `DD`.
+Constructs the matrix with matrix elements initialized contiguously with the contents of the initializer list `values`. The size of the initializer list should be equal to the number of matrix elements, the dynamic number of rows/colums is inferred from the initializer list size (`values.size() / ct_rows`, `values.size() / ct_cols`).
+
+*Parameters:*
+* `values` - the initializer list to initialize the matrix elements with
+
+### `is_empty`, `rows`, `cols`, `size`, `capacity`
+**Matrix size and capacity**
+
+```cpp
+// SS.
+static constexpr bool is_empty();
+// SD, DS, and DD.
+bool is_empty() const;
+```
 
 Checks if the matrix has zero number of elements.
 
@@ -157,50 +149,38 @@ Checks if the matrix has zero number of elements.
 `true` if the matrix is empty, and `false` otherwise.
 
 ```cpp
-// 1.
+// SS, SD.
 static constexpr std::size_t rows();
-// 2.
+// DS, DD.
 std::size_t rows() const;
 ```
-
-1. For the specializations `SS`, and `SD`.
-2. For the specializations `DS`, and `DD`.
 
 Returns the number of rows in the matrix.
 
 ```cpp
-// 1.
+// SS, DS.
 static constexpr std::size_t cols();
-// 2.
+// SD, DD.
 std::size_t cols() const;
 ```
-
-1. For the specializations `SS`, and `DS`.
-2. For the specializations `SD`, and `DD`.
 
 Returns the number of columns in the matrix.
 
 ```cpp
-// 1.
+// SS.
 static constexpr std::size_t size();
-// 2.
+// SD, DS, and DD.
 std::size_t size() const;
 ```
-
-1. For the specialization `SS`.
-2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the number of matrix elements (`= rows() * cols()`).
 
 ```cpp
-// 1.
-static constexpr std::size_t capacity();
-// 2.
+// SS.
+static constexpr std::size_t capacity();	// = size()
+// SD, DS, and DD.
 std::size_t capacity() const;
 ```
-
-1. For the specialization `SS` (`= size()`).
-2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the number of elements that the matrix has currently allocated space for.
 
@@ -208,16 +188,13 @@ Returns the number of elements that the matrix has currently allocated space for
 **Retrieves the given matrix element**
 
 ```cpp
-// 1.
+// SS.
 constexpr Value& operator()(std::size_t row, std::size_t col);
 constexpr const Value& operator()(std::size_t row, std::size_t col) const;
-// 2.
+// SD, DS, and DD.
 Value& operator()(std::size_t row, std::size_t col);
 const Value& operator()(std::size_t row, std::size_t col) const;
 ```
-
-1. For the specialization `SS`.
-2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the matrix element located in the row `row` and column `col`.
 
@@ -226,20 +203,17 @@ Returns the matrix element located in the row `row` and column `col`.
 * `col` - column position of the element to return.
 
 ```cpp
-// 1.
+// SS.
 constexpr Value& operator()(std::size_t index);
 constexpr const Value& operator()(std::size_t index) const;
 constexpr Value& operator[](std::size_t index);
 constexpr const Value& operator[](std::size_t index) const;
-// 2.
+// SD, DS, and DD.
 Value& operator()(std::size_t index);
 const Value& operator()(std::size_t index) const;
 Value& operator[](std::size_t index);
 const Value& operator[](std::size_t index) const;
 ```
-
-1. For the specialization `SS`.
-2. For the specializations `SD`, `DS`, and `DD`.
 
 Returns the matrix element located in the row `index` and column `0`. These functions can only be called for compile-time vectors (`ct_cols == 1`), otherwise a static assert violation will be generated.
 

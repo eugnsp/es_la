@@ -72,8 +72,8 @@ public:
 	Value& operator[](std::size_t);
 	const Value& operator[](std::size_t) const;
 
-	Value* data();
-	const Value* data() const;
+	Value* data() noexcept;
+	const Value* data() const noexcept;
 };
 
 class Matrix<Value_, dynamic, ct_cols, Layout>
@@ -104,8 +104,8 @@ public:
 	Value& operator[](std::size_t);
 	const Value& operator[](std::size_t) const;
 
-	Value* data();
-	const Value* data() const;
+	Value* data() noexcept;
+	const Value* data() const noexcept;
 };
 
 class Matrix<Value_, dynamic, dynamic, Layout>
@@ -133,8 +133,8 @@ public:
 	Value& operator[](std::size_t);
 	const Value& operator[](std::size_t) const;
 
-	Value* data();
-	const Value* data() const;
+	Value* data() noexcept;
+	const Value* data() const noexcept;
 };
 ```
 
