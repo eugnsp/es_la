@@ -27,8 +27,8 @@ using Matrix_3d = Matrix<double, 3, 3>;
 template<std::size_t t_rows, std::size_t t_cols>
 using Matrix_d = Matrix<double, t_rows, t_cols>;
 
-template<typename Value>
-using Matrix_x = Matrix<Value, dynamic, dynamic>;
+template<typename Value, class Layout = Col_major>
+using Matrix_x = Matrix<Value, dynamic, dynamic, Layout>;
 
 template<typename Value, std::size_t size>
 using Vector = Matrix<Value, size, 1>;
@@ -63,10 +63,13 @@ class Slice;
 template<class Expr1, class Expr2>
 struct Mul_func;
 
-template<class Expr1, class Expr2>
 struct Default_assign_scalar_op;
-
-template<class Expr1, class Expr2>
 struct Default_assign_expr_op;
+
+struct Mkl_matrix_assign_op;
+struct Mkl_matrix_assign_op2;
+
+template<class Expr, typename Scalar>
+class Scalar_mul_left_fn;
 } // namespace internal
 } // namespace es_la

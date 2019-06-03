@@ -20,4 +20,15 @@ ES_LA_MKL_BLAS_NRM2(float)
 ES_LA_MKL_BLAS_NRM2(double)
 ES_LA_MKL_BLAS_NRM2(std::complex<float>)
 ES_LA_MKL_BLAS_NRM2(std::complex<double>)
+
+///////////////////////////////////////////////////////////////////////
+
+#define ES_LA_MKL_OMATCOPY(T)                                                                                          \
+	void mkl_omatcopy(char layout, char trans, std::size_t rows, std::size_t cols, T alpha, const T* data_a,           \
+		std::size_t l_dim_a, T* data_b, std::size_t l_dim_b);
+
+ES_LA_MKL_OMATCOPY(float)
+ES_LA_MKL_OMATCOPY(double)
+ES_LA_MKL_OMATCOPY(std::complex<float>)
+ES_LA_MKL_OMATCOPY(std::complex<double>)
 } // namespace es_la::internal

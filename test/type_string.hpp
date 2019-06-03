@@ -18,6 +18,6 @@ std::string type_string()
 	str = typeid(T).name();
 #endif
 	str = std::regex_replace(str, std::regex{"es_la::(internal::)?"}, "");
-	str = std::regex_replace(str, std::regex{"\\(Dynamic_extent\\)0"}, "dynamic");
+	str = std::regex_replace(str, std::regex{"18446744073709551615ul"}, "dynamic");
 	return str;
 }

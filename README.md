@@ -31,4 +31,4 @@ Requires C++11/14/17 compiler.
 
 ## Documentation
 
-See [here](doc/synopsis.md).
+See [here](doc/README.md).

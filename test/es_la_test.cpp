@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-#include "type_string.hpp"
 #include "non_trivial.hpp"
+#include "type_string.hpp"
 
 #include "matrix_constructor.hpp"
 #include "matrix_view.hpp"
@@ -23,8 +23,21 @@ void run()
 	std::cout << "OK" << std::endl;
 }
 
+template<class T>
+void print(const T& mat)
+{
+	for (std::size_t row = 0; row < mat.rows(); ++row)
+	{
+		for (std::size_t col = 0; col < mat.cols(); ++col)
+			std::cout << mat(row, col) << ' ';
+		std::cout << std::endl;
+	}
+}
+
 int main()
 {
+	::mkl_verbose(1);
+
 	try
 	{
 		///////////////////////////////////////////////////////////////////////
@@ -59,6 +72,31 @@ int main()
 		///////////////////////////////////////////////////////////////////////
 		//* Binary expressions */
 
+		auto m1 = es_la::make_matrix<es_la::Row_major>(2, 3, [](auto i, auto j) { return 1. + i + j; });
+		print(m1);
+		std::cout << std::endl;
+
+		es_la::Matrix_x<double> m2(5, 6, 0);
+		// es_la::Matrix_x<std::complex<double>, es_la::Row_major> m3(5, 6, 0);
+
+		// es_la::Matrix_x<std::complex<double>> m4(6, 5, 0);
+		// es_la::Matrix_x<std::complex<double>, es_la::Row_major> m5(6, 5, 0);
+
+		m2.view(1, 2, 1, 3) = 5 * m1;
+		print(m2);
+		std::cout << std::endl;
+
+		// m4.view(1, 2, 1, 3).tr_view() = m1.tr_view();
+		// print(m4);
+		// std::cout << std::endl;
+
+		// m3.view(1, 3, 1, 2).tr_view() = m1;
+		// print(m3);
+		// std::cout << std::endl;
+
+		// m5.view(1, 2, 1, 3).tr_view() = m1.tr_view();
+		// print(m5);
+		// std::cout << std::endl;
 	}
 	catch (const std::exception& ex)
 	{

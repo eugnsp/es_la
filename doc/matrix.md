@@ -18,7 +18,7 @@ class Matrix;
 
 Storage for matrix elements of static matrices (`ct_rows != dynamic` and `ct_cols != dynamic`) is allocated inside a `Matrix` object itself. Storage for matrix elements of dynamic matrices (`ct_rows == dynamic` or `ct_cols == dynamic`) is allocated dynamically.
 
-The following notation is used for specializations below:
+The following notation is used for the specializations below:
 ```cpp
 SS = Matrix<Value, ct_rows, ct_cols, Layout> with ct_rows != dynamic && ct_cols != dynamic
 SD = Matrix<Value, ct_rows, dynamic, Layout> with ct_rows != dynamic
@@ -46,7 +46,7 @@ using Value = Value_;
 Matrix() = default;
 ```
 
-Default constructor. Constructs the matrix with default or value initialized matrix elements
+Default constructor. Constructs the matrix with default or value initialized matrix elements.
 
 ```cpp
 // SD, DS, and DD.
@@ -67,7 +67,7 @@ Matrix(std::size_t rows, std::size_t cols);
 Constructs the matrix with the given size and default constructed matrix elements.
 
 *Parameters:*
-* `rows` - the number of rows.
+* `rows` - the number of rows,
 * `cols` - the number of columns.
 
 ```cpp
@@ -128,7 +128,7 @@ Constructs the matrix with the given size and matrix elements initialized contig
 Matrix(std::initializer_list<Value> values);
 ```
 
-Constructs the matrix with matrix elements initialized contiguously with the contents of the initializer list `values`. The size of the initializer list should be equal to the number of matrix elements, the dynamic number of rows/colums is inferred from the initializer list size (`values.size() / ct_rows`, `values.size() / ct_cols`).
+Constructs the matrix with matrix elements initialized contiguously with the contents of the initializer list `values`. The size of the initializer list should be equal to the number of matrix elements, the dynamic number of columns or rows is inferred from the initializer list size (`values.size() / ct_rows` or `values.size() / ct_cols`).
 
 *Parameters:*
 * `values` - the initializer list to initialize the matrix elements with
@@ -185,7 +185,7 @@ std::size_t capacity() const;
 Returns the number of elements that the matrix has currently allocated space for.
 
 ### `operator()`, `operator[]`
-**Retrieves the given matrix element**
+**Access the specified element**
 
 ```cpp
 // SS.
@@ -215,7 +215,7 @@ Value& operator[](std::size_t index);
 const Value& operator[](std::size_t index) const;
 ```
 
-Returns the matrix element located in the row `index` and column `0`. These functions can only be called for compile-time vectors (`ct_cols == 1`), otherwise a static assert violation will be generated.
+Returns the matrix element located in the row `index` and column `0`. These functions can only be called for compile-time vectors (`ct_cols == 1`), otherwise a static assertion violation will be generated.
 
 *Parameters:*
 * `index` - row position of the element to return.
