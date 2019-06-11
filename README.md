@@ -4,22 +4,18 @@
 
 ## Synopsis
 
-This is a linear algebra library that is being developed mostly
-for educational purposes. It is also extensively used in the
-[`es_fe` library](https://github.com/eugnsp/es_fe) for finite
-elements.
+This is a linear algebra library that is being developed mostly for educational purposes. It is also extensively used in the [`es_fe` library](https://github.com/eugnsp/es_fe) for finite elements.
 
 ## Main features
 
-* Dense matrices and vectors of strandard and user-defined types
-with static and dynamic extents
+* Dense matrices and vectors of strandard and user-defined types with static and dynamic extents
 * Matrices with static extents can be used in `constexpr` context
 * Sub-matrix (block) and transposed views
 * Expression templates
 * Sparse matrices with CSR storage scheme
-* Some expressions like `X * Y` or `aX + bY` with `double` matrix
-elements are evaluated using MKL routines
+* Some operations like `X = Y` or `X += Y` with `float`, `double`, `std::complex<float>`, and `std::complex<double>` matrix elements are mapped into MKL routines
 * Export in MATLAB `.mat` and Gnuplot binary matrix files
+* MKL inspector-executor sparse matrix wrapper
 * MKL Pardiso linear solver and MKL Feast eigensolver wrappers
 
 ## Dependencies
@@ -27,7 +23,7 @@ elements are evaluated using MKL routines
 * Intel MKL
 * [`es_util` library](https://github.com/eugnsp/es_util)
 
-Requires C++11/14/17 compiler.
+Requires C++17 compiler. Tested with GCC 8.3.0 and Clang 7.0.0.
 
 ## Documentation
 

@@ -11,7 +11,8 @@ namespace es_la
 namespace internal
 {
 template<class Expr>
-struct Value_trait_impl;
+struct Value_trait_impl
+{};
 
 template<class Expr>
 struct Value_trait : internal::Value_trait_impl<es_util::Remove_cv_ref<Expr>>

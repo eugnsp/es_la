@@ -64,7 +64,7 @@ template<std::size_t t_size>
 class Slice;
 
 template<class Expr1, class Expr2>
-struct Mul_fn;
+class Mul_fn;
 
 template<class Expr, typename Scalar>
 class Scalar_mul_left_fn;

@@ -230,18 +230,18 @@ const Value* data() const noexcept;
 
 Returns the pointer to the underlying array serving as matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.
 
-### `eval()`
+### `eval`
 **Evaluated expression**
 
 ```cpp
-template<class Layout>
+template<class Layout = Col_major>
 Matrix<Value, ct_rows, ct_cols, Layout> eval() const
 ```
 
 Returns a copy of the matrix.
 
 *Parameters:*
-* `Layout` - layout tag of the resulting matrix.
+* `Layout` - the layout tag of the resulting matrix.
 
 ### `view`, `view`
 **Block views**

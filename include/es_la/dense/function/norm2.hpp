@@ -11,8 +11,8 @@
 
 namespace es_la
 {
-template<typename T, typename = std::void_t<decltype(std::abs(std::declval<T>()))>>
-auto norm2(T v)
+template<typename T>
+auto norm2(T v) -> decltype(std::abs(T{}))
 {
 	return std::abs(v);
 }

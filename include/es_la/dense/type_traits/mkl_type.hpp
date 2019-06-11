@@ -6,7 +6,8 @@
 namespace es_la::internal
 {
 template<class T>
-struct Mkl_type_trait;
+struct Mkl_type_trait
+{};
 
 template<>
 struct Mkl_type_trait<float>
