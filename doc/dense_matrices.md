@@ -259,6 +259,7 @@ Returns the block (submatrix) view to the matrix with rows in the range `[start_
 ### `row_view`, `row_cview`, `rows_view`, `rows_cview`
 **Row(s) views**
 
+```cpp
 // 1.
 template<std::size_t index>
 /* unspecified */ row_view();
@@ -286,6 +287,7 @@ template<std::size_t start_row, std::size_t rows>
 /* unspecified */ rows_view(std::size_t start_row, std::size_t rows);
 /* unspecified */ rows_view(std::size_t start_row, std::size_t rows) const;
 /* unspecified */ rows_cview(std::size_t start_row, std::size_t rows) const;
+```
 
 1. Returns the view to a matrix row with the given index.
 2. Returns the block view (submatrix) to the matrix with rows in the range `[start_row, start_row + rows)`.
