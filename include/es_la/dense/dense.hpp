@@ -161,9 +161,10 @@ public:
 		return (*this)[index];
 	}
 
+	template<class Layout>
 	auto eval() const
 	{
-		return Matrix<Value, ct_rows_value<Expr>, ct_cols_value<Expr>>{self()};
+		return Matrix<Value, ct_rows_value<Expr>, ct_cols_value<Expr>, Layout>{self()};
 	}
 
 	// 	template<class Other>

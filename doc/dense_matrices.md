@@ -10,7 +10,7 @@ template<typename Value_, std::size_t ct_rows, std::size_t ct_cols, class Layout
 class Matrix : public Expression<Matrix<Value, ct_rows, ct_cols, Layout>>;
 ```
 
-*Template parameters:*
+*Parameters:*
 * `Value_` - the type of elements,
 * `ct_rows` - number of rows fixed at compile-time or `dynamic`,
 * `ct_cols` - number of columns fixed at compile-time or `dynamic`,
@@ -230,6 +230,19 @@ const Value* data() const noexcept;
 
 Returns the pointer to the underlying array serving as matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.
 
+### `eval()`
+**Evaluated expression**
+
+```cpp
+template<class Layout>
+Matrix<Value, ct_rows, ct_cols, Layout> eval() const
+```
+
+Returns a copy of the matrix.
+
+*Parameters:*
+* `Layout` - layout tag of the resulting matrix.
+
 ### `view`, `view`
 **Block views**
 
@@ -248,7 +261,7 @@ template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::si
 /* unspecified */ cview(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const;
 ```
 
-Returns the block (submatrix) view to the matrix with rows in the range `[start_row, start_row + rows)` and columns in the range `[start_col, start_col + cols)`. Views returned by `const`-qualified methods provide an immutable access to the underlying matrix.
+Returns the block (submatrix) view to the matrix with rows in the range `[start_row, start_row + rows)` and columns in the range `[start_col, start_col + cols)`. Views returned by `const`-qualified member functions provide an immutable access to the underlying matrix.
 
 *Parameters:*
 * `start_row` - index of the first row in the view,
@@ -289,10 +302,10 @@ template<std::size_t start_row, std::size_t rows>
 /* unspecified */ rows_cview(std::size_t start_row, std::size_t rows) const;
 ```
 
-1. Returns the view to a matrix row with the given index.
+1. Returns the view to the matrix row with the given index.
 2. Returns the block view (submatrix) to the matrix with rows in the range `[start_row, start_row + rows)`.
 
-Views returned by `const`-qualified methods provide an immutable access to the underlying matrix.
+Views returned by `const`-qualified member functions provide an immutable access to the underlying matrix.
 
 *Parameters:*
 * `index` - index of the row in the view,
@@ -313,7 +326,7 @@ Similar member functions for a column(s) view.
 /* unspecified */ tr_cview() const;
 ```
 
-Returns the view to the transposed matrix.
+Returns the view to the transposed matrix. Views returned by `const`-qualified member functions provide an immutable access to the underlying matrix.
 
 ### `diag_view`
 **Diagonal view**
@@ -324,4 +337,4 @@ Returns the view to the transposed matrix.
 /* unspecified */ diag_cview() const;
 ```
 
-Returns the (vector) view to the diagonal matrix elements.
+Returns the (vector) view to the diagonal matrix elements. Views returned by `const`-qualified member functions provide an immutable access to the underlying matrix.
