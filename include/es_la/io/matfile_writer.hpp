@@ -114,11 +114,12 @@ private:
 
 	template<typename T>
 	void write_array_element(const std::string& name, std::size_t rows, std::size_t cols, const T* real_values,
-		es_util::Identity<const T*> complex_values = nullptr);
+		es_util::Type_identity<const T*> complex_values = nullptr);
 
 	template<typename T, typename Index>
 	void write_sparse_array_element(const std::string& name, std::size_t rows, std::size_t cols, std::size_t nnz,
-		const Index* ir, const Index* jc, const T* real_values, es_util::Identity<const T*> complex_values = nullptr);
+		const Index* ir, const Index* jc, const T* real_values,
+		es_util::Type_identity<const T*> complex_values = nullptr);
 
 private:
 	std::ofstream file_;
@@ -130,7 +131,7 @@ private:
 
 template<typename T>
 void Matfile_writer::write_array_element(const std::string& name, std::size_t rows, std::size_t cols,
-	const T* real_values, es_util::Identity<const T*> complex_values)
+	const T* real_values, es_util::Type_identity<const T*> complex_values)
 {
 	assert(real_values);
 
@@ -168,7 +169,8 @@ void Matfile_writer::write_array_element(const std::string& name, std::size_t ro
 
 template<typename T, typename Index>
 void Matfile_writer::write_sparse_array_element(const std::string& name, std::size_t rows, std::size_t cols,
-	std::size_t nnz, const Index* ir, const Index* jc, const T* real_values, es_util::Identity<const T*> complex_values)
+	std::size_t nnz, const Index* ir, const Index* jc, const T* real_values,
+	es_util::Type_identity<const T*> complex_values)
 {
 	static_assert(std::is_integral_v<Index>);
 	assert(real_values);

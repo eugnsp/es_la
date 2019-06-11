@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/core/type_traits.hpp>
+#include <es_la/dense/type_traits.hpp>
 
 #include <cstddef>
 

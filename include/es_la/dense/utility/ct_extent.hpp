@@ -1,8 +1,7 @@
 #pragma once
-#include <es_la/core/tags.hpp>
+#include <es_la/dense/tags.hpp>
 
 #include <cstddef>
-#include <type_traits>
 
 namespace es_la::internal
 {

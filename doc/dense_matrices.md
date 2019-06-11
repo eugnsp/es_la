@@ -7,7 +7,7 @@ Namespace: `es_la`
 
 ```cpp
 template<typename Value_, std::size_t ct_rows, std::size_t ct_cols, class Layout>
-class Matrix;
+class Matrix : public Expression<Matrix<Value, ct_rows, ct_cols, Layout>>;
 ```
 
 *Template parameters:*
@@ -18,7 +18,7 @@ class Matrix;
 
 Storage for matrix elements of static matrices (`ct_rows != dynamic` and `ct_cols != dynamic`) is allocated inside a `Matrix` object itself. Storage for matrix elements of dynamic matrices (`ct_rows == dynamic` or `ct_cols == dynamic`) is allocated dynamically.
 
-The following notation is used for the specializations below:
+The following notation is used below to denote specializations:
 ```cpp
 SS = Matrix<Value, ct_rows, ct_cols, Layout> with ct_rows != dynamic && ct_cols != dynamic
 SD = Matrix<Value, ct_rows, dynamic, Layout> with ct_rows != dynamic
@@ -230,136 +230,96 @@ const Value* data() const noexcept;
 
 Returns the pointer to the underlying array serving as matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.
 
-<!--
-### `get`
-**Retrieves all elements**
+### `view`, `view`
+**Block views**
 
 ```cpp
-template<class Random_access_iterator>
-void get(Random_access_iterator dest);
+template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
+/* unspecified */ view();
+
+template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
+/* unspecified */ view() const;
+
+template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
+/* unspecified */ cview() const;
+
+/* unspecified */ view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols);
+/* unspecified */ view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const;
+/* unspecified */ cview(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const;
 ```
 
-Stores all elements in the range `[dest, dest + size)`, where `size` is the size of the container.
+Returns the block (submatrix) view to the matrix with rows in the range `[start_row, start_row + rows)` and columns in the range `[start_col, start_col + cols)`. Views returned by `const`-qualified methods provide an immutable access to the underlying matrix.
 
 *Parameters:*
-* `dest` - the beginning of the destination range, should be a random access iterator.
+* `start_row` - index of the first row in the view,
+* `rows` - number of rows in the view,
+* `start_col` - index of the first column in the view,
+* `cols` - number of columns in the view.
 
-*Time complexity:* linear in the size of the container, `O(size())`.
+### `row_view`, `row_cview`, `rows_view`, `rows_cview`
+**Row(s) views**
 
-### `sum`
-**Range sum calculation**
-
-```cpp
 // 1.
-Value sum(Size first, Size last) const;
+template<std::size_t index>
+/* unspecified */ row_view();
+
+template<std::size_t index>
+/* unspecified */ row_view() const;
+
+template<std::size_t index>
+/* unspecified */ row_cview() const;
+
+/* unspecified */ row_view(std::size_t index);
+/* unspecified */ row_view(std::size_t index) const;
+/* unspecified */ row_cview(std::size_t index) const;
+
 // 2.
-Value sum(Size index) const;
-// 3.
-Value sum() const;
-```
+template<std::size_t start_row, std::size_t rows>
+/* unspecified */ rows_view();
 
-1. Returns the sum of elements in the closed range `[first, last]`.
-2. Returns the prefix sum, i.e. the sum of elements in the closed range `[0, index]`.
-3. Returns the sum of all element in the container. *Precondition:* the container should be non-empty.
+template<std::size_t start_row, std::size_t rows>
+/* unspecified */ rows_view() const;
 
-*Parameters:*
-* `first`, `last` - the range of elements to calculate the sum of.
-* `index` - index of the last element in the range to calculate the sum of.
+template<std::size_t start_row, std::size_t rows>
+/* unspecified */ rows_cview() const;
 
-*Time complexity:* logarithmic in the size of the container, `O(log(size()))`.
+/* unspecified */ rows_view(std::size_t start_row, std::size_t rows);
+/* unspecified */ rows_view(std::size_t start_row, std::size_t rows) const;
+/* unspecified */ rows_cview(std::size_t start_row, std::size_t rows) const;
 
-### `lower_bound`, `upper_bound`
-**Lower/upper bound binary search in a Fenwick tree with non-decreasing prefix sums**
+1. Returns the view to a matrix row with the given index.
+2. Returns the block view (submatrix) to the matrix with rows in the range `[start_row, start_row + rows)`.
 
-```cpp
-// 1.
-Size lower_bound(Value value) const;
-// 2.
-Size upper_bound(Value value) const;
-```
-
-1. Returns the smallest index such that the prefix sum is not less than the value `value`, or the container's size if no such index exists.
-2. Returns the smallest index such that the prefix sum is greater than the value `value`, or the container's size if no such index exists.
-
-*Precondition:* the container should be non-empty and all elements should be non-negative, so that the sequence of all prefix sums is non-decreasing (sorted).
-
-*Time complexity:* logarithmic in the size of the container, `O(log(size()))`.
-
-### `reset`
-**Replaces the contents of the container**
-
-```cpp
-// 1.
-void reset(Size size);
-// 2.
-void reset(std::vector<Value> data);
-// 3.
-void reset(Input_iterator1 first, Input_iterator2 last);
-```
-
-1. Replaces the contents with `size` copies of the zero value (`= Value{}`).
-2. Replaces the contents with the contents of `data`.
-3. Replaces the contents with copies of values in the range `[first, last)`.
+Views returned by `const`-qualified methods provide an immutable access to the underlying matrix.
 
 *Parameters:*
-* `size` - the new size of the container,
-* `data` - the vector to move the contents from,
-* `first`, `last` - the range to copy the elements from.
+* `index` - index of the row in the view,
+* `start_row` - index of the first row in the view,
+* `rows` - number of rows in the view.
 
-*Time complexity:* linear in the new size of the container, 1. `O(size)`, 2. `O(data.size())`, 3. `O(last - first)`.
+### `col_view`, `col_cview`, `cols_view`, `cols_cview`
+**Column(s) views**
 
-### `add`
-**Increments the given element**
+Similar member functions for a column(s) view.
 
-```cpp
-void add(Size index, const Value& value);
-```
-
-Adds the value `value` to the element with the index `index`.
-
-*Parameters:*
-* `index` - index of the element to add to,
-* `value` - value to add.
-
-*Time complexity:* logarithmic in the size of the container, `O(log(size()))`.
-
-### `set`
-**Sets the given element**
+### `tr_view`
+**Transposed view**
 
 ```cpp
-void set(Size index, const Value& value);
+/* unspecified */ tr_view();
+/* unspecified */ tr_view() const;
+/* unspecified */ tr_cview() const;
 ```
 
-Sets the value of the element with the index `index` to `value`.
+Returns the view to the transposed matrix.
 
-*Parameters:*
-* `index` - index of the element to add to,
-* `value` - value to set.
-
-*Time complexity:* logarithmic in the size of the container, `O(log(size()))`.
-
-### `push`
-**Adds an element to the end*
+### `diag_view`
+**Diagonal view**
 
 ```cpp
-void push(const Value& value);
+/* unspecified */ diag_view();
+/* unspecified */ diag_view() const;
+/* unspecified */ diag_cview() const;
 ```
 
-Appends the given element value to the end of the container.
-
-*Parameters:*
-* `value` - value to append.
-
-*Time complexity:* logarithmic in the size of the container, `O(log(size()))`.
-
-### `pop`
-**Removes the last element*
-
-```cpp
-void pop();
-```
-
-Removes the last element of the container.
-
-*Time complexity:* constant.
--->
+Returns the (vector) view to the diagonal matrix elements.

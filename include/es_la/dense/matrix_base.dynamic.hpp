@@ -5,7 +5,6 @@
 #include <es_la/dense/shape.hpp>
 #include <es_la/dense/storage/storage.hpp>
 #include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility.hpp>
 
 #include <array>
 #include <cassert>

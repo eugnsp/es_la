@@ -92,13 +92,13 @@ public:
 
 	constexpr Value& operator[](std::size_t index)
 	{
-		static_assert(internal::is_vector_expr<Expr>, "Expression should be a vector");
+		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return (*this)(index, 0);
 	}
 
 	constexpr const Value& operator[](std::size_t index) const
 	{
-		static_assert(internal::is_vector_expr<Expr>, "Expression should be a vector");
+		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return (*this)(index, 0);
 	}
 

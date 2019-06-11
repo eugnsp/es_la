@@ -1,9 +1,7 @@
 #pragma once
-#include <es_la/core/tags.hpp>
-#include <es_la/core/type_traits/ct_extent.hpp>
+#include <es_la/dense/tags.hpp>
+#include <es_la/dense/type_traits/ct_extent.hpp>
 #include <es_la/sparse/forward.hpp>
-
-#include <es_util/type_traits.hpp>
 
 namespace es_la
 {

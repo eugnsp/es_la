@@ -7,13 +7,14 @@
 
 namespace es_la
 {
-template<class Expr_, typename Scalar_, class Fn>
-class Scalar_expr : public Dense<Scalar_expr<Expr_, Scalar_, Fn>, Rvalue>
+template<class Expr_, typename Scalar_, template<class, typename> class Fn_>
+class Scalar_expr : public Dense<Scalar_expr<Expr_, Scalar_, Fn_>, Rvalue>
 {
 public:
 	using Value = Value_type<Scalar_expr>;
 	using Expr = Expr_;
 	using Scalar = Scalar_;
+	using Fn = Fn_<Expr, Scalar>;
 
 public:
 	template<class Expr_f, typename Scalar_f>

@@ -26,7 +26,7 @@ struct Block_view_lvalue_copy_constructor
 		static_assert(std::is_same_v<decltype(v1(0, 0)), T&>);
 		static_assert(std::is_same_v<decltype(v1c(0, 0)), T&>);
 		assert(v1.rows() == v1c.rows() && v1.cols() == v1c.cols());
-		assert(v1.l_dim() == v1c.l_dim());
+		assert(v1.lead_dim() == v1c.lead_dim());
 		assert(v1.data() == v1c.data());
 	}
 };
@@ -46,12 +46,12 @@ struct Block_view_lvalue_size
 
 		auto v1c = m1c.view(1, 2, 1, 3);
 		assert(v1c.rows() == 2 && v1c.cols() == 3);
-		assert(v1c.l_dim() == 3);
+		assert(v1c.lead_dim() == 3);
 		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v1c)>, es_la::Col_major>);
 
 		auto v1r = m1r.view(1, 2, 1, 3);
 		assert(v1r.rows() == 2 && v1r.cols() == 3);
-		assert(v1r.l_dim() == 4);
+		assert(v1r.lead_dim() == 4);
 		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v1r)>, es_la::Row_major>);
 	}
 };

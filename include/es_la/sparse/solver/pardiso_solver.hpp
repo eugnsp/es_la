@@ -25,7 +25,7 @@ private:
 	using Value = typename Sparse_matrix::Value;
 	using Symmetry_tag = typename Sparse_matrix_::Symmetry_tag;
 
-	static_assert(internal::is_fd_cfd<Value>);
+	static_assert(internal::is_fd_or_cfd<Value>);
 
 public:
 	Pardiso_solver(const Sparse_matrix& matrix) : matrix_(matrix)

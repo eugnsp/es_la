@@ -1,8 +1,9 @@
 #pragma once
+#include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/csr_matrix.hpp>
-#include <es_la/sparse/utility/mkl_overloads.hpp>
 #include <es_la/sparse/type_traits.hpp>
+#include <es_la/sparse/utility/mkl_overloads.hpp>
 
 #include <mkl_spblas.h>
 #include <mkl_types.h>
@@ -11,12 +12,38 @@
 
 namespace es_la::internal
 {
-template<class Matrix>
-constexpr ::sparse_layout_t mkl_sparse_dense_layout()
+//////////////////////////////////////////////////////////////////////
+//* Matrix memory layouts */
+
+inline constexpr ::sparse_layout_t layout_as_mkl_enum_sparse(Col_major)
 {
-	return is_col_major<Matrix> ? ::sparse_layout_t::SPARSE_LAYOUT_COLUMN_MAJOR
-								: ::sparse_layout_t::SPARSE_LAYOUT_ROW_MAJOR;
+	return ::sparse_layout_t::SPARSE_LAYOUT_COLUMN_MAJOR;
 }
+
+inline constexpr ::sparse_layout_t layout_as_mkl_enum_sparse(Row_major)
+{
+	return ::sparse_layout_t::SPARSE_LAYOUT_ROW_MAJOR;
+}
+
+///////////////////////////////////////////////////////////////////////
+//* Matrix operations */
+
+inline constexpr ::sparse_operation_t transp_op_as_mkl_enum_sparse(No_transpose)
+{
+	return ::sparse_operation_t::SPARSE_OPERATION_NON_TRANSPOSE;
+}
+
+inline constexpr ::sparse_operation_t transp_op_as_mkl_enum_sparse(Transpose)
+{
+	return ::sparse_operation_t::SPARSE_OPERATION_TRANSPOSE;
+}
+
+inline constexpr ::sparse_operation_t transp_op_as_mkl_enum_sparse(Conj_transpose)
+{
+	return ::sparse_operation_t::SPARSE_OPERATION_CONJUGATE_TRANSPOSE;
+}
+
+//////////////////////////////////////////////////////////////////////
 
 template<class Matrix>
 ::matrix_descr mkl_matrix_descr()

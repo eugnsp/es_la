@@ -1,6 +1,6 @@
 #pragma once
-#include <es_la/core/tags.hpp>
 #include <es_la/dense/dense.hpp>
+#include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 
 #include <cstddef>

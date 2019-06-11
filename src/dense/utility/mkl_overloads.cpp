@@ -1,4 +1,4 @@
-#include <es_la/core/type_traits.hpp>
+#include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/utility/mkl_overloads.hpp>
 
 #include <mkl_cblas.h>
@@ -49,4 +49,53 @@ ES_LA_IMPL_MKL_OMATCOPY(mkl_somatcopy, float)
 ES_LA_IMPL_MKL_OMATCOPY(mkl_domatcopy, double)
 ES_LA_IMPL_MKL_OMATCOPY(mkl_comatcopy, std::complex<float>)
 ES_LA_IMPL_MKL_OMATCOPY(mkl_zomatcopy, std::complex<double>)
+
+//////////////////////////////////////////////////////////////////////
+
+#define ES_LA_IMPL_MKL_GEMV_R(fn, T)                                                                                   \
+	void mkl_gemv(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE transp, std::size_t m, std::size_t n, T alpha, const T* data_a, \
+		std::size_t lead_dim_a, const T* data_x, std::size_t inc_x, T beta, T* data_y, std::size_t inc_y)              \
+	{                                                                                                                  \
+		::fn(layout, transp, static_cast<MKL_INT>(m), static_cast<MKL_INT>(n), alpha, data_a, lead_dim_a, data_x,      \
+			inc_x, beta, data_y, inc_y);                                                                               \
+	}
+
+#define ES_LA_IMPL_MKL_GEMV_C(fn, T)                                                                                   \
+	void mkl_gemv(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE transp, std::size_t m, std::size_t n, T alpha, const T* data_a, \
+		std::size_t lead_dim_a, const T* data_x, std::size_t inc_x, T beta, T* data_y, std::size_t inc_y)              \
+	{                                                                                                                  \
+		::fn(layout, transp, static_cast<MKL_INT>(m), static_cast<MKL_INT>(n), &alpha, data_a, lead_dim_a, data_x,     \
+			inc_x, &beta, data_y, inc_y);                                                                              \
+	}
+
+ES_LA_IMPL_MKL_GEMV_R(cblas_sgemv, float)
+ES_LA_IMPL_MKL_GEMV_R(cblas_dgemv, double)
+ES_LA_IMPL_MKL_GEMV_C(cblas_cgemv, std::complex<float>)
+ES_LA_IMPL_MKL_GEMV_C(cblas_zgemv, std::complex<double>)
+
+//////////////////////////////////////////////////////////////////////
+
+#define ES_LA_IMPL_MKL_GEMM_R(fn, T)                                                                                   \
+	void mkl_gemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE transp_a, CBLAS_TRANSPOSE transp_b, std::size_t m,              \
+		std::size_t n, std::size_t k, T alpha, const T* data_a, std::size_t lead_dim_a, const T* data_b,               \
+		std::size_t lead_dim_b, T beta, T* data_c, std::size_t lead_dim_c)                                             \
+	{                                                                                                                  \
+		::fn(layout, transp_a, transp_b, static_cast<MKL_INT>(m), static_cast<MKL_INT>(n), static_cast<MKL_INT>(k),    \
+			alpha, data_a, lead_dim_a, data_b, lead_dim_b, beta, data_c, lead_dim_c);                                  \
+	}
+
+#define ES_LA_IMPL_MKL_GEMM_C(fn, T)                                                                                   \
+	void mkl_gemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE transp_a, CBLAS_TRANSPOSE transp_b, std::size_t m,              \
+		std::size_t n, std::size_t k, T alpha, const T* data_a, std::size_t lead_dim_a, const T* data_b,               \
+		std::size_t lead_dim_b, T beta, T* data_c, std::size_t lead_dim_c)                                             \
+	{                                                                                                                  \
+		::fn(layout, transp_a, transp_b, static_cast<MKL_INT>(m), static_cast<MKL_INT>(n), static_cast<MKL_INT>(k),    \
+			&alpha, data_a, lead_dim_a, data_b, lead_dim_b, &beta, data_c, lead_dim_c);                                \
+	}
+
+ES_LA_IMPL_MKL_GEMM_R(cblas_sgemm, float)
+ES_LA_IMPL_MKL_GEMM_R(cblas_dgemm, double)
+ES_LA_IMPL_MKL_GEMM_C(cblas_cgemm3m, std::complex<float>)
+ES_LA_IMPL_MKL_GEMM_C(cblas_zgemm3m, std::complex<double>)
+
 } // namespace es_la::internal

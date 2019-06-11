@@ -14,7 +14,7 @@ struct Is_lvalue_block_trait_impl : std::false_type
 {};
 
 template<class Expr>
-struct Is_lvalue_block_trait : Is_lvalue_block_trait_impl<es_util::Remove_cv_ref<Expr>>
+struct Is_lvalue_block_trait : Is_lvalue_block_trait_impl<std::remove_const_t<Expr>>
 {};
 
 template<typename Value, auto ct_rows, auto ct_cols, class Layout>
@@ -28,6 +28,10 @@ struct Is_lvalue_block_trait_impl<View<Expr, Range<ct_begin1, ct_size1>, Range<c
 
 template<class Expr>
 struct Is_lvalue_block_trait_impl<Transposed_view<Expr, Lvalue>> : std::true_type
+{};
+
+template<class Expr>
+struct Is_lvalue_block_trait_impl<Diag_view<Expr, Lvalue>> : std::true_type
 {};
 } // namespace internal
 

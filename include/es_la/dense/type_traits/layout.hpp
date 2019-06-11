@@ -58,5 +58,16 @@ struct Layout_trait_impl<Transposed_view<Expr, Category>>
 {
 	using Type = Transpose_layout<Layout_tag<Expr>>;
 };
+
+template<class Expr, class Category>
+struct Layout_trait_impl<Diag_view<Expr, Category>>
+{
+	using Type = Row_major;
+};
+
+//////////////////////////////////////////////////////////////////////
+
+template<class Expr1, class Expr2>
+inline constexpr bool have_same_layout = std::is_same_v<Layout_tag<Expr1>, Layout_tag<Expr2>>;
 }
 } // namespace es_la

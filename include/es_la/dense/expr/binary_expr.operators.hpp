@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/core/expression.hpp>
+#include <es_la/dense/expression.hpp>
 #include <es_la/dense/expr/functor.hpp>
 #include <es_la/dense/forward.hpp>
 

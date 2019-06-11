@@ -8,7 +8,7 @@
 
 namespace es_la::internal
 {
-template<class Expr, typename Scalar, typename = std::enable_if_t<is_scalar<Scalar>>>
+template<class Expr, typename Scalar/* , typename = std::enable_if_t<is_scalar<Scalar>> */>
 void mul(Dense<Expr, Lvalue>& expr, Scalar scalar)
 {
 	for (std::size_t col = 0; col < expr.cols(); ++col)

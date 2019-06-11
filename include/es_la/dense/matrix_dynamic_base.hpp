@@ -1,11 +1,11 @@
 #pragma once
-#include <es_la/core/tags.hpp>
+#include <es_la/dense/tags.hpp>
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/matrix_base.static.hpp>
 #include <es_la/dense/shape.hpp>
 #include <es_la/dense/storage/storage.hpp>
 #include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/utility/ct_extent.hpp>
 
 #include <algorithm>
 #include <array>

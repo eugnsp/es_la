@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/core/type_traits/expr_storage.hpp>
+#include <es_la/dense/type_traits/expr_storage.hpp>
 #include <es_la/sparse/forward.hpp>
 
 #include <type_traits>

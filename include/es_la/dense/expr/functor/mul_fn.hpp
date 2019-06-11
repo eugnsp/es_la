@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/utility/ct_extent.hpp>
 #include <es_la/dense/type_traits.hpp>
 
 #include <cassert>

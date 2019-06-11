@@ -8,15 +8,26 @@
 
 namespace es_la::internal
 {
-template<class T>
-inline constexpr bool is_fd = es_util::is_one_of<T, float, double>;
+template<typename T>
+struct Is_fd : es_util::Is_one_of<T, float, double>
+{};
 
-template<class T>
-inline constexpr bool is_cfd =
-	es_util::is_one_of<T, std::complex<float>, std::complex<double>, ::MKL_Complex8, ::MKL_Complex16>;
+template<typename T>
+inline constexpr bool is_fd = Is_fd<T>::value;
 
-template<class T>
-inline constexpr bool is_fd_cfd = is_fd<T> || is_cfd<T>;
+template<typename T>
+struct Is_cfd : es_util::Is_one_of<T, std::complex<float>, std::complex<double>, ::MKL_Complex8, ::MKL_Complex16>
+{};
+
+template<typename T>
+inline constexpr bool is_cfd = Is_cfd<T>::value;
+
+template<typename T>
+struct Is_fd_or_cfd : std::disjunction<Is_fd<T>, Is_cfd<T>>
+{};
+
+template<typename T>
+inline constexpr bool is_fd_or_cfd = Is_fd_or_cfd<T>::value;
 
 template<class T>
 struct Add_complex_trait

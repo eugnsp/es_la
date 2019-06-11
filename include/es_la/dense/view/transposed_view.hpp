@@ -1,7 +1,7 @@
 #pragma once
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/utility/ct_extent.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -48,22 +48,22 @@ public:
 		return expr_.rows();
 	}
 
-	std::size_t l_dim() const
+	std::size_t lead_dim() const
 	{
 		static_assert(is_lvalue_block<Transposed_view>, "View should be an l-value block");
-		return expr_.l_dim();
+		return expr_.lead_dim();
 	}
 
-	std::size_t row_inc() const
+	std::size_t row_stride() const
 	{
 		static_assert(is_lvalue_block<Transposed_view>, "View should be an l-value block");
-		return expr_.col_inc();
+		return expr_.col_stride();
 	}
 
-	std::size_t col_inc() const
+	std::size_t col_stride() const
 	{
 		static_assert(is_lvalue_block<Transposed_view>, "View should be an l-value block");
-		return expr_.row_inc();
+		return expr_.row_stride();
 	}
 
 	//////////////////////////////////////////////////////////////////////

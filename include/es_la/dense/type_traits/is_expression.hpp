@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/core/forward.hpp>
+#include <es_la/dense/forward.hpp>
 
 #include <type_traits>
 #include <utility>

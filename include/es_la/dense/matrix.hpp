@@ -1,12 +1,12 @@
 #pragma once
 #include <es_la/dense/matrix_base.dynamic.hpp>
 #include <es_la/dense/matrix_base.static.hpp>
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/type_traits.hpp>
 
 #include <es_util/type_traits.hpp>
 
 #include <array>
-#include <tuple>
+#include <cstddef>
 #include <type_traits>
 
 namespace es_la
@@ -50,19 +50,19 @@ public:
 	using Base::cols;
 	using Base::rows;
 
-	std::size_t l_dim() const
+	std::size_t lead_dim() const
 	{
-		return is_col_major<Matrix> ? rows() : cols();
+		return is_col_major<Matrix> ? col_stride() : row_stride();
 	}
 
-	std::size_t row_inc() const
+	std::size_t row_stride() const
 	{
-		return is_col_major<Matrix> ? 1 : l_dim();
+		return is_col_major<Matrix> ? 1 : cols();
 	}
 
-	std::size_t col_inc() const
+	std::size_t col_stride() const
 	{
-		return is_col_major<Matrix> ? l_dim() : 1;
+		return is_col_major<Matrix> ? rows() : 1;
 	}
 
 	std::size_t memory_size() const

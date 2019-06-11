@@ -31,12 +31,12 @@ template<class Expr1, class Expr2>
 void cols_convolution(
 	const Dense<Expr1, Lvalue>& x, Dense<Expr2, Lvalue>& y, std::optional<std::size_t> y_start = {})
 {
-	static_assert(std::is_same_v<Value_type<Expr1>, Value_type<Expr2>>, "Incompatible data types");
-	static_assert(internal::is_vector_expr<Expr1>, "Expression should be a vector");
+	static_assert(internal::have_same_value_type<Expr1, Expr2>, "Incompatible data types");
+	static_assert(internal::is_vector<Expr1>, "Expression should be a vector");
 
 	::VSLConvTaskPtr task;
 	ES_LA_CALL_MKL_VSL(
-		::vsldConvNewTaskX1D, &task, VSL_CONV_MODE_AUTO, x.size(), y.rows(), y.rows(), x.self().data(), x.self().row_inc());
+		::vsldConvNewTaskX1D, &task, VSL_CONV_MODE_AUTO, x.size(), y.rows(), y.rows(), x.self().data(), x.self().row_stride());
 
 	if (y_start)
 	{
@@ -48,7 +48,7 @@ void cols_convolution(
 	for (std::size_t col = 0; col < y.cols(); ++col)
 	{
 		auto yc = y.col_view(col);
-		ES_LA_CALL_MKL_VSL(::vsldConvExecX1D, task, yc.data(), yc.row_inc(), z.data(), 1);
+		ES_LA_CALL_MKL_VSL(::vsldConvExecX1D, task, yc.data(), yc.row_stride(), z.data(), 1);
 		yc = z;
 	}
 
@@ -59,12 +59,12 @@ template<class Expr1, class Expr2>
 void rows_convolution(
 	const Dense<Expr1, Lvalue>& x, Dense<Expr2, Lvalue>& y, std::optional<std::size_t> y_start = {})
 {
-	static_assert(std::is_same_v<Value_type<Expr1>, Value_type<Expr2>>, "Incompatible data types");
-	static_assert(internal::is_vector_expr<Expr1>, "Expression should be a vector");
+	static_assert(internal::have_same_value_type<Expr1, Expr2>, "Incompatible data types");
+	static_assert(internal::is_vector<Expr1>, "Expression should be a vector");
 
 	::VSLConvTaskPtr task;
 	ES_LA_CALL_MKL_VSL(
-		::vsldConvNewTaskX1D, &task, VSL_CONV_MODE_AUTO, x.size(), y.cols(), y.cols(), x.self().data(), x.self().row_inc());
+		::vsldConvNewTaskX1D, &task, VSL_CONV_MODE_AUTO, x.size(), y.cols(), y.cols(), x.self().data(), x.self().row_stride());
 
 	if (y_start)
 	{
@@ -76,7 +76,7 @@ void rows_convolution(
 	for (std::size_t row = 0; row < y.rows(); ++row)
 	{
 		auto yr = y.row_view(row).tr_view();
-		ES_LA_CALL_MKL_VSL(::vsldConvExecX1D, task, yr.data(), yr.row_inc(), z.data(), 1);
+		ES_LA_CALL_MKL_VSL(::vsldConvExecX1D, task, yr.data(), yr.row_stride(), z.data(), 1);
 		yr = z;
 	}
 

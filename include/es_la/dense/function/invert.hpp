@@ -2,7 +2,7 @@
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/function/det.hpp>
 #include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/utility/ct_extent.hpp>
 
 #include <type_traits>
 #include <utility>

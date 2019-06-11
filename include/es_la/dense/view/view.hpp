@@ -1,7 +1,7 @@
 #pragma once
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/utility/ct_extent.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -55,22 +55,22 @@ public:
 		return cols_.size();
 	}
 
-	std::size_t l_dim() const
+	std::size_t lead_dim() const
 	{
 		static_assert(is_lvalue_block<View>, "View should be an l-value block");
-		return expr_.l_dim();
+		return expr_.lead_dim();
 	}
 
-	std::size_t row_inc() const
+	std::size_t row_stride() const
 	{
 		static_assert(is_lvalue_block<View>, "View should be an l-value block");
-		return expr_.row_inc();
+		return expr_.row_stride();
 	}
 
-	std::size_t col_inc() const
+	std::size_t col_stride() const
 	{
 		static_assert(is_lvalue_block<View>, "View should be an l-value block");
-		return expr_.col_inc();
+		return expr_.col_stride();
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -93,18 +93,18 @@ public:
 	{
 		static_assert(is_lvalue_block<View>, "View should be an l-value block");
 		if constexpr (is_col_major<View>)
-			return expr_.data() + cols_.start() * l_dim() + rows_.start();
+			return expr_.data() + cols_.start() * lead_dim() + rows_.start();
 		else
-			return expr_.data() + rows_.start() * l_dim() + cols_.start();
+			return expr_.data() + rows_.start() * lead_dim() + cols_.start();
 	}
 
 	auto data() const
 	{
 		static_assert(is_lvalue_block<View>, "View should be an l-value block");
 		if constexpr (is_col_major<View>)
-			return &std::as_const(*(expr_.data() + cols_.start() * l_dim() + rows_.start()));
+			return &std::as_const(*(expr_.data() + cols_.start() * lead_dim() + rows_.start()));
 		else
-			return &std::as_const(*(expr_.data() + rows_.start() * l_dim() + cols_.start()));
+			return &std::as_const(*(expr_.data() + rows_.start() * lead_dim() + cols_.start()));
 	}
 
 private:

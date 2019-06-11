@@ -1,10 +1,11 @@
 #pragma once
-#include <es_la/core/expression.hpp>
+#include <es_la/dense/expression.hpp>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/forward.hpp>
 #include <es_la/sparse/type_traits.hpp>
-#include <es_la/sparse/utility.hpp>
+#include <es_la/sparse/utility/mkl_helpers.hpp>
+#include <es_la/sparse/utility/mkl_overloads.hpp>
 
 #include <es_util/type_traits.hpp>
 
@@ -35,7 +36,7 @@ public:
 
 	static_assert(internal::is_csr_matrix<Matrix>, "Bad matrix type");
 	static_assert(sizeof(Index) == sizeof(MKL_INT), "Incompatible matrix index type size");
-	static_assert(internal::is_fd_cfd<Value>, "Incompatible matrix element type");
+	static_assert(internal::is_fd_or_cfd<Value>, "Incompatible matrix element type");
 
 public:
 	Mkl_sparse_matrix(const Mkl_sparse_matrix&) = delete;

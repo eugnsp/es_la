@@ -1,25 +1,26 @@
 #pragma once
-#include <es_la/core/expression.hpp>
 #include <es_la/dense/expr.hpp>
+#include <es_la/dense/expression.hpp>
 #include <es_la/dense/forward.hpp>
+//#include <es_la/dense/functor.hpp>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/view/range.hpp>
 #include <es_la/dense/view/slice.hpp>
-
 #include <es_la/dense/expr/add.hpp>
+#include <es_la/dense/functor/type_traits.hpp>
 
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 namespace es_la
 {
 template<class Expr, class Category>
 class Dense : public Expression<Expr>
 {
-	// static_assert(std::is_same_v<Category_type<Expr>, Category>);
-
 private:
 	using Base = Expression<Expr>;
 
@@ -27,27 +28,16 @@ public:
 	using typename Base::Value;
 
 public:
-	using Base::cols;
-	using Base::rows;
 	using Base::self;
 
-	template<class Scalar>
-	void assign_scalar(const Scalar& scalar)
-	{
-		static_assert(std::is_same_v<Category, Lvalue>, "Expression should be an l-value");
-		static_assert(std::is_convertible_v<Scalar, Value>, "Inconsistent data types");
+	//////////////////////////////////////////////////////////////////////
+	//* Extents */
 
-		internal::Assign_scalar_op_type<Expr, Scalar>::run(self(), scalar);
-	}
+	using Base::cols;
+	using Base::rows;
 
-	template<class Expr2>
-	void assign_expr(const Expression<Expr2>& expr)
-	{
-		static_assert(std::is_same_v<Category, Lvalue>, "Expression should be an l-value");
-		static_assert(std::is_convertible_v<Value_type<Expr2>, Value>, "Inconsistent data types");
-
-		internal::Assign_expr_op_type<Expr, Expr2>::run(self(), expr.self());
-	}
+	///////////////////////////////////////////////////////////////////////
+	//* Operators */
 
 	template<class Scalar, typename = std::enable_if_t<std::is_convertible_v<Scalar, Value>>>
 	Dense& operator=(const Scalar& scalar)
@@ -61,6 +51,79 @@ public:
 	{
 		assign_expr(expr);
 		return *this;
+	}
+
+	// template<typename Scalar, typename = std::void_t<decltype(std::declval<Value>() += std::declval<Scalar>())>>
+	// Dense& operator+=(const Scalar& expr)
+	// {
+	// 	static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+
+	// 	internal::Add_equal<Expr, Expr2>::run(self(), expr);
+	// 	return *this;
+	// }
+
+	template<class Expr2>
+	Dense& operator+=(const Expression<Expr2>& expr)
+	{
+		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
+		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
+		assert(rows() == expr.rows());
+		assert(cols() == expr.cols());
+
+		internal::Fn_expr_add_assign_type<Expr, Expr2>{}(self(), expr.self());
+		return *this;
+	}
+
+	template<class Expr2>
+	Dense& operator-=(const Expression<Expr2>& expr)
+	{
+		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
+		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
+		assert(rows() == expr.rows());
+		assert(cols() == expr.cols());
+
+		internal::Fn_expr_sub_assign_type<Expr, Expr2>{}(self(), expr.self());
+		return *this;
+	}
+
+	template<class Scalar>
+	Dense& operator*=(const Scalar& scalar)
+	{
+		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+
+		internal::Fn_scalar_mul_assign_type<Expr, Scalar>{}(self(), scalar);
+		return *this;
+	}
+
+	template<class Scalar>
+	Dense& operator/=(const Scalar& scalar)
+	{
+		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+
+		internal::Fn_scalar_div_assign_type<Expr, Scalar>{}(self(), scalar);
+		return *this;
+	}
+
+	template<class Scalar>
+	void assign_scalar(const Scalar& scalar)
+	{
+		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+
+		internal::Fn_scalar_assign_type<Expr, Scalar>{}(self(), scalar);
+	}
+
+	template<class Expr2>
+	void assign_expr(const Expression<Expr2>& expr)
+	{
+		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
+		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
+		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
+		assert(rows() == expr.rows());
+		assert(cols() == expr.cols());
+
+		internal::Fn_expr_assign_type<Expr, Expr2>{}(self(), expr.self());
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -78,18 +141,18 @@ public:
 
 	decltype(auto) operator[](std::size_t index)
 	{
-		static_assert(internal::is_vector_expr<Expr>, "Expression should be a vector");
+		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return self()(index, 0);
 	}
 
 	decltype(auto) operator[](std::size_t index) const
 	{
-		static_assert(internal::is_vector_expr<Expr>, "Expression should be a vector");
+		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return self()(index, 0);
 	}
 
 	decltype(auto) operator()(std::size_t index)
-	{	
+	{
 		return (*this)[index];
 	}
 
@@ -100,11 +163,7 @@ public:
 
 	auto eval() const
 	{
-		constexpr auto rows = ct_rows_value<Expr>;
-		constexpr auto cols = ct_cols_value<Expr>;
-
-		Matrix<Value, rows, cols> matrix{self()};
-		return matrix;
+		return Matrix<Value, ct_rows_value<Expr>, ct_cols_value<Expr>>{self()};
 	}
 
 	// 	template<class Other>
@@ -132,58 +191,29 @@ public:
 	// 		return !(*this == other);
 	// 	}
 
-	template<class Expr2>
-	Dense& operator+=(const Expr2& expr)
-	{
-		internal::Add_equal<Expr, Expr2>::run(self(), expr);
-		//	internal::add(*this, expr);
-		return *this;
-	}
-
-	// template<class Expr2>
-	// Dense& operator-=(const Expr2& expr)
-	// {
-	// 	internal::sub(*this, expr);
-	// 	return *this;
-	// }
-
-	template<class Expr2>
-	Dense& operator*=(const Expr2& expr)
-	{
-		internal::mul(*this, expr);
-		return *this;
-	}
-
-	// template<class Expr2>
-	// Dense& operator/=(const Expr2& expr)
-	// {
-	// 	internal::div(*this, expr);
-	// 	return *this;
-	// }
-
 	//////////////////////////////////////////////////////////////////////////
 	/** Block views */
 
-	template<std::size_t ct_start_row, std::size_t ct_rows, std::size_t ct_start_col, std::size_t ct_cols>
+	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
 	auto view()
 	{
-		using Rows = internal::Range<ct_start_row, ct_rows>;
-		using Cols = internal::Range<ct_start_col, ct_cols>;
+		using Rows = internal::Range<start_row, rows>;
+		using Cols = internal::Range<start_col, cols>;
 		return view_impl(Rows{}, Cols{});
 	}
 
-	template<std::size_t ct_start_row, std::size_t ct_rows, std::size_t ct_start_col, std::size_t ct_cols>
+	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
 	auto view() const
 	{
-		using Rows = internal::Range<ct_start_row, ct_rows>;
-		using Cols = internal::Range<ct_start_col, ct_cols>;
+		using Rows = internal::Range<start_row, rows>;
+		using Cols = internal::Range<start_col, cols>;
 		return view_impl(Rows{}, Cols{});
 	}
 
-	template<std::size_t ct_start_row, std::size_t ct_rows, std::size_t ct_start_col, std::size_t ct_cols>
+	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
 	auto cview() const
 	{
-		return view<ct_start_row, ct_rows, ct_start_col, ct_cols>();
+		return view<start_row, rows, start_col, cols>();
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -208,41 +238,41 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	//* Row views */
 
-	template<std::size_t ct_index>
+	template<std::size_t index>
 	auto row_view()
 	{
-		using Rows = internal::Range<ct_index, std::size_t{1}>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Rows = internal::Range<index, 1>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{}, Cols{0, cols()});
 	}
 
-	template<std::size_t ct_index>
+	template<std::size_t index>
 	auto row_view() const
 	{
-		using Rows = internal::Range<ct_index, std::size_t{1}>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Rows = internal::Range<index, 1>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{}, Cols{0, cols()});
 	}
 
-	template<std::size_t ct_index>
+	template<std::size_t index>
 	auto row_cview() const
 	{
-		return row_view<ct_index>();
+		return row_view<index>();
 	}
 
 	///////////////////////////////////////////////////////////////////////
 
 	auto row_view(std::size_t index)
 	{
-		using Rows = internal::Range<dynamic, std::size_t{1}>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Rows = internal::Range<dynamic, 1>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{index}, Cols{0, cols()});
 	}
 
 	auto row_view(std::size_t index) const
 	{
-		using Rows = internal::Range<dynamic, std::size_t{1}>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Rows = internal::Range<dynamic, 1>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{index}, Cols{0, cols()});
 	}
 
@@ -253,26 +283,26 @@ public:
 
 	///////////////////////////////////////////////////////////////////////
 
-	template<std::size_t ct_start_row, std::size_t ct_rows>
+	template<std::size_t start_row, std::size_t rows>
 	auto rows_view()
 	{
-		using Rows = internal::Range<ct_start_row, ct_rows>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Rows = internal::Range<start_row, rows>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{}, Cols{0, cols()});
 	}
 
-	template<std::size_t ct_start_row, std::size_t ct_rows>
+	template<std::size_t start_row, std::size_t rows>
 	auto rows_view() const
 	{
-		using Rows = internal::Range<ct_start_row, ct_rows>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Rows = internal::Range<start_row, rows>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{}, Cols{0, cols()});
 	}
 
-	template<std::size_t ct_start_row, std::size_t ct_rows>
+	template<std::size_t start_row, std::size_t rows>
 	auto rows_cview() const
 	{
-		return rows_view<ct_start_row, ct_rows>();
+		return rows_view<start_row, rows>();
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -280,14 +310,14 @@ public:
 	auto rows_view(std::size_t start_row, std::size_t rows)
 	{
 		using Rows = internal::Range<dynamic, dynamic>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{start_row, rows}, Cols{0, cols()});
 	}
 
 	auto rows_view(std::size_t start_row, std::size_t rows) const
 	{
 		using Rows = internal::Range<dynamic, dynamic>;
-		using Cols = internal::Range<std::size_t{0}, ct_cols_value<Expr>>;
+		using Cols = internal::Range<0, ct_cols_value<Expr>>;
 		return view_impl(Rows{start_row, rows}, Cols{0, cols()});
 	}
 
@@ -299,41 +329,41 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	//* Column views */
 
-	template<std::size_t ct_index>
+	template<std::size_t index>
 	auto col_view()
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
-		using Cols = internal::Range<ct_index, std::size_t{1}>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
+		using Cols = internal::Range<index, 1>;
 		return view_impl(Rows{0, rows()}, Cols{});
 	}
 
-	template<std::size_t ct_index>
+	template<std::size_t index>
 	auto col_view() const
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
-		using Cols = internal::Range<ct_index, std::size_t{1}>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
+		using Cols = internal::Range<index, 1>;
 		return view_impl(Rows{0, rows()}, Cols{});
 	}
 
-	template<std::size_t ct_index>
+	template<std::size_t index>
 	auto col_cview() const
 	{
-		return col_view<ct_index>();
+		return col_view<index>();
 	}
 
 	///////////////////////////////////////////////////////////////////////
 
 	auto col_view(std::size_t index)
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
-		using Cols = internal::Range<dynamic, std::size_t{1}>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
+		using Cols = internal::Range<dynamic, 1>;
 		return view_impl(Rows{0, rows()}, Cols{index});
 	}
 
 	auto col_view(std::size_t index) const
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
-		using Cols = internal::Range<dynamic, std::size_t{1}>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
+		using Cols = internal::Range<dynamic, 1>;
 		return view_impl(Rows{0, rows()}, Cols{index});
 	}
 
@@ -344,40 +374,40 @@ public:
 
 	///////////////////////////////////////////////////////////////////////
 
-	template<std::size_t ct_start_col, std::size_t ct_cols>
+	template<std::size_t start_col, std::size_t cols>
 	auto cols_view()
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
-		using Cols = internal::Range<ct_start_col, ct_cols>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
+		using Cols = internal::Range<start_col, cols>;
 		return view_impl(Rows{0, rows()}, Cols{});
 	}
 
-	template<std::size_t ct_start_col, std::size_t ct_cols>
+	template<std::size_t start_col, std::size_t cols>
 	auto cols_view() const
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
-		using Cols = internal::Range<ct_start_col, ct_cols>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
+		using Cols = internal::Range<start_col, cols>;
 		return view_impl(Rows{0, rows()}, Cols{});
 	}
 
-	template<std::size_t ct_start_col, std::size_t ct_cols>
+	template<std::size_t start_col, std::size_t cols>
 	auto cols_cview() const
 	{
-		return cols_view<ct_start_col, ct_cols>();
+		return cols_view<start_col, cols>();
 	}
 
 	///////////////////////////////////////////////////////////////////////
 
 	auto cols_view(std::size_t start_col, std::size_t cols)
 	{
-		using Rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
+		using Rows = internal::Range<0, ct_rows_value<Expr>>;
 		using Cols = internal::Range<dynamic, dynamic>;
 		return view_impl(Rows{0, rows()}, Cols{start_col, cols});
 	}
 
 	auto cols_view(std::size_t start_col, std::size_t cols) const
 	{
-		using All_rows = internal::Range<std::size_t{0}, ct_rows_value<Expr>>;
+		using All_rows = internal::Range<0, ct_rows_value<Expr>>;
 		using Cols = internal::Range<dynamic, dynamic>;
 		return view_impl(All_rows{0, rows()}, Cols{start_col, cols});
 	}
@@ -403,6 +433,24 @@ public:
 	auto tr_cview() const
 	{
 		return tr_view();
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	//* Diagonal view */
+
+	auto diag_view()
+	{
+		return Diag_view<Expr, Category>{self()};
+	}
+
+	auto diag_view() const
+	{
+		return Diag_view<const Expr, Category>{self()};
+	}
+
+	auto diag_cview() const
+	{
+		return diag_view();
 	}
 
 	// template<std::size_t t_size>
@@ -475,41 +523,6 @@ public:
 	// 	return *this;
 	// }
 
-	// template<class TExpr>
-	// Dense& operator-=(const Dense<TExpr>& expr)
-	// {
-	// 	for (std::size_t col = 0; col < cols(); ++col)
-	// 		for (std::size_t row = 0; row < rows(); ++row)
-	// 			self()(row, col) -= expr(row, col);
-	// 	return *this;
-	// }
-
-	// template<class T_Expr>
-	// Dense& operator+=(const Dense<T_Expr>& expr)
-	// {
-	// 	for (std::size_t col = 0; col < cols(); ++col)
-	// 		for (std::size_t row = 0; row < rows(); ++row)
-	// 			self()(row, col) += expr(row, col);
-	// 	return *this;
-	// }
-
-	// template<typename TAlpha>
-	// Dense& operator*=(TAlpha alpha)
-	// {
-	// 	for (std::size_t col = 0; col < cols(); ++col)
-	// 		for (std::size_t row = 0; row < rows(); ++row)
-	// 			self()(row, col) *= alpha;
-	// 	return *this;
-	// }
-
-	// template<typename TAlpha>
-	// Dense& operator/=(TAlpha alpha)
-	// {
-	// 	for (std::size_t col = 0; col < cols(); ++col)
-	// 		for (std::size_t row = 0; row < rows(); ++row)
-	// 			self()(row, col) /= alpha;
-	// 	return *this;
-	// }
 
 private:
 	template<class Rows, class Cols>
@@ -524,5 +537,4 @@ private:
 		return View<const Expr, Rows, Cols, Category>{self(), std::move(rows), std::move(cols)};
 	}
 };
-
 } // namespace es_la

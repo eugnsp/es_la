@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/core/type_traits/value.hpp>
+#include <es_la/dense/type_traits/value.hpp>
 #include <es_la/sparse/forward.hpp>
 
 namespace es_la::internal

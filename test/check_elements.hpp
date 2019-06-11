@@ -26,10 +26,10 @@ bool check_elements_data(const Expr& expr, std::initializer_list<T> list)
 		{
 			if (it == list.end() || *ptr_r != *it)
 				return false;
-			ptr_r += expr.row_inc();
+			ptr_r += expr.row_stride();
 			++it;
 		}
-		ptr_c += expr.col_inc();
+		ptr_c += expr.col_stride();
 	}
 
 	return it == list.end();

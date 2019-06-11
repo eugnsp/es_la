@@ -1,7 +1,7 @@
 #pragma once
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility.hpp>
+#include <es_la/dense/utility/ct_extent.hpp>
 
 #include <cmath>
 #include <cstddef>
@@ -9,7 +9,7 @@
 
 namespace es_la
 {
-template<typename T, typename = std::enable_if_t<is_scalar<T>>>
+template<typename T, typename = std::void_t<decltype(std::abs(std::declval<T>()))>>
 auto norm_sup(T v)
 {
 	return std::abs(v);
@@ -18,10 +18,10 @@ auto norm_sup(T v)
 template<class Expr, class Category>
 auto norm_sup(const Dense<Expr, Category>& expr)
 {
-	static_assert(internal::is_vector_expr<Expr>, "Expression should be a vector");
+	static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 
-	using R = decltype(std::abs(expr[0]));
-	R nrm_sup{};
+	using Ret = decltype(std::abs(expr[0]));
+	Ret nrm_sup{};
 
 	for (std::size_t i = 0; i < expr.size(); ++i)
 		if (nrm_sup < std::abs(expr[i]))

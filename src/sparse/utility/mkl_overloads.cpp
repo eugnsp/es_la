@@ -1,4 +1,4 @@
-#include <es_la/core/type_traits.hpp>
+#include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/utility/mkl_overloads.hpp>
 
 #include <mkl_spblas.h>
