@@ -2,6 +2,7 @@
 #include <es_la/dense/forward.hpp>
 #include <es_la/dense/functor/fn_expr_mkl_mat_copy.hpp>
 #include <es_la/dense/functor/fn_expr_mkl_mat_mul.hpp>
+#include <es_la/dense/functor/fn_expr_mkl_vec_axpy.hpp>
 #include <es_la/dense/functor/type_traits/fn_expr_trait.hpp>
 #include <es_la/dense/type_traits/ct_extent.hpp>
 #include <es_la/dense/type_traits/mkl_decay.hpp>
@@ -42,6 +43,15 @@ struct Fn_expr_assign_trait<Expr1, Expr2, Lvalue_block_t<Value>,
 
 //////////////////////////////////////////////////////////////////////
 //* += */
+
+// X += Y
+template<class Expr1, class Expr2, typename Value>
+struct Fn_expr_add_assign_trait<Expr1, Expr2, Lvalue_block_t<Value>, Lvalue_block_t<Value>,
+	std::enable_if_t<is_fd_or_cfd<Value> && is_dynamic<Expr1> && is_dynamic<Expr2> &&
+					 (is_vector<Expr1> || is_vector<Expr2>)>>
+{
+	using Type = Fn_expr_mkl_vec_axpy<Fn_expr_mkl_vec_axpy_add_assign_tag>;
+};
 
 // X += Y * Z
 template<class Expr1, class Expr2, typename Value>

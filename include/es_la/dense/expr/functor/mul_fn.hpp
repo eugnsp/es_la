@@ -10,7 +10,7 @@ namespace es_la::internal
 template<class Expr1, class Expr2>
 class Mul_fn
 {
-	static_assert(is_ct_extent_dynamic_or_eq(ct_cols_value<Expr1>, ct_rows_value<Expr2>), "Incompatible extents");
+	static_assert(is_extent_dynamic_or_eq(ct_cols_value<Expr1>, ct_rows_value<Expr2>), "Incompatible extents");
 
 public:
 	using Value = decltype(std::declval<Value_type<Expr1>>() * std::declval<Value_type<Expr2>>());

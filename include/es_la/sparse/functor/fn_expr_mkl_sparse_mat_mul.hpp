@@ -12,14 +12,14 @@ class Fn_expr_mkl_sparse_mat_mul
 {
 public:
 	template<class Expr_dst, class Expr_src>
-	void operator()(Expr_dst& dst, const Expr_src& src)
+	void operator()(Expr_dst& dst, const Expr_src& src) const
 	{
 		(*this)(dst, src.expr1(), src.expr2());
 	}
 
 private:
 	template<class Expr_dst, class Expr1, class Expr2>
-	void operator()(Expr_dst& dst, const Expr1& expr1, const Expr2& expr2)
+	void operator()(Expr_dst& dst, const Expr1& expr1, const Expr2& expr2) const
 	{
 		static_assert(have_same_layout<Expr_dst, Expr2>, "Incompatible layouts");
 

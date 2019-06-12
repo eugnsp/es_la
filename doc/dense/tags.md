@@ -1,4 +1,4 @@
-# Dense expressions: tags
+# Dense expressions: Tags
 
 Header: `<es_la/dense.hpp>`\
 Namespace: `es_la`

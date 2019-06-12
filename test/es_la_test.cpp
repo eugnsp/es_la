@@ -80,11 +80,18 @@ int main()
 
 
 
-		// using T = double;
-		// auto m = es_la::make_matrix<es_la::Col_major>(4, 4, [](auto i, auto j) { return T(1 + i + 2 * j); });
+		using T = double;
+		auto m1 = es_la::make_vector(4, [](auto i) { return T(i); });
+		auto m2 = es_la::make_matrix<es_la::Row_major>(4, 1, [](auto i, auto j) { return T(1 + j + 2 * i); });
 		// auto v = es_la::make_vector(4, [](auto i) { return T(1 + 3 * i); });
-		// print(m);
-		// print(v);
+		print(m1);
+		print(m2);
+
+		m1 += m2;
+		print(m1);
+
+		m2 += m1;
+		print(m2);
 
 		// es_la::Matrix_x<T> mv(4, 4, 1000);
 		// mv = m;

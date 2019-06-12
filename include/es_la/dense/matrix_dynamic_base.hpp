@@ -31,7 +31,7 @@ public:
 	//* Constructor */
 
 	Matrix_dynamic_base() :
-		Matrix_dynamic_base(Internal{}, ct_extent_static_or_zero(ct_rows), ct_extent_static_or_zero(ct_cols))
+		Matrix_dynamic_base(Internal{}, extent_static_or_zero(ct_rows), extent_static_or_zero(ct_cols))
 	{}
 
 	Matrix_dynamic_base(const Matrix_dynamic_base& matrix) :

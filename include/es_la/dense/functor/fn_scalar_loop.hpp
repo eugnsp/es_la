@@ -13,7 +13,7 @@ class Fn_scalar_element_wise
 {
 public:
 	template<class Expr, typename Scalar>
-	void operator()(Expr& dst, const Scalar scalar)
+	void operator()(Expr& dst, const Scalar scalar) const
 	{
 		// Prefer contiguous writes to contiguous reads
 		(*this)(dst, scalar, Layout_tag<Expr>{});
@@ -21,7 +21,7 @@ public:
 
 private:
 	template<class Expr, typename Scalar>
-	void operator()(Expr& dst, const Scalar scalar, Col_major)
+	void operator()(Expr& dst, const Scalar scalar, Col_major) const
 	{
 		for (std::size_t col = 0; col < dst.cols(); ++col)
 			for (std::size_t row = 0; row < dst.rows(); ++row)
@@ -29,7 +29,7 @@ private:
 	}
 
 	template<class Expr, typename Scalar>
-	void operator()(Expr& dst, const Scalar scalar, Row_major)
+	void operator()(Expr& dst, const Scalar scalar, Row_major) const
 	{
 		for (std::size_t row = 0; row < dst.rows(); ++row)
 			for (std::size_t col = 0; col < dst.cols(); ++col)

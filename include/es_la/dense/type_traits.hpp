@@ -8,6 +8,7 @@
 #include <es_la/dense/type_traits/is_row_col_major.hpp>
 #include <es_la/dense/type_traits/is_view.hpp>
 #include <es_la/dense/type_traits/layout.hpp>
+#include <es_la/dense/type_traits/mkl_decay.hpp>
 #include <es_la/dense/type_traits/mkl_type.hpp>
 #include <es_la/dense/type_traits/numeric.hpp>
 #include <es_la/dense/type_traits/value.hpp>

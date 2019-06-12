@@ -1,4 +1,4 @@
-# Dense expressions: matrices
+# Dense expressions: Matrices
 
 Header: `<es_la/dense.hpp>`\
 Namespace: `es_la`
@@ -6,7 +6,7 @@ Namespace: `es_la`
 ---
 
 ```cpp
-template<typename Value_, std::size_t ct_rows, std::size_t ct_cols, class Layout>
+template<typename Value_, std::size_t ct_rows, std::size_t ct_cols, class Layout = Col_major>
 class Matrix : public Expression<Matrix<Value, ct_rows, ct_cols, Layout>>;
 ```
 
@@ -34,6 +34,7 @@ DD = Matrix<Value, dynamic, dynamic, Layout>
 // SS, SD, DS, and DD.
 using Value = Value_;
 ```
+
 ---
 
 ## Member functions
@@ -193,16 +194,16 @@ std::size_t row_stride() const;
 std::size_t col_stride() const;
 ```
 
-1. Returns the leading dimension of a matrix. Leading dimension is the increment that is used to determine the starting point for the matrix elements in each successive column (column-major order) or row (row-major order).
-2. Returns the increment that is used to determine the starting point of the matrix element in the next row and the same column.
-3. Returns the increment that is used to determine the starting point of the matrix element in the next column and the same row.
+1. Returns the leading dimension of a matrix. The leading dimension is the increment used to determine the starting point for the matrix elements in each successive column (column-major order) or row (row-major order).
+2. Returns the increment used to determine the starting point of the matrix element in the next row of the same column.
+3. Returns the increment used to determine the starting point of the matrix element in the next column of the same row.
 
 For matrices (not submatrices) the following equalities hold:
 
-| [Layout][2] | `lead_dim()` | `row_stride()` | `col_stride()` |
-|:------------|:------------:|:--------------:|:--------------:|
-| `Col_major` | `= rows()`   | `= 1`          | `= rows()`     |
-| `Row_major` | `= cols()`   | `= cols()`     | `= 1`          |
+| [`Layout`][2] | `lead_dim()` | `row_stride()` | `col_stride()` |
+|:--------------|:------------:|:--------------:|:--------------:|
+| `Col_major`   | `= rows()`   | `= 1`          | `= rows()`     |
+| `Row_major`   | `= cols()`   | `= cols()`     | `= 1`          |
 
 
 ### `operator()`, `operator[]`
@@ -359,6 +360,49 @@ Returns the view to the transposed matrix. Views returned by `const`-qualified m
 ```
 
 Returns the (vector) view to the diagonal matrix elements. Views returned by `const`-qualified member functions provide an immutable access to the underlying matrix.
+
+---
+
+## Type aliases
+
+```cpp
+using Matrix_xd = Matrix<double, dynamic, dynamic>;
+using Matrix_2d = Matrix<double, 2, 2>;
+using Matrix_3d = Matrix<double, 3, 3>;
+
+using Matrix_xf = Matrix<float, dynamic, dynamic>;
+using Matrix_2f = Matrix<float, 2, 2>;
+using Matrix_3f = Matrix<float, 3, 3>;
+
+template<std::size_t rows, std::size_t cols, class Layout = Col_major>
+using Matrix_d = Matrix<double, rows, cols, Layout>;
+
+template<std::size_t rows, std::size_t cols, class Layout = Col_major>
+using Matrix_f = Matrix<float, rows, cols, Layout>;
+
+template<typename Value, class Layout = Col_major>
+using Matrix_x = Matrix<Value, dynamic, dynamic, Layout>;
+
+template<typename Value, std::size_t size>
+using Vector = Matrix<Value, size, 1>;
+
+using Vector_xd = Vector<double, dynamic>;
+using Vector_2d = Vector<double, 2>;
+using Vector_3d = Vector<double, 3>;
+
+using Vector_xf = Vector<float, dynamic>;
+using Vector_2f = Vector<float, 2>;
+using Vector_3f = Vector<float, 3>;
+
+template<std::size_t size>
+using Vector_d = Vector<double, size>;
+
+template<std::size_t size>
+using Vector_f = Vector<float, size>;
+
+template<typename Value>
+using Vector_x = Matrix<Value, dynamic, 1>;
+```
 
 [1]: tags.md#extents
 [2]: tags.md#memory-layouts

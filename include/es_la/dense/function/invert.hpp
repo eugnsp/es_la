@@ -10,8 +10,8 @@
 namespace es_la
 {
 // clang-format off
-template<class Expr, std::enable_if_t<internal::is_ct_extent_static_and_eq(ct_rows_value<Expr>, 2) &&
-									  internal::is_ct_extent_static_and_eq(ct_cols_value<Expr>, 2), int> = 0>
+template<class Expr, std::enable_if_t<internal::is_extent_static_and_eq(ct_rows_value<Expr>, 2) &&
+									  internal::is_extent_static_and_eq(ct_cols_value<Expr>, 2), int> = 0>
 void invert(Dense<Expr, Lvalue>& expr)
 {
 	const auto d = det(expr);
@@ -25,8 +25,8 @@ void invert(Dense<Expr, Lvalue>& expr)
 	expr(0, 1) /= -d;
 }
 
-template<class Expr, std::enable_if_t<internal::is_ct_extent_static_and_eq(ct_rows_value<Expr>, 2) &&
-									  internal::is_ct_extent_static_and_eq(ct_cols_value<Expr>, 2), int> = 0>
+template<class Expr, std::enable_if_t<internal::is_extent_static_and_eq(ct_rows_value<Expr>, 2) &&
+									  internal::is_extent_static_and_eq(ct_cols_value<Expr>, 2), int> = 0>
 void invert_transpose(Dense<Expr, Lvalue>& expr)
 {
 	invert(expr);

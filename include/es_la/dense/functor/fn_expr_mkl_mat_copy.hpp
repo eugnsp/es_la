@@ -21,26 +21,26 @@ class Fn_expr_mkl_mat_copy
 {
 public:
 	template<class Expr_dst, class Expr_src>
-	void operator()(Expr_dst& dst, const Expr_src& src)
+	void operator()(Expr_dst& dst, const Expr_src& src) const
 	{
 		(*this)(dst, src, Tag{});
 	}
 
 private:
 	template<class Expr_dst, class Expr_src>
-	void operator()(Expr_dst& dst, const Expr_src& src, Fn_expr_mkl_mat_copy_assign_tag)
+	void operator()(Expr_dst& dst, const Expr_src& src, Fn_expr_mkl_mat_copy_assign_tag) const
 	{
 		(*this)(dst, src, 1);
 	}
 
 	template<class Expr_dst, class Expr_src>
-	void operator()(Expr_dst& dst, const Expr_src& src, Fn_expr_mkl_mat_copy_scale_assign_tag)
+	void operator()(Expr_dst& dst, const Expr_src& src, Fn_expr_mkl_mat_copy_scale_assign_tag) const
 	{
 		(*this)(dst, src.expr(), src.scalar());
 	}
 
 	template<class Expr_dst, class Expr_src, typename Alpha>
-	void operator()(Expr_dst& dst, const Expr_src& src, Alpha alpha)
+	void operator()(Expr_dst& dst, const Expr_src& src, Alpha alpha) const
 	{
 		using Transp_tag = std::conditional_t<have_same_layout<Expr_dst, Expr_src>, No_transpose, Transpose>;
 

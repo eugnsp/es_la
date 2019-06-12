@@ -66,8 +66,8 @@ public:
 	Dense& operator+=(const Expression<Expr2>& expr)
 	{
 		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
-		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
-		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
+		static_assert(internal::is_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
+		static_assert(internal::is_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
 		assert(rows() == expr.rows());
 		assert(cols() == expr.cols());
 
@@ -79,8 +79,8 @@ public:
 	Dense& operator-=(const Expression<Expr2>& expr)
 	{
 		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
-		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
-		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
+		static_assert(internal::is_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
+		static_assert(internal::is_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
 		assert(rows() == expr.rows());
 		assert(cols() == expr.cols());
 
@@ -118,8 +118,8 @@ public:
 	void assign_expr(const Expression<Expr2>& expr)
 	{
 		static_assert(internal::is_lvalue<Category>, "Expression should be an l-value");
-		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
-		static_assert(internal::is_ct_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
+		static_assert(internal::is_extent_dynamic_or_eq(ct_rows_value<Expr>, ct_rows_value<Expr2>));
+		static_assert(internal::is_extent_dynamic_or_eq(ct_cols_value<Expr>, ct_cols_value<Expr2>));
 		assert(rows() == expr.rows());
 		assert(cols() == expr.cols());
 
