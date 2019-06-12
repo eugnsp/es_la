@@ -59,7 +59,7 @@ struct Symmetric_lower
 // {};
 
 //////////////////////////////////////////////////////////////////////
-//* Dense matrix memory storage layouts */
+//* Dense matrix memory layouts */
 
 struct Col_major
 {};

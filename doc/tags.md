@@ -1,30 +1,26 @@
-# Dense matrices
+# Tags
 
 Header: `<es_la/dense.hpp>`\
 Namespace: `es_la`
 
 ---
 
+## Extents
+
 ```cpp
-template<typename Value_, std::size_t ct_rows, std::size_t ct_cols, class Layout>
-class Matrix : public Expression<Matrix<Value, ct_rows, ct_cols, Layout>>;
+inline constexpr std::size_t dynamic = -1;
 ```
 
-*Parameters:*
-* `Value_` - the type of elements,
-* `ct_rows` - number of rows fixed at compile-time or [`dynamic`][1],
-* `ct_cols` - number of columns fixed at compile-time or [`dynamic`][1],
-* `Layout` - matrix [memory layout tag][2].
+The constant used to denote dynamic extents in expressions.
 
-Storage for matrix elements of static matrices (`ct_rows != dynamic` and `ct_cols != dynamic`) is allocated inside a `Matrix` object itself. Storage for matrix elements of dynamic matrices (`ct_rows == dynamic` or `ct_cols == dynamic`) is allocated dynamically.
+## Memory layouts
 
-The following notation is used below to denote specializations:
 ```cpp
-SS = Matrix<Value, ct_rows, ct_cols, Layout> with ct_rows != dynamic && ct_cols != dynamic
-SD = Matrix<Value, ct_rows, dynamic, Layout> with ct_rows != dynamic
-DS = Matrix<Value, dynamic, ct_cols, Layout> with ct_cols != dynamic
-DD = Matrix<Value, dynamic, dynamic, Layout>
+struct Col_major {};
+struct Row_major {};
 ```
+
+Tags that define the memory layout of a matrix. `Col_major` represents the column-major order: `a(0, 0), a(1, 0), a(2, 0), ..., a(0, 1), a(1, 1), ...`, and `Row_major` represents the row-major order: `a(0, 0), a(0, 1), a(0, 2), ..., a(1, 0), a(1, 1), ...`.
 
 ---
 
@@ -133,8 +129,8 @@ Constructs the matrix with matrix elements initialized contiguously with the con
 *Parameters:*
 * `values` - the initializer list to initialize the matrix elements with
 
-### `is_empty`, `rows`, `cols`, `size`, `capacity`, `lead_dim`, `row_stride`, `col_stride`
-**Matrix extents and capacity**
+### `is_empty`, `rows`, `cols`, `size`, `capacity`
+**Matrix size and capacity**
 
 ```cpp
 // SS.
@@ -183,27 +179,6 @@ std::size_t capacity() const;
 ```
 
 Returns the number of elements that the matrix has currently allocated space for.
-
-```cpp
-// 1.
-std::size_t lead_dim() const;
-// 2.
-std::size_t row_stride() const;
-// 3.
-std::size_t col_stride() const;
-```
-
-1. Returns the leading dimension of a matrix. Leading dimension is the increment that is used to determine the starting point for the matrix elements in each successive column (column-major order) or row (row-major order).
-2. Returns the increment that is used to determine the starting point of the matrix element in the next row and the same column.
-3. Returns the increment that is used to determine the starting point of the matrix element in the next column and the same row.
-
-For matrices (not submatrices) the following equalities hold:
-
-| [Layout][2] | `lead_dim()` | `row_stride()` | `col_stride()` |
-|:------------|:------------:|:--------------:|:--------------:|
-| `Col_major` | `= rows()`   | `= 1`          | `= rows()`     |
-| `Row_major` | `= cols()`   | `= cols()`     | `= 1`          |
-
 
 ### `operator()`, `operator[]`
 **Access the specified element**
@@ -262,7 +237,7 @@ Matrix<Value, ct_rows, ct_cols, Layout> eval() const
 Returns a copy of the matrix.
 
 *Parameters:*
-* `Layout` - the [memory layout tag][2] of the resulting matrix.
+* `Layout` - the layout of the resulting matrix.
 
 ### `view`, `view`
 **Block views**
@@ -359,6 +334,3 @@ Returns the view to the transposed matrix. Views returned by `const`-qualified m
 ```
 
 Returns the (vector) view to the diagonal matrix elements. Views returned by `const`-qualified member functions provide an immutable access to the underlying matrix.
-
-[1]: tags.md#extents
-[2]: tags.md#memory-layouts

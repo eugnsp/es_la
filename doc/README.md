@@ -2,4 +2,7 @@
 
 :construction: Under construction.
 
-[Dense matrices](dense_matrices.md)
+Dense expressions:
+
+* [Tags](tags.md)
+* [Dense matrices](dense_matrices.md)
