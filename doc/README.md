@@ -4,5 +4,5 @@
 
 Dense expressions:
 
-* [Tags](tags.md)
-* [Dense matrices](dense_matrices.md)
+* [Tags](dense/tags.md)
+* [Matrices](dense/matrices.md)
