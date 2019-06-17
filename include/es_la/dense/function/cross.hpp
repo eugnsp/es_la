@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/dense/dense.hpp>
+#include <es_la/dense/forward.hpp>
 #include <es_la/dense/type_traits.hpp>
 
 #include <es_util/numeric/det.hpp>

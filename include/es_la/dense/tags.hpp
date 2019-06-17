@@ -17,23 +17,26 @@ struct Dynamic : std::integral_constant<std::size_t, static_cast<std::size_t>(-1
 //* Expression tags */
 
 template<typename Value>
-struct Lvalue_block_t
+struct Lvalue_block_tag
 {};
 
-struct Mul_t
+struct Fn_mul_tag
 {};
 
 template<class Expr, typename Scalar, class Fn>
-struct Scalar_expr_t
+struct Scalar_expr_tag
 {};
 
 template<class Expr1, class Expr2, class Fn>
-struct Binary_expr_t
+struct Binary_expr_tag
 {};
 } // namespace internal
 
 // Dynamic extent
 inline constexpr auto dynamic = internal::Dynamic::value;
+
+//////////////////////////////////////////////////////////////////////
+//* Value categories of expressions */
 
 struct Rvalue
 {};

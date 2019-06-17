@@ -6,236 +6,412 @@
 #include <cassert>
 #include <cstddef>
 #include <utility>
+#include <functional>
 
 template<typename T>
-struct Matrix_constructor_default
+struct Matrix_default_construction
 {
 	auto name()
 	{
-		return "Matrix default constructors";
+		return "Matrix default construction: Matrix<...> m;";
 	}
 
 	void operator()()
 	{
-		es_la::Matrix<T, 2, 3> m1;
-		static_assert(m1.rows() == 2 && m1.cols() == 3);
-		static_assert(m1.size() == 6);
-		static_assert(m1.capacity() == 6);
+		op<1, 1>();
+		op<2, 3>();
+		op<10, 11>();
+	}
 
-		const es_la::Matrix<T, 2, 3> m1c{};
-		static_assert(m1c.rows() == 2 && m1c.cols() == 3);
-		static_assert(m1c.size() == 6);
+	template<std::size_t rows, std::size_t cols>
+	void op()
+	{
+		op_static<rows, cols, es_la::Row_major>();
+		op_static<rows, cols, es_la::Col_major>();
 
-		es_la::Matrix<T, 4, es_la::dynamic> m2;
-		assert(m2.rows() == 4 && m2.cols() == 0);
-		assert(m2.size() == 0);
+		op_static<rows, cols, es_la::Row_major>();
+		op_static<rows, cols, es_la::Col_major>();
+	}
 
-		es_la::Matrix<T, es_la::dynamic, 5> m3;
-		assert(m3.rows() == 0 && m3.cols() == 5);
-		assert(m3.size() == 0);
+	template<std::size_t rows, std::size_t cols, class Layout>
+	void op_static()
+	{
+		es_la::Matrix<T, rows, cols, Layout> m;
+		static_assert(m.rows() == rows);
+		static_assert(m.cols() == cols);
+		static_assert(m.size() == rows * cols);
+		static_assert(m.capacity() == rows * cols);
+	}
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m4;
-		assert(m4.rows() == 0 && m4.cols() == 0);
-		assert(m4.size() == 0);
+	template<std::size_t rows, std::size_t cols, class Layout>
+	void op_dynamic()
+	{
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msd;
+		assert(msd.rows() == rows);
+		assert(msd.cols() == 0);
+		assert(msd.size() == 0);
 
-		const es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m4c;
-		assert(m4c.rows() == 0 && m4c.cols() == 0);
-		assert(m4c.size() == 0);
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mds;
+		assert(mds.rows() == 0);
+		assert(mds.cols() == cols);
+		assert(mds.size() == 0);
+
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, Layout> mdd;
+		assert(mdd.rows() == 0);
+		assert(mdd.cols() == 0);
+		assert(mdd.size() == 0);
+
+		const es_la::Matrix<T, es_la::dynamic, es_la::dynamic> mddc;
+		assert(mddc.rows() == 0);
+		assert(mddc.cols() == 0);
+		assert(mddc.size() == 0);
 	}
 };
 
 template<typename T>
-struct Matrix_constructor_size
+struct Matrix_value_construction
 {
 	auto name()
 	{
-		return "Matrix constructors (size)";
+		return "Matrix value construction: Matrix<...> m{};";
 	}
 
 	void operator()()
 	{
-		es_la::Matrix<T, 2, es_la::dynamic> m1(3);
-		assert(m1.rows() == 2 && m1.cols() == 3 && m1.size() == 6);
-		assert(m1.capacity() >= 6);
+		op<1, 1>();
+		op<2, 3>();
+		op<10, 11>();
+	}
 
-		es_la::Matrix<T, es_la::dynamic, 2> m2(3);
-		assert(m2.rows() == 3 && m2.cols() == 2 && m2.size() == 6);
-		assert(m2.capacity() >= 6);
+	template<std::size_t rows, std::size_t cols>
+	void op()
+	{
+		op2<rows, cols, es_la::Row_major>();
+		op2<rows, cols, es_la::Col_major>();
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m3(3, 4);
-		assert(m3.rows() == 3 && m3.cols() == 4 && m3.size() == 12);
-		assert(m3.capacity() >= 12);
+		op2<rows, cols, es_la::Row_major>();
+		op2<rows, cols, es_la::Col_major>();
+	}
+
+	template<std::size_t rows, std::size_t cols, class Layout>
+	void op2()
+	{
+		es_la::Matrix<T, rows, cols, Layout> mv{};
+		static_assert(mv.rows() == rows);
+		static_assert(mv.cols() == cols);
+		static_assert(mv.size() == rows * cols);
+		static_assert(mv.capacity() == rows * cols);
+		check_elements(mv, 0);
+
+		const es_la::Matrix<T, rows, cols, Layout> mc{};
+		static_assert(mc.rows() == rows);
+		static_assert(mc.cols() == cols);
+		static_assert(mc.size() == rows * cols);
+		check_elements(mc, 0);
 	}
 };
 
 template<typename T>
-struct Matrix_constructor_values
+struct Matrix_construction_size
 {
 	auto name()
 	{
-		return "Matrix constructors (values)";
+		return "Matrix construction: Matrix<...> m(<size>);";
 	}
 
 	void operator()()
 	{
-		es_la::Matrix<T, 2, 2> m1(123);
-		assert(check_elements(m1, {123, 123, 123, 123}));
+		op<1, 1>();
+		op<2, 3>();
+		op<10, 11>();
+	}
 
-		es_la::Matrix<T, 2, es_la::dynamic> m2(2, 123);
-		assert(check_elements(m2, {123, 123, 123, 123}));
+	template<std::size_t rows, std::size_t cols>
+	void op()
+	{
+		op2<rows, cols, es_la::Row_major>();
+		op2<rows, cols, es_la::Col_major>();
+	}
 
-		es_la::Matrix<T, es_la::dynamic, 2> m3(2, 123);
-		assert(check_elements(m3, {123, 123, 123, 123}));
+	template<std::size_t rows, std::size_t cols, class Layout>
+	void op2()
+	{
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msd(cols);
+		assert(msd.rows() == rows);
+		assert(msd.cols() == cols);
+		assert(msd.size() == rows * cols);
+		assert(msd.capacity() >= rows * cols);
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m4(2, 2, 123);
-		assert(check_elements(m4, {123, 123, 123, 123}));
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mds(rows);
+		assert(mds.rows() == rows);
+		assert(mds.cols() == cols);
+		assert(mds.size() == rows * cols);
+		assert(mds.capacity() >= rows * cols);
 
-		es_la::Matrix<T, 2, 2, es_la::Col_major> m5c{1, 2, 3, 4};
-		assert(check_elements(m5c, {1, 2, 3, 4}));
-
-		es_la::Matrix<T, 2, 2, es_la::Row_major> m5r{1, 2, 3, 4};
-	 	assert(check_elements(m5r, {1, 3, 2, 4}));
-
-		es_la::Matrix<T, 2, es_la::dynamic, es_la::Col_major> m6c(2, {1, 2, 3, 4});
-	 	assert(check_elements(m6c, {1, 2, 3, 4}));
-
-		es_la::Matrix<T, 2, es_la::dynamic, es_la::Row_major> m6r(2, {1, 2, 3, 4});
-	 	assert(check_elements(m6r, {1, 3, 2, 4}));
-
-		es_la::Matrix<T, es_la::dynamic, 2, es_la::Col_major> m7c(2, {1, 2, 3, 4});
-		assert(check_elements(m7c, {1, 2, 3, 4}));
-
-		es_la::Matrix<T, es_la::dynamic, 2, es_la::Row_major> m7r(2, {1, 2, 3, 4});
-	 	assert(check_elements(m7r, {1, 3, 2, 4}));
-
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Col_major> m8c(2, 2, {1, 2, 3, 4});
-		assert(check_elements(m8c, {1, 2, 3, 4}));
-
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Row_major> m8r(2, 2, {1, 2, 3, 4});
-	 	assert(check_elements(m8r, {1, 3, 2, 4}));
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, Layout> mdd(rows, cols);
+		assert(mdd.rows() == rows);
+		assert(mdd.cols() == cols);
+		assert(mdd.size() == rows * cols);
+		assert(mdd.capacity() >= rows * cols);
 	}
 };
 
 template<typename T>
-struct Matrix_constructor_init_list
+struct Matrix_construction_value
 {
 	auto name()
 	{
-		return "Matrix constructors (initializer_list)";
+		return "Matrix construction: Matrix<...> m([<size>,] value);";
 	}
 
 	void operator()()
 	{
-		es_la::Matrix<T, 2, 2, es_la::Col_major> m1c{1, 2, 3, 4};
-		assert(check_elements(m1c, {1, 2, 3, 4}));
+		op<1, 1>(11);
+		op<2, 2>(12);
+		op<2, 3>(13);
+		op<10, 11>(14);
+	}
 
-		es_la::Matrix<T, 2, 2, es_la::Row_major> m1r{1, 2, 3, 4};
-	 	assert(check_elements(m1r, {1, 3, 2, 4}));
+	template<std::size_t rows, std::size_t cols>
+	void op(T value)
+	{
+		op2<rows, cols, es_la::Row_major>(value);
+		op2<rows, cols, es_la::Col_major>(value);
+	}
 
-		// es_la::Matrix<T, 2, es_la::dynamic, es_la::Col_major> m6c(2, {1, 2, 3, 4});
-	 	// assert(check_elements(m6c, {1, 2, 3, 4}));
+	template<std::size_t rows, std::size_t cols, class Layout>
+	void op2(T value)
+	{
+		es_la::Matrix<T, rows, cols> mss(value);
+		assert(check_elements(mss, value));
 
-		// es_la::Matrix<T, 2, es_la::dynamic, es_la::Row_major> m6r(2, {1, 2, 3, 4});
-	 	// assert(check_elements(m6r, {1, 3, 2, 4}));
+		es_la::Matrix<T, rows, es_la::dynamic> msd(cols, value);
+		assert(check_elements(msd, value));
 
-		// es_la::Matrix<T, es_la::dynamic, 2, es_la::Col_major> m7c(2, {1, 2, 3, 4});
-		// assert(check_elements(m7c, {1, 2, 3, 4}));
+		es_la::Matrix<T, es_la::dynamic, cols> mds(rows, value);
+		assert(check_elements(mds, value));
 
-		// es_la::Matrix<T, es_la::dynamic, 2, es_la::Row_major> m7r(2, {1, 2, 3, 4});
-	 	// assert(check_elements(m7r, {1, 3, 2, 4}));
-
-		// es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Col_major> m8c(2, 2, {1, 2, 3, 4});
-		// assert(check_elements(m8c, {1, 2, 3, 4}));
-
-		// es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Row_major> m8r(2, 2, {1, 2, 3, 4});
-	 	// assert(check_elements(m8r, {1, 3, 2, 4}));
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> mdd(rows, cols, value);
+		assert(check_elements(mdd, value));
 	}
 };
 
 template<typename T>
-struct Matrix_constructor_copy
+struct Matrix_construction_values
 {
 	auto name()
 	{
-		return "Matrix copy constructors";
+		return "Matrix construction: Matrix<...> m(values...);";
 	}
 
 	void operator()()
 	{
-		es_la::Matrix<T, 2, 2> m1{1, 2, 3, 4};
-		es_la::Matrix<T, 2, 2> m1c(m1);
-	 	assert(check_elements(m1c, {1, 2, 3, 4}));
+		op<1, 1>(1);
+		op<2, 2>(1, 2, 3, 4);
+		op<2, 3>(1, 2, 3, 4, 5, 6);
+		op<3, 2>(1, 2, 3, 4, 5, 6);
+	}
 
-		es_la::Matrix<T, 2, es_la::dynamic> m2(2, {1, 2, 3, 4});
-		es_la::Matrix<T, 2, es_la::dynamic> m2c(m2);
-	 	assert(check_elements(m2c, {1, 2, 3, 4}));
+	template<std::size_t rows, std::size_t cols, typename... Ts>
+	void op(Ts... list)
+	{
+		op2<rows, cols, es_la::Col_major>(list...);
+		op2<rows, cols, es_la::Row_major>(list...);
+	}
 
-		es_la::Matrix<T, es_la::dynamic, 2> m3(2, {1, 2, 3, 4});
-		es_la::Matrix<T, es_la::dynamic, 2> m3c(m3);
-	 	assert(check_elements(m3c, {1, 2, 3, 4}));
-
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m4(2, 2, {1, 2, 3, 4});
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m4c(m4);
-	 	assert(check_elements(m4c, {1, 2, 3, 4}));
+	template<std::size_t rows, std::size_t cols, class Layout, typename... Ts>
+	void op2(Ts... list)
+	{
+		es_la::Matrix<T, rows, cols, Layout> mss{list...};
+		assert(check_matrix_elements(mss, {list...}));
 	}
 };
 
 template<typename T>
-struct Matrix_constructor_move
+struct Matrix_construction_init_list
 {
 	auto name()
 	{
-		return "Matrix move constructors";
+		return "Matrix construction: Matrix<...> m(<size>, {values...});";
 	}
 
 	void operator()()
 	{
-	 	es_la::Matrix<T, 2, es_la::dynamic> m1(2, {1, 2, 3, 4});
-	 	auto d1 = m1.data();
-	 	es_la::Matrix<T, 2, es_la::dynamic> m1m(std::move(m1));
-	 	assert(m1.data() == nullptr && m1m.data() == d1);
-	 	assert(check_elements(m1m, {1, 2, 3, 4}));
+		op<1, 1>(1);
+		op<2, 2>(1, 2, 3, 4);
+		op<2, 3>(1, 2, 3, 4, 5, 6);
+		op<3, 2>(1, 2, 3, 4, 5, 6);
+	}
 
-	 	es_la::Matrix<T, es_la::dynamic, 2> m2(2, {1, 2, 3, 4});
-	 	auto d2 = m2.data();
-	 	es_la::Matrix<T, es_la::dynamic, 2> m2m(std::move(m2));
-	 	assert(m2.data() == nullptr && m2m.data() == d2);
-		assert(check_elements(m2m, {1, 2, 3, 4}));
+	template<std::size_t rows, std::size_t cols, typename... Ts>
+	void op(Ts... list)
+	{
+		op2<rows, cols, es_la::Col_major>(list...);
+		op2<rows, cols, es_la::Row_major>(list...);
+	}
 
-	 	es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m3(2, 2, {1, 2, 3, 4});
-	 	auto d3 = m3.data();
-	 	es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m3m(std::move(m3));
-	 	assert(m3.data() == nullptr && m3m.data() == d3);
-	 	assert(check_elements(m3m, {1, 2, 3, 4}));
+	template<std::size_t rows, std::size_t cols, class Layout, typename... Ts>
+	void op2(Ts... list)
+	{
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msd(cols, {list...});
+		assert(check_matrix_elements(msd, {list...}));
+
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msd2({list...});
+		assert(check_matrix_elements(msd2, {list...}));
+
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mds(rows, {list...});
+		assert(check_matrix_elements(mds, {list...}));
+
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mds2({list...});
+		assert(check_matrix_elements(mds2, {list...}));
+
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, Layout> mdd(rows, cols, {list...});
+		assert(check_matrix_elements(mdd, {list...}));
 	}
 };
 
 template<typename T>
-struct Matrix_constructor_expr
+struct Matrix_copy_construction
 {
 	auto name()
 	{
-		return "Matrix construction from expressions";
+		return "Matrix copy construction";
 	}
 
 	void operator()()
 	{
-		es_la::Matrix<T, 3, 3> m1{1, 2, 3, 4, 5, 6, 7, 8, 9};
+		op<2, 2>(1, 2, 3, 4);
+		op<2, 3>(1, 2, 3, 4, 5, 6);
+		op<3, 2>(1, 2, 3, 4, 5, 6);
+	}
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m2(m1);
-		assert(m2.rows() == 3 && m2.cols() == 3);
-		assert(check_elements(m2, {1, 2, 3, 4, 5, 6, 7, 8, 9}));
+	template<std::size_t rows, std::size_t cols, typename... Ts>
+	void op(Ts... list)
+	{
+		op2<rows, cols, es_la::Col_major>(list...);
+		op2<rows, cols, es_la::Row_major>(list...);
+	}
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m3(m1 + m1);
-		assert(m3.rows() == 3 && m3.cols() == 3);
-		assert(check_elements(m3, {2, 4, 6, 8, 10, 12, 14, 16, 18}));
+	template<std::size_t rows, std::size_t cols, class Layout, typename... Ts>
+	void op2(Ts... list)
+	{
+		es_la::Matrix<T, rows, cols, Layout> mss{list...};
+		es_la::Matrix<T, rows, cols, Layout> mssc(mss);
+		assert(check_matrix_elements(mssc, {list...}));
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> m4(3, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9});
-		es_la::Matrix<T, 3, 3> m5(m4);
-		assert(check_elements(m5, {1, 2, 3, 4, 5, 6, 7, 8, 9}));
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msd(cols, {list...});
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msdc(msd);
+		assert(check_matrix_elements(msdc, {list...}));
 
-		es_la::Matrix<T, 3, 3> m6(m4 + m4);
-		assert(check_elements(m6, {2, 4, 6, 8, 10, 12, 14, 16, 18}));
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mds(rows, {list...});
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mdsc(mds);
+		assert(check_matrix_elements(mdsc, {list...}));
+
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, Layout> mdd(rows, cols, {list...});
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, Layout> mddc(mdd);
+		assert(check_matrix_elements(mddc, {list...}));
+	}
+};
+
+template<typename T>
+struct Matrix_move_construction
+{
+	auto name()
+	{
+		return "Matrix move construction";
+	}
+
+	void operator()()
+	{
+		op<2, 2>(1, 2, 3, 4);
+		op<2, 3>(1, 2, 3, 4, 5, 6);
+		op<3, 2>(1, 2, 3, 4, 5, 6);
+	}
+
+	template<std::size_t rows, std::size_t cols, typename... Ts>
+	void op(Ts... list)
+	{
+		op2<rows, cols, es_la::Col_major>(list...);
+		op2<rows, cols, es_la::Row_major>(list...);
+	}
+
+	template<std::size_t rows, std::size_t cols, class Layout, typename... Ts>
+	void op2(Ts... list)
+	{
+		es_la::Matrix<T, rows, es_la::dynamic> msd(cols, {list...});
+		auto dsd = msd.data();
+		es_la::Matrix<T, rows, es_la::dynamic> msdm(std::move(msd));
+		assert(msd.data() == nullptr);
+		assert(msdm.data() == dsd);
+		assert(check_matrix_elements(msdm, {list...}));
+
+		es_la::Matrix<T, es_la::dynamic, cols> mds(rows, {list...});
+		auto dds = mds.data();
+		es_la::Matrix<T, es_la::dynamic, cols> mdsm(std::move(mds));
+		assert(mds.data() == nullptr);
+		assert(mdsm.data() == dds);
+		assert(check_matrix_elements(mdsm, {list...}));
+
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> mdd(rows, cols, {list...});
+		auto ddd = mdd.data();
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> mddm(std::move(mdd));
+		assert(mdd.data() == nullptr);
+		assert(mddm.data() == ddd);
+		assert(check_matrix_elements(mddm, {list...}));
+	}
+};
+
+template<typename T>
+struct Matrix_construction_expr
+{
+	auto name()
+	{
+		return "Matrix construction: Matrix<...> m(<expression>);";
+	}
+
+	void operator()()
+	{
+		op<2, 2>(1, 2, 3, 4);
+		op<2, 3>(1, 2, 3, 4, 5, 6);
+		op<3, 2>(1, 2, 3, 4, 5, 6);
+	}
+
+	template<std::size_t rows, std::size_t cols, typename... Ts>
+	void op(Ts... list)
+	{
+		op2<rows, cols, es_la::Col_major>(std::plus<>{}, 3, 5, list...);
+		op2<rows, cols, es_la::Row_major>(std::plus<>{}, 3, 5, list...);
+
+		op2<rows, cols, es_la::Col_major>(std::minus<>{}, 3, 5, list...);
+		op2<rows, cols, es_la::Row_major>(std::minus<>{}, 3, 5, list...);
+	}
+
+	template<std::size_t rows, std::size_t cols, class Layout, class Fn, typename A, typename B, typename... Ts>
+	void op2(Fn fn, A a, B b, Ts... list)
+	{
+		const es_la::Matrix<T, rows, cols, Layout> m1{(a * list)...};
+		const es_la::Matrix<T, rows, cols, Layout> m2{(b * list)...};
+
+		const auto expr = fn(m1, m2);
+		const auto ab = fn(a, b);
+
+		es_la::Matrix<T, rows, cols, Layout> mss(expr);
+		assert(check_matrix_elements(mss, {(ab * list)...}));
+
+		es_la::Matrix<T, rows, es_la::dynamic, Layout> msd(expr);
+		assert(msd.rows() == rows);
+		assert(msd.cols() == cols);
+		assert(check_matrix_elements(msd, {(ab * list)...}));
+
+		es_la::Matrix<T, es_la::dynamic, cols, Layout> mds(expr);
+		assert(mds.rows() == rows);
+		assert(mds.cols() == cols);
+		assert(check_matrix_elements(mds, {(ab * list)...}));
+
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, Layout> mdd(expr);
+		assert(mdd.rows() == rows);
+		assert(mdd.cols() == cols);
+		assert(check_matrix_elements(mdd, {(ab * list)...}));
 	}
 };
 

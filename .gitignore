@@ -1,8 +1,6 @@
-*.o
-*.obj
-*.so
-*.a
-*.lib
-*.exe
-*.out
 build/
+
+doc/doxygen/html/*
+doc/doxygen/xml/*
+doc/sphinx/_build
+

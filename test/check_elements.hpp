@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <es_la/dense.hpp>
 #include <initializer_list>
 
 template<class Expr, typename T>
@@ -10,7 +11,37 @@ bool check_elements(const Expr& expr, std::initializer_list<T> list)
 		for (std::size_t row = 0; row < expr.rows(); ++row)
 			if (it == list.end() || expr(row, col) != *it++)
 				return false;
+	return it == list.end();
+}
 
+template<class Expr, typename T>
+bool check_elements(const Expr& expr, T value)
+{
+	for (std::size_t col = 0; col < expr.cols(); ++col)
+		for (std::size_t row = 0; row < expr.rows(); ++row)
+			if (expr(row, col) != value)
+				return false;
+	return true;
+}
+
+template<class M, typename T>
+bool check_matrix_elements(const M& expr, std::initializer_list<T> list)
+{
+	auto it = list.begin();
+	if constexpr (es_la::is_col_major<M>)
+	{
+		for (std::size_t col = 0; col < expr.cols(); ++col)
+			for (std::size_t row = 0; row < expr.rows(); ++row)
+				if (it == list.end() || expr(row, col) != *it++)
+					return false;
+	}
+	else
+	{
+		for (std::size_t row = 0; row < expr.rows(); ++row)
+			for (std::size_t col = 0; col < expr.cols(); ++col)
+				if (it == list.end() || expr(row, col) != *it++)
+					return false;
+	}
 	return it == list.end();
 }
 

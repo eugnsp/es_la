@@ -8,12 +8,16 @@
 #include "non_trivial.hpp"
 #include "type_string.hpp"
 
+#include "binary_expr.hpp"
+#include "block_view.hpp"
 #include "matrix_constructor.hpp"
-#include "matrix_view.hpp"
 #include "type_traits.hpp"
 
 #include <es_la/dense.hpp>
 #include <es_la/sparse.hpp>
+
+#include <mkl_sparse_qr.h>
+#include <numeric>
 
 template<template<class T> class Test, typename S>
 void run()
@@ -28,9 +32,8 @@ template<class Matrix>
 void print(const Matrix& mat)
 {
 	std::cout << "Matrix " << mat.rows() << " x " << mat.cols() << ' '
-			  << (es_la::is_col_major<Matrix> ? "col-major" : "row-major")
-			  << ", row stride = " << mat.row_stride() << ", col_stride = " << mat.col_stride()
-			  << ", lead_dim = " << mat.lead_dim() << ":\n";
+			  << (es_la::is_col_major<Matrix> ? "col-major" : "row-major") << ", row stride = " << mat.row_stride()
+			  << ", col_stride = " << mat.col_stride() << ", lead_dim = " << mat.lead_dim() << ":\n";
 
 	for (std::size_t row = 0; row < mat.rows(); ++row)
 	{
@@ -43,7 +46,6 @@ void print(const Matrix& mat)
 int main()
 {
 	// ::mkl_verbose(1);
-
 	try
 	{
 		///////////////////////////////////////////////////////////////////////
@@ -54,18 +56,22 @@ int main()
 		// ///////////////////////////////////////////////////////////////////////
 		// //* Matrix class constructors */
 
-		run<Matrix_constructor_default, int>();
-		run<Matrix_constructor_default, Non_trivial>();
-		run<Matrix_constructor_size, int>();
-		run<Matrix_constructor_size, Non_trivial>();
-		run<Matrix_constructor_values, int>();
-		run<Matrix_constructor_init_list, int>();
-		run<Matrix_constructor_copy, int>();
-		run<Matrix_constructor_copy, Non_trivial>();
-		run<Matrix_constructor_move, int>();
-		run<Matrix_constructor_move, Non_trivial>();
-		run<Matrix_constructor_expr, int>();
+		run<Matrix_default_construction, int>();
+		run<Matrix_value_construction, int>();
+		run<Matrix_construction_size, int>();
+		run<Matrix_construction_value, int>();
+		run<Matrix_construction_values, int>();
+		run<Matrix_construction_init_list, int>();
+		run<Matrix_copy_construction, int>();
+		run<Matrix_move_construction, int>();
+		run<Matrix_construction_expr, int>();
 		run<Matrix_deduction_guides, int>();
+
+		run<Matrix_value_construction, Non_trivial>();
+		run<Matrix_construction_size, Non_trivial>();
+		run<Matrix_copy_construction, Non_trivial>();
+		run<Matrix_move_construction, Non_trivial>();
+		run<Matrix_default_construction, Non_trivial>();
 
 		// ///////////////////////////////////////////////////////////////////////
 		// //* Views */
@@ -78,7 +84,7 @@ int main()
 		///////////////////////////////////////////////////////////////////////
 		//* Binary expressions */
 
-
+		run<Binary_expr_constructor, int>();
 
 		using T = double;
 		auto m1 = es_la::make_vector(4, [](auto i) { return T(i); });

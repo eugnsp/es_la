@@ -25,7 +25,8 @@ struct Block_view_lvalue_copy_constructor
 
 		static_assert(std::is_same_v<decltype(v1(0, 0)), T&>);
 		static_assert(std::is_same_v<decltype(v1c(0, 0)), T&>);
-		assert(v1.rows() == v1c.rows() && v1.cols() == v1c.cols());
+		assert(v1.rows() == v1c.rows());
+		assert(v1.cols() == v1c.cols());
 		assert(v1.lead_dim() == v1c.lead_dim());
 		assert(v1.data() == v1c.data());
 	}
@@ -41,18 +42,51 @@ struct Block_view_lvalue_size
 
 	void operator()()
 	{
-		es_la::Matrix<T, 3, 4, es_la::Col_major> m1c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-		es_la::Matrix<T, 3, 4, es_la::Row_major> m1r{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		es_la::Matrix<T, 10, 11, es_la::Col_major> msc;
+		es_la::Matrix<T, 10, 11, es_la::Row_major> msr;
 
-		auto v1c = m1c.view(1, 2, 1, 3);
-		assert(v1c.rows() == 2 && v1c.cols() == 3);
-		assert(v1c.lead_dim() == 3);
-		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v1c)>, es_la::Col_major>);
+		op(msc, 0, 5, 0, 6);
+		op(msc, 1, 5, 2, 6);
+		op(msr, 0, 5, 0, 6);
+		op(msr, 1, 5, 2, 6);
 
-		auto v1r = m1r.view(1, 2, 1, 3);
-		assert(v1r.rows() == 2 && v1r.cols() == 3);
-		assert(v1r.lead_dim() == 4);
-		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v1r)>, es_la::Row_major>);
+		op<0, 5, 0, 6>(msc);
+		op<1, 5, 2, 6>(msc);
+		op<0, 5, 0, 6>(msr);
+		op<1, 5, 2, 6>(msr);
+
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Col_major> mdc;
+		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Row_major> mdr;
+
+		op(mdc, 0, 5, 0, 6);
+		op(mdc, 1, 5, 2, 6);
+		op(mdr, 0, 5, 0, 6);
+		op(mdr, 1, 5, 2, 6);
+
+		op<0, 5, 0, 6>(mdc);
+		op<1, 5, 2, 6>(mdc);
+		op<0, 5, 0, 6>(mdr);
+		op<1, 5, 2, 6>(mdr);
+	}
+
+	template<class M>
+	void op(const M& m, std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols)
+	{
+		auto v = m.view(start_row, rows, start_col, cols);
+		assert(v.rows() == rows);
+		assert(v.cols() == cols);
+		assert(v.lead_dim() == m.lead_dim());
+		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v)>, es_la::Layout_tag<M>>);
+	}
+
+	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols, class M>
+	void op(const M& m)
+	{
+		auto v = m.template view<start_row, rows, start_col, cols>();
+		assert(v.rows() == rows);
+		assert(v.cols() == cols);
+		assert(v.lead_dim() == m.lead_dim());
+		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v)>, es_la::Layout_tag<M>>);
 	}
 };
 

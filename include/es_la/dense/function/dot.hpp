@@ -30,7 +30,7 @@ public:
 };
 
 template<class Expr1, class Expr2, typename Value>
-class Dot_impl<Expr1, Expr2, Lvalue_block_t<Value>, Lvalue_block_t<Value>,
+class Dot_impl<Expr1, Expr2, Lvalue_block_tag<Value>, Lvalue_block_tag<Value>,
 	std::enable_if_t<is_fd<Value> && is_dynamic<Expr1> && is_dynamic<Expr2>>>
 {
 public:
@@ -47,8 +47,8 @@ auto dot(T v1, T v2)
 	return v1 * v2;
 }
 
-template<class Expr1, class Expr2>
-auto dot(const Expression<Expr1>& expr1, const Expression<Expr2>& expr2)
+template<class Expr1, class Category1, class Expr2, class Category2>
+auto dot(const Dense<Expr1, Category1>& expr1, const Dense<Expr2, Category2>& expr2)
 {
 	static_assert(internal::is_vector<Expr1> && internal::is_vector<Expr2>);
 	static_assert(internal::is_extent_dynamic_or_eq(ct_rows_value<Expr1>, ct_rows_value<Expr2>));

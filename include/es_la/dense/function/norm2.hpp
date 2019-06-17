@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/dense/expression.hpp>
+#include <es_la/dense/forward.hpp>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/utility/ct_extent.hpp>
@@ -31,7 +31,7 @@ public:
 };
 
 template<class Expr, typename Value>
-class Norm2_impl<Expr, Lvalue_block_t<Value>, std::enable_if_t<is_fd_or_cfd<Value> && is_dynamic<Expr>>>
+class Norm2_impl<Expr, Lvalue_block_tag<Value>, std::enable_if_t<is_fd_or_cfd<Value> && is_dynamic<Expr>>>
 {
 public:
 	auto operator()(const Expr& expr) const
@@ -47,8 +47,8 @@ auto norm2(T v) -> decltype(std::abs(T{}))
 	return std::abs(v);
 }
 
-template<class Expr>
-auto norm2(const Expression<Expr>& expr)
+template<class Expr, class Category>
+auto norm2(const Dense<Expr, Category>& expr)
 {
 	static_assert(internal::is_vector<Expr>);
 	return internal::Norm2_impl<Expr, internal::Mkl_expr_decay<Expr>>{}(expr);
