@@ -3,22 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-es_la linear algebra library
-=================================
+Linear algebra library
+======================
+
+Contents:
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-Matrix
-======
-
-.. doxygenclass:: es_la::Matrix
-	:members:
+	:maxdepth: 1
+	
+	doc/matrix
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

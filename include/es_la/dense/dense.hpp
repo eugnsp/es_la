@@ -126,36 +126,42 @@ public:
 		internal::Fn_expr_assign_type<Expr, Expr2>{}(self(), expr.self());
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	//* Element access */
+	///////////////////////////////////////////////////////////////////////
+	/** Element access */
 
+	// Returns the matrix element (row, col)
 	decltype(auto) operator()(std::size_t row, std::size_t col)
 	{
 		return self()(row, col);
 	}
 
+	// Returns the matrix element (row, col)
 	decltype(auto) operator()(std::size_t row, std::size_t col) const
 	{
 		return self()(row, col);
 	}
 
+	// Returns the matrix element (index, 0)
 	decltype(auto) operator[](std::size_t index)
 	{
 		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return self()(index, 0);
 	}
 
+	// Returns the matrix element (index, 0)
 	decltype(auto) operator[](std::size_t index) const
 	{
 		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return self()(index, 0);
 	}
 
+	// Returns the matrix element (index, 0)
 	decltype(auto) operator()(std::size_t index)
 	{
 		return (*this)[index];
 	}
 
+	// Returns the matrix element (index, 0)
 	decltype(auto) operator()(std::size_t index) const
 	{
 		return (*this)[index];
@@ -192,8 +198,8 @@ public:
 	// 		return !(*this == other);
 	// 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	/** Block views */
+	///////////////////////////////////////////////////////////////////////
+	// Block views */
 
 	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
 	auto view()
@@ -237,7 +243,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Row views */
+	// Row views */
 
 	template<std::size_t index>
 	auto row_view()
@@ -328,7 +334,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Column views */
+	/** Column views */
 
 	template<std::size_t index>
 	auto col_view()
@@ -418,8 +424,8 @@ public:
 		return cols_view(start_col, cols);
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	//* Transposed view */
+	///////////////////////////////////////////////////////////////////////
+	/** Transposed view */
 
 	auto tr_view()
 	{
@@ -436,8 +442,8 @@ public:
 		return tr_view();
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	//* Diagonal view */
+	///////////////////////////////////////////////////////////////////////
+	/** Diagonal view */
 
 	auto diag_view()
 	{

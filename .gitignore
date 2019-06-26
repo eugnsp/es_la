@@ -1,6 +1,4 @@
 build/
 
-doc/doxygen/html/*
-doc/doxygen/xml/*
-doc/sphinx/_build
-
+doc/sphinx/
+docs/

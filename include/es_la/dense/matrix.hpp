@@ -22,7 +22,7 @@ private:
 
 public:
 	///////////////////////////////////////////////////////////////////////
-	//* Constructors */
+	/** Constructors */
 
 	using Base::Base;
 
@@ -37,29 +37,34 @@ public:
 	// }
 
 	///////////////////////////////////////////////////////////////////////
-	//* Assignments */
+	/** Assignments */
 
 	using Base::operator=;
 
 	Matrix& operator=(const Matrix&) = default;
 	Matrix& operator=(Matrix&&) = default;
 
-	//////////////////////////////////////////////////////////////////////
-	//* Extents */
+	////////////////////////////////////////////////////////////////////////
+	/** Extents */
 
 	using Base::cols;
 	using Base::rows;
 
+	// Returns the leading dimension of a matrix
 	std::size_t lead_dim() const
 	{
 		return is_col_major<Matrix> ? col_stride() : row_stride();
 	}
 
+	// Returns the increment used to determine the starting
+	// point of the matrix element in the next row of the same column
 	std::size_t row_stride() const
 	{
 		return is_col_major<Matrix> ? 1 : cols();
 	}
 
+	// Returns the increment used to determine the starting
+	// point of the matrix element in the next column of the same row
 	std::size_t col_stride() const
 	{
 		return is_col_major<Matrix> ? rows() : 1;
@@ -71,7 +76,7 @@ public:
 	}
 
 	//////////////////////////////////////////////////////////////////////
-	//* Element access */
+	/** Element access */
 
 	Value* data() noexcept
 	{
@@ -88,5 +93,5 @@ private:
 };
 
 template<class Expr>
-Matrix(const Expression<Expr>&) -> Matrix<Value_type<Expr>, ct_rows_value<Expr>, ct_cols_value<Expr>>;
+Matrix(const Expression<Expr>&)->Matrix<Value_type<Expr>, ct_rows_value<Expr>, ct_cols_value<Expr>>;
 } // namespace es_la

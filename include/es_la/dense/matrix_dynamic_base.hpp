@@ -107,11 +107,13 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	//* Element access */
 
+	/** @brief Returns the matrix element located in the row \p row and column \p col. */
 	Value& operator()(std::size_t row, std::size_t col)
 	{
 		return data_[linear_index(row, col)];
 	}
 
+	/** @brief Returns the matrix element located in the row \p row and column \p col. */
 	const Value& operator()(std::size_t row, std::size_t col) const
 	{
 		return data_[linear_index(row, col)];
