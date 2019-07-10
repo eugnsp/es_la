@@ -19,24 +19,26 @@ if (NOT TARGET es_util)
 endif()
 target_link_libraries(es_la PUBLIC es_util)
 
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+find_package(Threads REQUIRED)
+
 target_include_directories(es_la PUBLIC "$ENV{MKLROOT}/include")
 target_compile_definitions(es_la PUBLIC MKL_ILP64)
 set(MKL_LIB "$ENV{MKLROOT}/lib/intel64")
 #set(MKL_LIBRARIES "-Wl,--start-group" "${MKL_LIB}/libmkl_intel_ilp64.a" "${MKL_LIB}/libmkl_sequential.a" "${MKL_LIB}/libmkl_core.a" "-Wl,--end-group" pthread m dl)
-set(MKL_LIBRARIES "-Wl,--no-as-needed" mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
+set(MKL_LIBRARIES "-Wl,--no-as-needed" mkl_intel_ilp64 mkl_sequential mkl_core Threads::Threads m dl)
 
 target_link_directories(es_la PUBLIC "${MKL_LIB}")
 target_link_libraries(es_la PUBLIC "${MKL_LIBRARIES}")
 
-enable_testing()
-
 find_package(Boost)
+enable_testing()
 
 add_executable(es_la_test "test/es_la_test.cpp")
 if (Boost_FOUND)
 	target_include_directories(es_la_test PUBLIC "${Boost_INCLUDE_DIRS}")
 endif()
-target_link_libraries(es_la_test es_la)
+target_link_libraries(es_la_test PUBLIC es_la)
 target_compile_options(es_la_test PRIVATE -Wall -Wpedantic -Wextra -Werror=return-type -m64 -march=native -O0 -g)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
