@@ -15,8 +15,7 @@ struct Value_trait_impl
 {};
 
 template<class Expr>
-struct Value_trait : internal::Value_trait_impl<es_util::Remove_cv_ref<Expr>>
-{};
+using Value_trait = internal::Value_trait_impl<es_util::Remove_cv_ref<Expr>>;
 
 template<typename Value, std::size_t rows, std::size_t cols, class Layout>
 struct Value_trait_impl<Matrix<Value, rows, cols, Layout>>

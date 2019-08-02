@@ -14,8 +14,7 @@ struct Mkl_expr_decay_trait_impl
 };
 
 template<class Expr>
-struct Mkl_expr_decay_trait : Mkl_expr_decay_trait_impl<std::remove_const_t<Expr>>
-{};
+using Mkl_expr_decay_trait = Mkl_expr_decay_trait_impl<std::remove_const_t<Expr>>;
 
 template<class Expr>
 using Mkl_expr_decay = typename Mkl_expr_decay_trait<Expr>::Type;

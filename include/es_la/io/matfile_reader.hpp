@@ -1,16 +1,18 @@
 #pragma once
+#include <es_la/dense.hpp>
+#include <es_la/io/matfile.hpp>
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <es_la/io/matfile_base.hpp>
 #include <fstream>
 #include <stdexcept>
 #include <string>
 
 namespace es_la
 {
-class Matfile_reader : private internal::Matfile_base
+class Matfile_reader
 {
 public:
 	explicit Matfile_reader(const std::string& file_name)
@@ -28,35 +30,34 @@ public:
 	}
 
 	std::string read_string(const std::string& var_name)
-	{}
+	{
+		return "";
+	}
 
 	template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 	void read(const std::string& var_name, T& scalar)
 	{
-		file_.seekg(sizeof(Header));
-
-		while (true)
-		{
-			Tag tag;
-			read_raw(tag);
-			if (!file_)
-				break;
-
-			switch (tag.data_type)
-			{
-			case internal::Matfile_data_types::MATRIX:
-				//				read_array_flags_subelement();
-				break;
-
-			default:
-				file_.seekg(tag.n_bytes, std::ifstream::cur);
-			}
-		}
+		//seek_variable(var_name);
 	}
 
 	template<class T, std::size_t rows, std::size_t cols>
 	void read(const std::string& var_name, const Matrix<T, rows, cols>& matrix)
-	{}
+	{
+		while (true)
+		{
+			internal::matfile::Tag tag;
+			read_raw(tag);
+			if (!file_)
+				break;
+
+			if (tag.data_type == internal::matfile::Data_types::MATRIX)
+			{
+
+			}
+			else
+				file_.seekg(tag.n_bytes, std::ifstream::cur);
+		}
+	}
 
 	void close()
 	{
@@ -78,7 +79,7 @@ private:
 
 	void read_header()
 	{
-		Header header;
+		internal::matfile::Header header;
 		read_raw(header);
 		if (!file_)
 			throw std::runtime_error("Error while reading MAT-file");
@@ -94,14 +95,15 @@ private:
 			header_text_.end());
 	}
 
-	void read_array_flags_subelement(internal::Matfile_class_types& class_type, Flags& flags, std::size_t& nnz)
+	void read_array_flags_subelement(
+		internal::matfile::Class_types& class_type, internal::matfile::Flags& flags, std::size_t& nnz)
 	{
-		Array_flags array_flags;
+		internal::matfile::Array_flags array_flags;
 		read_raw(array_flags);
 		if (!file_)
 			throw std::runtime_error("Error while reading MAT-file");
 
-		class_type = static_cast<internal::Matfile_class_types>(array_flags.class_type);
+		class_type = static_cast<internal::matfile::Class_types>(array_flags.class_type);
 		flags.from_uint8(array_flags.flags);
 		//		nnz
 		// 		array_flags.class_type = static_cast<std::uint8_t>(class_type);
@@ -109,6 +111,29 @@ private:
 		// 		array_flags.flags = 0;
 		// 		if (is_complex)
 		// 			array_flags.flags |= complex_flag;
+	}
+
+	void seek_variable(const std::string& /* var_name */)
+	{
+		file_.seekg(sizeof(internal::matfile::Header));
+
+		while (true)
+		{
+			internal::matfile::Tag tag;
+			read_raw(tag);
+			if (!file_)
+				break;
+
+			switch (tag.data_type)
+			{
+			case internal::matfile::Data_types::MATRIX:
+				//				read_array_flags_subelement();
+				break;
+
+			default:
+				file_.seekg(tag.n_bytes, std::ifstream::cur);
+			}
+		}
 	}
 
 private:

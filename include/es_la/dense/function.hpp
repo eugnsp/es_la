@@ -7,3 +7,4 @@
 #include <es_la/dense/function/make_matrix.hpp>
 #include <es_la/dense/function/norm2.hpp>
 #include <es_la/dense/function/norm_sup.hpp>
+#include <es_la/dense/function/sum.hpp>

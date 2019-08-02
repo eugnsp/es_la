@@ -34,8 +34,7 @@ struct Layout_trait_impl
 {};
 
 template<class Expr>
-struct Layout_trait : Layout_trait_impl<es_util::Remove_cv_ref<Expr>>
-{};
+using Layout_trait = Layout_trait_impl<es_util::Remove_cv_ref<Expr>>;
 }
 
 template<class Expr>

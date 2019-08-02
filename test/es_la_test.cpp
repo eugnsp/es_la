@@ -19,6 +19,8 @@
 #include <mkl_sparse_qr.h>
 #include <numeric>
 
+#include <es_la/io.hpp>
+
 template<template<class T> class Test, typename S>
 void run()
 {
@@ -45,6 +47,10 @@ void print(const Matrix& mat)
 
 int main()
 {
+	// es_la::Matfile_reader mr("Indian_pines_gt.mat");
+	// es_la::Matrix_xd m;
+	// mr.read("indian_pines_gt", m);
+
 	// ::mkl_verbose(1);
 	try
 	{
@@ -86,18 +92,29 @@ int main()
 
 		run<Binary_expr_constructor, int>();
 
-		using T = double;
-		auto m1 = es_la::make_vector(4, [](auto i) { return T(i); });
-		auto m2 = es_la::make_matrix<es_la::Row_major>(4, 1, [](auto i, auto j) { return T(1 + j + 2 * i); });
-		// auto v = es_la::make_vector(4, [](auto i) { return T(1 + 3 * i); });
-		print(m1);
-		print(m2);
+		// using T = double;
+		// auto m1 = es_la::make_vector(4, [](auto i) { return T(i); });
+		// auto m2 = es_la::make_matrix<es_la::Row_major>(4, 1, [](auto i, auto j) { return T(1 + j + 2 * i); });
+		// // auto v = es_la::make_vector(4, [](auto i) { return T(1 + 3 * i); });
+		// print(m1);
+		// print(m2);
 
-		m1 += m2;
+		// m1 += m2;
+		// print(m1);
+
+		// m2 += m1;
+		// print(m2);
+
+		auto m = es_la::make_matrix<es_la::Row_major>(4, 4, [](auto i, auto j) { return 1. + i + j; });
+		auto m1 = es_la::make_matrix<es_la::Row_major>(4, 4, [](auto...) { return 0; });
+		auto m2 = es_la::make_matrix<es_la::Row_major>(4, 4, [](auto...) { return 2; });
+
+		print(m);
 		print(m1);
 
-		m2 += m1;
-		print(m2);
+		m1.col_view(0) = m * m2.col_view(0);
+
+		print(m1);
 
 		// es_la::Matrix_x<T> mv(4, 4, 1000);
 		// mv = m;

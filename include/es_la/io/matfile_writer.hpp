@@ -1,12 +1,16 @@
 #pragma once
+#include <es_la/dense.hpp>
+#include <es_la/io/matfile.hpp>
+#include <es_la/sparse.hpp>
+
+#include <es_util/time.hpp>
+#include <es_util/type_traits.hpp>
+
+#include <mkl.h>
+
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <es_la/dense.hpp>
-#include <es_la/io/matfile_base.hpp>
-#include <es_la/sparse.hpp>
-#include <es_util/time.hpp>
-#include <es_util/type_traits.hpp>
 #include <fstream>
 #include <stdexcept>
 #include <string>
@@ -14,12 +18,10 @@
 #include <type_traits>
 #include <vector>
 
-#include <mkl.h>
-
 namespace es_la
 {
 // MAT-file class that writes data to Level 5 MAT-files
-class Matfile_writer : private internal::Matfile_base
+class Matfile_writer
 {
 public:
 	explicit Matfile_writer(const std::string& file_name);
@@ -102,11 +104,11 @@ private:
 		file_.write(reinterpret_cast<const char*>(data), n_elements * sizeof(T));
 	}
 
-	void write_tag(internal::Matfile_data_types, std::size_t n_bytes);
+	void write_tag(internal::matfile::Data_types, std::size_t n_bytes);
 
 	void write_header();
 
-	void write_array_flags_subelement(internal::Matfile_class_types, bool is_complex, std::size_t nnz);
+	void write_array_flags_subelement(internal::matfile::Class_types, bool is_complex, std::size_t nnz);
 
 	void write_dimensions_subelement(std::size_t rows, std::size_t cols);
 
@@ -141,27 +143,27 @@ void Matfile_writer::write_array_element(const std::string& name, std::size_t ro
 	if (data_size_in_bytes > INT32_MAX)
 		throw std::length_error("Level 5 MAT-files cannot hold variables exceeding 2GB");
 
-	const std::size_t total_size_in_bytes =		   // The total size includes all subelement paddings
-		sizeof(Array_flags) +					   // Array flags
-		sizeof(Dimensions) +					   // Dimensions array
-		sizeof(Tag) + padded_size(name.length()) + // Array name
-		(sizeof(Tag) + padded_size(data_size_in_bytes)) * (is_complex_data ? 2 : 1); // Data size
+	const std::size_t total_size_in_bytes =							  // The total size includes all subelement paddings
+		sizeof(internal::matfile::Array_flags) +					  // Array flags
+		sizeof(internal::matfile::Dimensions) +						  // Dimensions array
+		sizeof(internal::matfile::Tag) + padded_size(name.length()) + // Array name
+		(sizeof(internal::matfile::Tag) + padded_size(data_size_in_bytes)) * (is_complex_data ? 2 : 1); // Data size
 
-	write_tag(internal::Matfile_data_types::MATRIX, total_size_in_bytes);
+	write_tag(internal::matfile::Data_types::MATRIX, total_size_in_bytes);
 
-	write_array_flags_subelement(internal::Matfile_class_type<T>::value, is_complex_data, 0);
+	write_array_flags_subelement(internal::matfile::Class_type<T>::value, is_complex_data, 0);
 	write_dimensions_subelement(rows, cols);
 	write_array_name_subelement(name);
 
 	// Real data
-	write_tag(internal::Matfile_data_type<T>::value, data_size_in_bytes);
+	write_tag(internal::matfile::Data_type<T>::value, data_size_in_bytes);
 	write_raw(real_values, rows * cols);
 	write_zero_padding(data_size_in_bytes);
 
 	if (is_complex_data)
 	{
 		// Complex data
-		write_tag(internal::Matfile_data_type<T>::value, data_size_in_bytes);
+		write_tag(internal::matfile::Data_type<T>::value, data_size_in_bytes);
 		write_raw(complex_values, rows * cols);
 		write_zero_padding(data_size_in_bytes);
 	}
@@ -183,22 +185,22 @@ void Matfile_writer::write_sparse_array_element(const std::string& name, std::si
 	if (data_size_in_bytes > INT32_MAX)
 		throw std::length_error("Level 5 MAT-files cannot hold variables exceeding 2GB");
 
-	const std::size_t total_size_in_bytes =					  // Total size includes all subelement paddings
-		sizeof(Array_flags) +								  // Array flags
-		sizeof(Dimensions) +								  // Dimensions array
-		sizeof(Tag) + padded_size(name.length()) +			  // Array name
-		sizeof(Tag) + padded_size(row_ind_size_in_bytes) +	  // Row indices
-		sizeof(Tag) + padded_size(column_ind_size_in_bytes) + // Column indices
-		(sizeof(Tag) + padded_size(data_size_in_bytes)) * (is_complex_data ? 2 : 1); // Data size
+	const std::size_t total_size_in_bytes =							  // Total size includes all subelement paddings
+		sizeof(internal::matfile::Array_flags) +					  // Array flags
+		sizeof(internal::matfile::Dimensions) +						  // Dimensions array
+		sizeof(internal::matfile::Tag) + padded_size(name.length()) + // Array name
+		sizeof(internal::matfile::Tag) + padded_size(row_ind_size_in_bytes) +	 // Row indices
+		sizeof(internal::matfile::Tag) + padded_size(column_ind_size_in_bytes) + // Column indices
+		(sizeof(internal::matfile::Tag) + padded_size(data_size_in_bytes)) * (is_complex_data ? 2 : 1); // Data size
 
-	write_tag(internal::Matfile_data_types::MATRIX, total_size_in_bytes);
+	write_tag(internal::matfile::Data_types::MATRIX, total_size_in_bytes);
 
-	write_array_flags_subelement(internal::Matfile_class_types::SPARSE, is_complex_data, nnz);
+	write_array_flags_subelement(internal::matfile::Class_types::SPARSE, is_complex_data, nnz);
 	write_dimensions_subelement(rows, cols);
 	write_array_name_subelement(name);
 
 	// Row indices
-	write_tag(internal::Matfile_data_types::INT32, row_ind_size_in_bytes);
+	write_tag(internal::matfile::Data_types::INT32, row_ind_size_in_bytes);
 	if constexpr (sizeof(Index) == 4)
 		write_raw(ir, nnz);
 	else
@@ -207,7 +209,7 @@ void Matfile_writer::write_sparse_array_element(const std::string& name, std::si
 	write_zero_padding(row_ind_size_in_bytes);
 
 	// Column indices
-	write_tag(internal::Matfile_data_types::INT32, column_ind_size_in_bytes);
+	write_tag(internal::matfile::Data_types::INT32, column_ind_size_in_bytes);
 	if constexpr (sizeof(Index) == 4)
 		write_raw(jc, cols + 1);
 	else
@@ -216,14 +218,14 @@ void Matfile_writer::write_sparse_array_element(const std::string& name, std::si
 	write_zero_padding(column_ind_size_in_bytes);
 
 	// Real data
-	write_tag(internal::Matfile_data_type<T>::value, data_size_in_bytes);
+	write_tag(internal::matfile::Data_type<T>::value, data_size_in_bytes);
 	write_raw(real_values, nnz);
 	write_zero_padding(data_size_in_bytes);
 
 	if (is_complex_data)
 	{
 		// Complex data
-		write_tag(internal::Matfile_data_type<T>::value, data_size_in_bytes);
+		write_tag(internal::matfile::Data_type<T>::value, data_size_in_bytes);
 		write_raw(complex_values, nnz);
 		write_zero_padding(data_size_in_bytes);
 	}
