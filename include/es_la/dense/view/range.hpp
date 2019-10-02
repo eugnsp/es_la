@@ -141,7 +141,6 @@ public:
 
 	std::size_t operator[](std::size_t index) const
 	{
-		assert(index < size_);
 		return start_ + index;
 	}
 

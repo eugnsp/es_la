@@ -138,6 +138,16 @@ struct Ct_cols_trait_impl<Random_matrix<Random_distribution, Random_generator>> 
 
 ///////////////////////////////////////////////////////////////////////
 
+template<class Fn>
+struct Ct_rows_trait_impl<Fn_matrix<Fn>> : internal::Dynamic
+{};
+
+template<class Fn>
+struct Ct_cols_trait_impl<Fn_matrix<Fn>> : internal::Dynamic
+{};
+
+///////////////////////////////////////////////////////////////////////
+
 template<std::size_t ct_begin, std::size_t ct_size>
 struct Ct_size_trait_impl<internal::Range<ct_begin, ct_size>> : std::integral_constant<std::size_t, ct_size>
 {};

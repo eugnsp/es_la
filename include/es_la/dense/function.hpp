@@ -3,8 +3,10 @@
 #include <es_la/dense/function/cross.hpp>
 #include <es_la/dense/function/det.hpp>
 #include <es_la/dense/function/dot.hpp>
+#include <es_la/dense/function/eigenvalues.hpp>
 #include <es_la/dense/function/invert.hpp>
 #include <es_la/dense/function/make_matrix.hpp>
+#include <es_la/dense/function/norm1.hpp>
 #include <es_la/dense/function/norm2.hpp>
 #include <es_la/dense/function/norm_sup.hpp>
 #include <es_la/dense/function/sum.hpp>

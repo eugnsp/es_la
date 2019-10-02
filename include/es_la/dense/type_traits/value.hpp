@@ -52,6 +52,12 @@ struct Value_trait_impl<Random_matrix<Random_distribution, Random_generator>>
 {
 	using Type = typename Random_distribution::result_type;
 };
+
+template<class Fn>
+struct Value_trait_impl<Fn_matrix<Fn>>
+{
+	using Type = std::invoke_result_t<Fn, std::size_t, std::size_t>;
+};
 } // namespace internal
 
 template<class Expr>

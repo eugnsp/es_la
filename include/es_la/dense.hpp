@@ -3,9 +3,9 @@
 #include <es_la/dense/expr/binary_expr.operators.hpp>
 #include <es_la/dense/expr/scalar_expr.hpp>
 #include <es_la/dense/expr/scalar_expr.operators.hpp>
+#include <es_la/dense/special.hpp>
 #include <es_la/dense/function.hpp>
 #include <es_la/dense/matrix.hpp>
-#include <es_la/dense/random_matrix.hpp>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/utility/mkl_destructor.hpp>

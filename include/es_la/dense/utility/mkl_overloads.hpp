@@ -4,6 +4,7 @@
 #include <es_la/dense/utility/mkl_helpers.hpp>
 
 #include <mkl_cblas.h>
+#include <mkl_lapacke.h>
 
 #include <complex>
 #include <cstddef>
