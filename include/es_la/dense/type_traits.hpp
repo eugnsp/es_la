@@ -1,4 +1,5 @@
 #pragma once
+
 #include <es_la/dense/type_traits/ct_extent.hpp>
 #include <es_la/dense/type_traits/expr_storage.hpp>
 #include <es_la/dense/type_traits/is_dense.hpp>
@@ -11,4 +12,6 @@
 #include <es_la/dense/type_traits/mkl_decay.hpp>
 #include <es_la/dense/type_traits/mkl_type.hpp>
 #include <es_la/dense/type_traits/numeric.hpp>
+#include <es_la/dense/type_traits/traversal_order.hpp>
 #include <es_la/dense/type_traits/value.hpp>
+

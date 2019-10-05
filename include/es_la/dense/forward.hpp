@@ -35,7 +35,7 @@ class Binary_expr;
 template<class Random_distribution, class Random_generator>
 class Random_matrix;
 
-template<class Fn>
+template<class Fn, class Traversal_order = Any_order>
 class Fn_matrix;
 
 namespace internal

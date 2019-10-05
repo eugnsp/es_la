@@ -51,4 +51,16 @@ private:
 	internal::Expr_storage_type<const Expr> expr_;
 	const Scalar scalar_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<class Expr, typename Scalar, template<class, typename> class Fn>
+struct Traversal_order<Scalar_expr<Expr, Scalar, Fn>>
+{
+	using Type = Traversal_order_tag<Expr>;
+};
+} // namespace traits
 } // namespace es_la

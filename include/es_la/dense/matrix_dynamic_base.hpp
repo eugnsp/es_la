@@ -28,7 +28,7 @@ public:
 
 public:
 	//////////////////////////////////////////////////////////////////////
-	//* Constructor */
+	//> Constructors
 
 	Matrix_dynamic_base() :
 		Matrix_dynamic_base(Internal{}, extent_static_or_zero(ct_rows), extent_static_or_zero(ct_cols))
@@ -57,7 +57,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Assignments */
+	//> Assignments
 
 	using Dense_base::operator=;
 
@@ -94,7 +94,7 @@ public:
 	}
 
 	//////////////////////////////////////////////////////////////////////
-	//* Extents */
+	//> Extents
 
 	using Shape_base::cols;
 	using Shape_base::rows;
@@ -105,22 +105,22 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Element access */
+	//> Element access
 
-	/** @brief Returns the matrix element located in the row \p row and column \p col. */
+	// Returns the matrix element located in the row \p row and column \p col
 	Value& operator()(std::size_t row, std::size_t col)
 	{
 		return data_[linear_index(row, col)];
 	}
 
-	/** @brief Returns the matrix element located in the row \p row and column \p col. */
+	// Returns the matrix element located in the row \p row and column \p col
 	const Value& operator()(std::size_t row, std::size_t col) const
 	{
 		return data_[linear_index(row, col)];
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Modifiers */
+	//> Modifiers
 
 	void swap(Matrix_dynamic_base& other) noexcept
 	{
@@ -130,7 +130,7 @@ public:
 
 protected:
 	//////////////////////////////////////////////////////////////////////
-	//* Constructor */
+	//> Constructor
 
 	Matrix_dynamic_base(Internal, std::size_t rows, std::size_t cols) : Shape_base(rows, cols), data_(rows * cols)
 	{

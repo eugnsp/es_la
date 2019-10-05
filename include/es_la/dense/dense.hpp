@@ -3,12 +3,12 @@
 #include <es_la/dense/expression.hpp>
 #include <es_la/dense/forward.hpp>
 //#include <es_la/dense/functor.hpp>
+#include <es_la/dense/expr/add.hpp>
+#include <es_la/dense/functor/type_traits.hpp>
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/view/range.hpp>
 #include <es_la/dense/view/slice.hpp>
-#include <es_la/dense/expr/add.hpp>
-#include <es_la/dense/functor/type_traits.hpp>
 
 #include <array>
 #include <cassert>
@@ -31,13 +31,16 @@ public:
 	using Base::self;
 
 	//////////////////////////////////////////////////////////////////////
-	//* Extents */
+	//> Extents
 
-	using Base::cols;
+	// Returns the number of rows
 	using Base::rows;
 
+	// Returns the number of columns
+	using Base::cols;
+
 	///////////////////////////////////////////////////////////////////////
-	//* Operators */
+	//> Operators
 
 	template<class Scalar, typename = std::enable_if_t<std::is_convertible_v<Scalar, Value>>>
 	Dense& operator=(const Scalar& scalar)
@@ -127,42 +130,42 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	/** Element access */
+	//> Element access
 
 	// Returns the matrix element (row, col)
-	decltype(auto) operator()(std::size_t row, std::size_t col)
+	decltype(auto) operator()(const std::size_t row, const std::size_t col)
 	{
 		return self()(row, col);
 	}
 
 	// Returns the matrix element (row, col)
-	decltype(auto) operator()(std::size_t row, std::size_t col) const
+	decltype(auto) operator()(const std::size_t row, const std::size_t col) const
 	{
 		return self()(row, col);
 	}
 
 	// Returns the matrix element (index, 0)
-	decltype(auto) operator[](std::size_t index)
+	decltype(auto) operator[](const std::size_t index)
 	{
 		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return self()(index, 0);
 	}
 
 	// Returns the matrix element (index, 0)
-	decltype(auto) operator[](std::size_t index) const
+	decltype(auto) operator[](const std::size_t index) const
 	{
 		static_assert(internal::is_vector<Expr>, "Expression should be a vector");
 		return self()(index, 0);
 	}
 
 	// Returns the matrix element (index, 0)
-	decltype(auto) operator()(std::size_t index)
+	decltype(auto) operator()(const std::size_t index)
 	{
 		return (*this)[index];
 	}
 
 	// Returns the matrix element (index, 0)
-	decltype(auto) operator()(std::size_t index) const
+	decltype(auto) operator()(const std::size_t index) const
 	{
 		return (*this)[index];
 	}
@@ -199,9 +202,9 @@ public:
 	// 	}
 
 	///////////////////////////////////////////////////////////////////////
-	// Block views */
+	//> Block views
 
-	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
+	template<std::size_t start_row, std::size_t start_col, std::size_t rows, std::size_t cols>
 	auto view()
 	{
 		using Rows = internal::Range<start_row, rows>;
@@ -209,7 +212,7 @@ public:
 		return view_impl(Rows{}, Cols{});
 	}
 
-	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
+	template<std::size_t start_row, std::size_t start_col, std::size_t rows, std::size_t cols>
 	auto view() const
 	{
 		using Rows = internal::Range<start_row, rows>;
@@ -217,33 +220,35 @@ public:
 		return view_impl(Rows{}, Cols{});
 	}
 
-	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols>
+	template<std::size_t start_row, std::size_t start_col, std::size_t rows, std::size_t cols>
 	auto cview() const
 	{
-		return view<start_row, rows, start_col, cols>();
+		return view<start_row, start_col, rows, cols>();
 	}
 
 	///////////////////////////////////////////////////////////////////////
 
-	auto view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols)
+	auto view(const std::size_t start_row, const std::size_t start_col, const std::size_t rows, const std::size_t cols)
 	{
 		using Range = internal::Range<dynamic, dynamic>;
 		return view_impl(Range{start_row, rows}, Range{start_col, cols});
 	}
 
-	auto view(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const
+	auto view(
+		const std::size_t start_row, const std::size_t start_col, const std::size_t rows, const std::size_t cols) const
 	{
 		using Range = internal::Range<dynamic, dynamic>;
 		return view_impl(Range{start_row, rows}, Range{start_col, cols});
 	}
 
-	auto cview(std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols) const
+	auto cview(
+		const std::size_t start_row, const std::size_t start_col, const std::size_t rows, const std::size_t cols) const
 	{
-		return view(start_row, rows, start_col, cols);
+		return view(start_row, start_col, rows, cols);
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	// Row views */
+	//> Row views
 
 	template<std::size_t index>
 	auto row_view()
@@ -334,7 +339,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	/** Column views */
+	//> Column views
 
 	template<std::size_t index>
 	auto col_view()
@@ -425,7 +430,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	/** Transposed view */
+	//> Transposed view
 
 	auto tr_view()
 	{
@@ -443,7 +448,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	/** Diagonal view */
+	//> Diagonal view
 
 	auto diag_view()
 	{
@@ -529,7 +534,6 @@ public:
 	// 			self()(row, col) -= value;
 	// 	return *this;
 	// }
-
 
 private:
 	template<class Rows, class Cols>

@@ -1,6 +1,7 @@
 #pragma once
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/tags.hpp>
+#include <es_la/dense/type_traits.hpp>
 
 #include <cstddef>
 #include <utility>
@@ -8,8 +9,8 @@
 
 namespace es_la
 {
-template<class Fn>
-class Fn_matrix : public Dense<Fn_matrix<Fn>, Rvalue>
+template<class Fn, class Traversal_order>
+class Fn_matrix : public Dense<Fn_matrix<Fn, Traversal_order>, Rvalue>
 {
 public:
 	using Value = std::invoke_result_t<Fn, std::size_t, std::size_t>;
@@ -36,7 +37,19 @@ public:
 private:
 	const std::size_t rows_;
 	const std::size_t cols_;
-	
+
 	const Fn fn_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<class Fn, class Traversal_order_>
+struct Traversal_order<Fn_matrix<Fn, Traversal_order_>>
+{
+	using Type = Traversal_order_;
+};
+}
 } // namespace es_la

@@ -15,7 +15,7 @@ public:
 	using Value = Value_type<Random_matrix>;
 
 public:
-	Random_matrix(std::size_t rows, std::size_t cols, Random_distribution distr, Random_generator& gen) :
+	Random_matrix(const std::size_t rows, const std::size_t cols, Random_distribution distr, Random_generator& gen) :
 		rows_(rows), cols_(cols), distr_(std::move(distr)), gen_(gen)
 	{}
 
@@ -29,7 +29,7 @@ public:
 		return cols_;
 	}
 
-	Value operator()(std::size_t, std::size_t) const
+	Value operator()(const std::size_t, const std::size_t) const
 	{
 		return distr_(gen_);
 	}
@@ -41,4 +41,16 @@ private:
 	mutable Random_distribution distr_;
 	Random_generator& gen_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<class Random_distribution, class Random_generator>
+struct Traversal_order<Random_matrix<Random_distribution, Random_generator>>
+{
+	using Type = Any_order;
+};
+} // namespace traits
 } // namespace es_la

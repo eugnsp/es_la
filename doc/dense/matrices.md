@@ -194,9 +194,9 @@ std::size_t row_stride() const;
 std::size_t col_stride() const;
 ```
 
-1. Returns the leading dimension of a matrix. The leading dimension is the increment used to determine the starting point for the matrix elements in each successive column (column-major order) or row (row-major order).
-2. Returns the increment used to determine the starting point of the matrix element in the next row of the same column.
-3. Returns the increment used to determine the starting point of the matrix element in the next column of the same row.
+1. Returns the leading dimension of a matrix. The leading dimension is the increment used to determine the starting position for the matrix elements in each successive column (column-major order) or row (row-major order).
+2. Returns the increment used to determine the starting position of the matrix element in the next row of the same column.
+3. Returns the increment used to determine the starting position of the matrix element in the next column of the same row.
 
 For matrices (not submatrices) the following equalities hold:
 
@@ -250,7 +250,7 @@ Value* data() noexcept;
 const Value* data() const noexcept;
 ```
 
-Returns the pointer to the underlying array serving as matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.
+Returns the pointer to the underlying array of matrix element storage, the returned pointer is equal to the address of the `(0, 0)` matrix element.
 
 ### `eval`
 **Evaluated expression**

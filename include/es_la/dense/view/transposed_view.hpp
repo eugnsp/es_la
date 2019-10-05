@@ -95,4 +95,16 @@ public:
 private:
 	internal::Expr_storage_type<Expr> expr_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<class Expr, class Category>
+struct Layout<Transposed_view<Expr, Category>>
+{
+	using Type = typename internal::Transpose_layout_tag<Layout_tag<Expr>>::Type;
+};
+} // namespace traits
 } // namespace es_la

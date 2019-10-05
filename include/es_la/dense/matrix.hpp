@@ -21,8 +21,7 @@ private:
 	using Base = internal::Matrix_base<ct_rows, ct_cols, Matrix<Value, ct_rows, ct_cols, Layout>, Layout>;
 
 public:
-	///////////////////////////////////////////////////////////////////////
-	/** Constructors */
+	//> Constructors
 
 	using Base::Base;
 
@@ -37,7 +36,7 @@ public:
 	// }
 
 	///////////////////////////////////////////////////////////////////////
-	/** Assignments */
+	//> Assignments
 
 	using Base::operator=;
 
@@ -45,7 +44,7 @@ public:
 	Matrix& operator=(Matrix&&) = default;
 
 	////////////////////////////////////////////////////////////////////////
-	/** Extents */
+	//> Extents
 
 	using Base::cols;
 	using Base::rows;
@@ -53,21 +52,21 @@ public:
 	// Returns the leading dimension of a matrix
 	std::size_t lead_dim() const
 	{
-		return is_col_major<Matrix> ? col_stride() : row_stride();
+		return is_col_major<Layout> ? col_stride() : row_stride();
 	}
 
 	// Returns the increment used to determine the starting
-	// point of the matrix element in the next row of the same column
+	// position of the matrix element in the next row of the same column
 	std::size_t row_stride() const
 	{
-		return is_col_major<Matrix> ? 1 : cols();
+		return is_col_major<Layout> ? 1 : cols();
 	}
 
 	// Returns the increment used to determine the starting
-	// point of the matrix element in the next column of the same row
+	// position of the matrix element in the next column of the same row
 	std::size_t col_stride() const
 	{
-		return is_col_major<Matrix> ? rows() : 1;
+		return is_col_major<Layout> ? rows() : 1;
 	}
 
 	std::size_t memory_size() const
@@ -76,13 +75,15 @@ public:
 	}
 
 	//////////////////////////////////////////////////////////////////////
-	/** Element access */
+	//> Element access
 
+	// Returns the pointer to the underlying array of matrix element storage
 	Value* data() noexcept
 	{
 		return data_.data();
 	}
 
+	// Returns the pointer to the underlying array of matrix element storage
 	const Value* data() const noexcept
 	{
 		return data_.data();
@@ -94,4 +95,16 @@ private:
 
 template<class Expr>
 Matrix(const Expression<Expr>&)->Matrix<Value_type<Expr>, ct_rows_value<Expr>, ct_cols_value<Expr>>;
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<typename Value, std::size_t rows, std::size_t cols, class Layout_>
+struct Layout<Matrix<Value, rows, cols, Layout_>>
+{
+	using Type = Layout_;
+};
+} // namespace traits
 } // namespace es_la

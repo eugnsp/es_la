@@ -20,7 +20,7 @@ struct Block_view_lvalue_copy_constructor
 		es_la::Matrix<T, 3, 3, es_la::Col_major> m1{1, 2, 3, 4, 5, 6, 7, 8, 9};
 		const es_la::Matrix<T, 3, 3, es_la::Col_major> m2{1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-		auto v1 = m1.view(1, 2, 1, 3);
+		auto v1 = m1.view(1, 1, 2, 3);
 		auto v1c = v1;
 
 		static_assert(std::is_same_v<decltype(v1(0, 0)), T&>);
@@ -72,7 +72,7 @@ struct Block_view_lvalue_size
 	template<class M>
 	void op(const M& m, std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols)
 	{
-		auto v = m.view(start_row, rows, start_col, cols);
+		auto v = m.view(start_row, start_col, rows, cols);
 		assert(v.rows() == rows);
 		assert(v.cols() == cols);
 		assert(v.lead_dim() == m.lead_dim());
@@ -104,7 +104,7 @@ struct Block_view_lvalue_data
 		es_la::Matrix<T, 3, 4, es_la::Row_major> m1r{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		const es_la::Matrix<T, 3, 4, es_la::Col_major> m2c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
-		auto v1c = m1c.view(1, 2, 1, 3);
+		auto v1c = m1c.view(1, 1, 2, 3);
 		static_assert(std::is_same_v<decltype(v1c(0, 0)), T&>);
 		static_assert(std::is_same_v<decltype(v1c.data()), T*>);
 		assert(check_elements(v1c, {5, 6, 8, 9, 11, 12}));
@@ -113,13 +113,13 @@ struct Block_view_lvalue_data
 		v1c(1, 1) = 13;
 		assert(m1c(2, 2) == 13);
 
-		auto v2c = m2c.view(1, 2, 1, 3);
+		auto v2c = m2c.view(1, 1, 2, 3);
 		static_assert(std::is_same_v<decltype(v2c(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v2c.data()), const T*>);
 		assert(check_elements(v2c, {5, 6, 8, 9, 11, 12}));
 		assert(check_elements_data(v2c, {5, 6, 8, 9, 11, 12}));
 
-		auto v1r = m1r.view(1, 2, 1, 3);
+		auto v1r = m1r.view(1, 1, 2, 3);
 		static_assert(std::is_same_v<decltype(v1r(0, 0)), int&>);
 		static_assert(std::is_same_v<decltype(v1r.data()), T*>);
 		assert(check_elements(v1r, {6, 10, 7, 11, 8, 12}));
@@ -143,30 +143,30 @@ struct Block_view_lvalue_const
 		es_la::Matrix<T, 3, 3> m1;
 		const es_la::Matrix<T, 3, 3> m1c{};
 
-		auto v1 = m1.view(0, 1, 0, 1);
-		auto v1c = m1c.view(0, 1, 0, 1);
+		auto v1 = m1.view(0, 0, 1, 1);
+		auto v1c = m1c.view(0, 0, 1, 1);
 		static_assert(std::is_same_v<decltype(v1(0, 0)), T&>);
 		static_assert(std::is_same_v<decltype(v1c(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v1.data()), T*>);
 		static_assert(std::is_same_v<decltype(v1c.data()), const T*>);
 
-		const auto v2 = m1.view(0, 1, 0, 1);
-		const auto v2c = m1c.view(0, 1, 0, 1);
+		const auto v2 = m1.view(0, 0, 1, 1);
+		const auto v2c = m1c.view(0, 0, 1, 1);
 
 		static_assert(std::is_same_v<decltype(v2(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v2c(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v2.data()), const T*>);
 		static_assert(std::is_same_v<decltype(v2c.data()), const T*>);
 
-		auto v3 = m1.cview(0, 1, 0, 1);
-		auto v3c = m1c.cview(0, 1, 0, 1);
+		auto v3 = m1.cview(0, 0, 1, 1);
+		auto v3c = m1c.cview(0, 0, 1, 1);
 		static_assert(std::is_same_v<decltype(v3(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v3c(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v3.data()), const T*>);
 		static_assert(std::is_same_v<decltype(v3c.data()), const T*>);
 
-		const auto v4 = m1.cview(0, 1, 0, 1);
-		const auto v4c = m1c.cview(0, 1, 0, 1);
+		const auto v4 = m1.cview(0, 0, 1, 1);
+		const auto v4c = m1c.cview(0, 0, 1, 1);
 		static_assert(std::is_same_v<decltype(v4(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v4c(0, 0)), const T&>);
 		static_assert(std::is_same_v<decltype(v4.data()), const T*>);

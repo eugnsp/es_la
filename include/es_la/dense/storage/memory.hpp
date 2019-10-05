@@ -20,12 +20,12 @@ constexpr std::size_t get_alignment()
 	return (std::is_arithmetic_v<T> && alignof(T) < min_arithmetic_alignment) ? min_arithmetic_alignment : alignof(T);
 }
 
-[[nodiscard]] inline void* mem_alloc(std::size_t size, std::size_t alignment)
+[[nodiscard, gnu::malloc, gnu::alloc_size(1)]] inline void* mem_alloc(std::size_t size, std::size_t alignment)
 {
 	return ::mkl_malloc(size, static_cast<int>(alignment));
 }
 
-[[nodiscard]] inline void* mem_realloc(void* ptr, std::size_t size, std::size_t alignment)
+[[nodiscard, gnu::alloc_size(2)]] inline void* mem_realloc(void* ptr, std::size_t size, std::size_t alignment)
 {
 	const auto new_ptr = ::mkl_realloc(ptr, size);
 

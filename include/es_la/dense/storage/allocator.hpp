@@ -27,7 +27,7 @@ public:
 
 		auto ptr = es_la::internal::mem_alloc(size * sizeof(T), alignment);
 		if (!ptr)
-			throw std::bad_alloc();
+			throw std::bad_alloc{};
 
 		return static_cast<T*>(ptr);
 	}
@@ -50,7 +50,7 @@ public:
 
 		auto ptr = es_la::internal::mem_realloc(old_ptr, size * sizeof(T), alignment);
 		if (!ptr)
-			throw std::bad_alloc();
+			throw std::bad_alloc{};
 
 		return static_cast<T*>(ptr);
 	}

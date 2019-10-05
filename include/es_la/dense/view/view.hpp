@@ -113,4 +113,16 @@ private:
 	const Rows rows_;
 	const Cols cols_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<class Expr, class Rows, class Cols, class Category>
+struct Layout<View<Expr, Rows, Cols, Category>>
+{
+	using Type = Layout_tag<Expr>;
+};
+} // namespace traits
 } // namespace es_la

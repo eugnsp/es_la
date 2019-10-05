@@ -52,4 +52,16 @@ private:
 	internal::Expr_storage_type<const Expr1> expr1_;
 	internal::Expr_storage_type<const Expr2> expr2_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+namespace traits
+{
+template<class Expr1, class Expr2, template<class, class> class Fn>
+struct Traversal_order<Binary_expr<Expr1, Expr2, Fn>>
+{
+	using Type = Common_traversal_order_tag<Expr1, Expr2>;
+};
+} // namespace traits
 } // namespace es_la

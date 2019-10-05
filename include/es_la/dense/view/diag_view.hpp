@@ -13,6 +13,9 @@ namespace es_la
 template<class Expr, class Category>
 class Diag_view : public Dense<Diag_view<Expr, Category>, Category>
 {
+public:
+	using Traversal_order = Col_major;
+
 private:
 	using Base = Dense<Diag_view<Expr, Category>, Category>;
 
