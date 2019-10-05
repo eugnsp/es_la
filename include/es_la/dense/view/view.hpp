@@ -117,12 +117,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
-{
 template<class Expr, class Rows, class Cols, class Category>
-struct Layout<View<Expr, Rows, Cols, Category>>
+struct Traits<View<Expr, Rows, Cols, Category>>
 {
-	using Type = Layout_tag<Expr>;
+	using Value = Value_type<Expr>;
+	using Layout = Layout_tag<Expr>;
+
+	static constexpr std::size_t rows = ct_rows_value<Expr>;
+	static constexpr std::size_t cols = ct_cols_value<Expr>;
 };
-} // namespace traits
 } // namespace es_la

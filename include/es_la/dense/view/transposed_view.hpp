@@ -2,6 +2,7 @@
 #include <es_la/dense/dense.hpp>
 #include <es_la/dense/type_traits.hpp>
 #include <es_la/dense/utility/ct_extent.hpp>
+#include <es_la/dense/utility/layout.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -99,12 +100,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
-{
 template<class Expr, class Category>
-struct Layout<Transposed_view<Expr, Category>>
+struct Traits<Transposed_view<Expr, Category>>
 {
-	using Type = typename internal::Transpose_layout_tag<Layout_tag<Expr>>::Type;
+	using Value = Value_type<Expr>;
+	using Layout = typename internal::Transpose_layout<Layout_tag<Expr>>::Type;
+
+	static constexpr std::size_t rows = ct_cols_value<Expr>;
+	static constexpr std::size_t cols = ct_rows_value<Expr>;
 };
-} // namespace traits
 } // namespace es_la

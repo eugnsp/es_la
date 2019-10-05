@@ -13,7 +13,7 @@ namespace internal
 template<class Fn, class Expr, class... Exprs>
 void for_each_element_impl(Fn fn, Expr&& expr, Exprs&&... exprs)
 {
-	if constexpr (is_row_major_traversal<Expr>)
+	if constexpr (is_row_major<Common_layout_tag<Expr, Exprs...>>)
 		for (std::size_t col = 0; col < expr.cols(); ++col)
 			for (std::size_t row = 0; row < expr.rows(); ++row)
 				fn(expr(row, col), exprs(row, col)...);

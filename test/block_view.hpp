@@ -45,32 +45,32 @@ struct Block_view_lvalue_size
 		es_la::Matrix<T, 10, 11, es_la::Col_major> msc;
 		es_la::Matrix<T, 10, 11, es_la::Row_major> msr;
 
-		op(msc, 0, 5, 0, 6);
-		op(msc, 1, 5, 2, 6);
-		op(msr, 0, 5, 0, 6);
-		op(msr, 1, 5, 2, 6);
+		op(msc, 0, 0, 5, 6);
+		op(msc, 1, 2, 5, 6);
+		op(msr, 0, 0, 5, 6);
+		op(msr, 1, 2, 5, 6);
 
-		op<0, 5, 0, 6>(msc);
-		op<1, 5, 2, 6>(msc);
-		op<0, 5, 0, 6>(msr);
-		op<1, 5, 2, 6>(msr);
+		op<0, 0, 5, 6>(msc);
+		op<1, 2, 5, 6>(msc);
+		op<0, 0, 5, 6>(msr);
+		op<1, 2, 5, 6>(msr);
 
 		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Col_major> mdc;
 		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Row_major> mdr;
 
-		op(mdc, 0, 5, 0, 6);
-		op(mdc, 1, 5, 2, 6);
-		op(mdr, 0, 5, 0, 6);
-		op(mdr, 1, 5, 2, 6);
+		op(mdc, 0, 0, 5, 6);
+		op(mdc, 1, 2, 5, 6);
+		op(mdr, 0, 0, 5, 6);
+		op(mdr, 1, 2, 5, 6);
 
-		op<0, 5, 0, 6>(mdc);
-		op<1, 5, 2, 6>(mdc);
-		op<0, 5, 0, 6>(mdr);
-		op<1, 5, 2, 6>(mdr);
+		op<0, 0, 5, 6>(mdc);
+		op<1, 2, 5, 6>(mdc);
+		op<0, 0, 5, 6>(mdr);
+		op<1, 2, 5, 6>(mdr);
 	}
 
 	template<class M>
-	void op(const M& m, std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols)
+	void op(const M& m, std::size_t start_row, std::size_t start_col, std::size_t rows, std::size_t cols)
 	{
 		auto v = m.view(start_row, start_col, rows, cols);
 		assert(v.rows() == rows);
@@ -79,10 +79,10 @@ struct Block_view_lvalue_size
 		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v)>, es_la::Layout_tag<M>>);
 	}
 
-	template<std::size_t start_row, std::size_t rows, std::size_t start_col, std::size_t cols, class M>
+	template<std::size_t start_row, std::size_t start_col, std::size_t rows, std::size_t cols, class M>
 	void op(const M& m)
 	{
-		auto v = m.template view<start_row, rows, start_col, cols>();
+		auto v = m.template view<start_row, start_col, rows, cols>();
 		assert(v.rows() == rows);
 		assert(v.cols() == cols);
 		assert(v.lead_dim() == m.lead_dim());

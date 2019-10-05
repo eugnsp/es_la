@@ -1,6 +1,6 @@
 #pragma once
 #include <es_la/dense/functor/fn.hpp>
-#include <es_la/dense/type_traits/layout.hpp>
+#include <es_la/dense/type_traits.hpp>
 
 #include <cstddef>
 

@@ -10,7 +10,7 @@ class Expression
 {
 public:
 	using Value = Value_type<Expr>;
-	using Traversal_order = Traversal_order_tag<Expr>;
+	using Layout = Layout_tag<Expr>;
 
 public:
 	///////////////////////////////////////////////////////////////////////

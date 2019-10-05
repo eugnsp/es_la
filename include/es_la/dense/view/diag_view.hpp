@@ -104,4 +104,16 @@ public:
 private:
 	internal::Expr_storage_type<Expr> expr_;
 };
+
+///////////////////////////////////////////////////////////////////////
+//> Traits
+
+template<class Expr, class Category>
+struct Traits<Diag_view<Expr, Category>>
+{
+	using Value = Value_type<Expr>;
+
+	static constexpr std::size_t rows = std::min(ct_rows_value<Expr>, ct_cols_value<Expr>);
+	static constexpr std::size_t cols = 1;
+};
 } // namespace es_la

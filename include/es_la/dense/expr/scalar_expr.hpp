@@ -55,12 +55,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
-{
 template<class Expr, typename Scalar, template<class, typename> class Fn>
-struct Traversal_order<Scalar_expr<Expr, Scalar, Fn>>
+struct Traits<Scalar_expr<Expr, Scalar, Fn>>
 {
-	using Type = Traversal_order_tag<Expr>;
+	using Value = typename Fn<Expr, Scalar>::Value;
+	using Layout = Layout_tag<Expr>;
+
+	static constexpr std::size_t rows = ct_rows_value<Expr>;
+	static constexpr std::size_t cols = ct_rows_value<Expr>;
 };
-} // namespace traits
 } // namespace es_la

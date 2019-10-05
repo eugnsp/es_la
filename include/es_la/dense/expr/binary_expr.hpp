@@ -56,12 +56,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
-{
 template<class Expr1, class Expr2, template<class, class> class Fn>
-struct Traversal_order<Binary_expr<Expr1, Expr2, Fn>>
+struct Traits<Binary_expr<Expr1, Expr2, Fn>>
 {
-	using Type = Common_traversal_order_tag<Expr1, Expr2>;
+	using Value = typename Fn<Expr1, Expr2>::Value;
+	using Layout = Common_layout_tag<Expr1, Expr2>;
+
+	static constexpr std::size_t rows = Fn<Expr1, Expr2>::ct_rows;
+	static constexpr std::size_t cols = Fn<Expr1, Expr2>::ct_cols;
 };
-} // namespace traits
 } // namespace es_la

@@ -32,12 +32,6 @@ class Scalar_expr;
 template<class Expr1, class Expr2, template<class, class> class Fn>
 class Binary_expr;
 
-template<class Random_distribution, class Random_generator>
-class Random_matrix;
-
-template<class Fn, class Traversal_order = Any_order>
-class Fn_matrix;
-
 namespace internal
 {
 template<std::size_t start, std::size_t size>

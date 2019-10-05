@@ -9,11 +9,11 @@
 
 namespace es_la
 {
-template<class Fn, class Traversal_order>
-class Fn_matrix : public Dense<Fn_matrix<Fn, Traversal_order>, Rvalue>
+template<class Fn, class Layout = void>
+class Fn_matrix : public Dense<Fn_matrix<Fn, Layout>, Rvalue>
 {
 public:
-	using Value = std::invoke_result_t<Fn, std::size_t, std::size_t>;
+	using Value = Value_type<Fn_matrix>;
 
 public:
 	Fn_matrix(std::size_t rows, std::size_t cols, Fn fn) : rows_(rows), cols_(cols), fn_(std::move(fn))
@@ -44,12 +44,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
+template<class Fn, class Layout_>
+struct Traits<Fn_matrix<Fn, Layout_>>
 {
-template<class Fn, class Traversal_order_>
-struct Traversal_order<Fn_matrix<Fn, Traversal_order_>>
-{
-	using Type = Traversal_order_;
+	using Value = std::invoke_result_t<Fn, std::size_t, std::size_t>;
+	using Layout = Layout_;
+
+	static constexpr std::size_t rows = dynamic;
+	static constexpr std::size_t cols = dynamic;
 };
-}
 } // namespace es_la

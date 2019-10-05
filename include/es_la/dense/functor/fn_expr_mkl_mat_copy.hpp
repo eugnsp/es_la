@@ -1,7 +1,6 @@
 #pragma once
 #include <es_la/dense/tags.hpp>
 #include <es_la/dense/type_traits/ct_extent.hpp>
-#include <es_la/dense/type_traits/layout.hpp>
 #include <es_la/dense/utility/mkl_overloads.hpp>
 
 #include <utility>

@@ -2,6 +2,7 @@
 #include "sparsity_pattern.hpp"
 #include <es_la/sparse/csr_pattern.hpp>
 #include <es_la/sparse/forward.hpp>
+#include <es_la/dense/type_traits.hpp>
 
 //#include <es_la/base/extended.hpp>
 #include <es_la/dense/matrix.hpp>
@@ -206,5 +207,14 @@ private:
 	using Base::rows_;
 
 	Vector_x<Value> values_;
+};
+
+//////////////////////////////////////////////////////////////////////
+//> Type traits
+
+template<typename Value_, class Symmetry_, typename Index_>
+struct Traits<Csr_matrix<Value_, Symmetry_, Index_>>
+{
+	using Value = Value_;
 };
 } // namespace es_la

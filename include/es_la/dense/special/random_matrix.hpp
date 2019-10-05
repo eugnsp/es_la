@@ -45,12 +45,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
-{
 template<class Random_distribution, class Random_generator>
-struct Traversal_order<Random_matrix<Random_distribution, Random_generator>>
+struct Traits<Random_matrix<Random_distribution, Random_generator>>
 {
-	using Type = Any_order;
+	using Type = typename Random_distribution::result_type;
+	using Layout = void;
+
+	static constexpr std::size_t rows = dynamic;
+	static constexpr std::size_t cols = dynamic;
 };
-} // namespace traits
 } // namespace es_la

@@ -99,12 +99,13 @@ Matrix(const Expression<Expr>&)->Matrix<Value_type<Expr>, ct_rows_value<Expr>, c
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
 
-namespace traits
+template<typename Value_, std::size_t rows_, std::size_t cols_, class Layout_>
+struct Traits<Matrix<Value_, rows_, cols_, Layout_>>
 {
-template<typename Value, std::size_t rows, std::size_t cols, class Layout_>
-struct Layout<Matrix<Value, rows, cols, Layout_>>
-{
-	using Type = Layout_;
+	using Value = Value_;
+	using Layout = Layout_;
+
+	static constexpr std::size_t rows = rows_;
+	static constexpr std::size_t cols = cols_;
 };
-} // namespace traits
 } // namespace es_la

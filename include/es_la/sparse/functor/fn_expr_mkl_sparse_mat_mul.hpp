@@ -1,6 +1,5 @@
 #pragma once
-#include <es_la/dense/type_traits/layout.hpp>
-#include <es_la/dense/type_traits/value.hpp>
+#include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/utility/mkl_helpers.hpp>
 #include <es_la/sparse/utility/mkl_overloads.hpp>
 

@@ -1,8 +1,7 @@
 #pragma once
 #include <es_la/dense/functor/type_traits/fn_expr_trait.hpp>
 #include <es_la/dense/tags.hpp>
-#include <es_la/dense/type_traits/layout.hpp>
-#include <es_la/dense/type_traits/numeric.hpp>
+#include <es_la/dense/type_traits.hpp>
 #include <es_la/sparse/functor/fn_expr_mkl_sparse_mat_mul.hpp>
 
 #include <es_util/type_traits.hpp>
