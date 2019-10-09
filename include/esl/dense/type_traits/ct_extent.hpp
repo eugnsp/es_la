@@ -32,16 +32,16 @@ struct Ct_size_trait_impl<internal::Slice<ct_size>> : std::integral_constant<std
 } // namespace internal
 
 template<class Expr>
-inline constexpr auto ct_rows_value = Traits<Expr>::rows;
+inline constexpr auto ct_rows_value = Traits<esu::Remove_cv_ref<Expr>>::rows;
 
 template<class Expr>
-inline constexpr auto ct_cols_value = Traits<Expr>::cols;
+inline constexpr auto ct_cols_value = Traits<esu::Remove_cv_ref<Expr>>::cols;
 
 template<class Expr>
-inline constexpr auto ct_row_stride_value = Traits<Expr>::row_stride;
+inline constexpr auto ct_row_stride_value = Traits<esu::Remove_cv_ref<Expr>>::row_stride;
 
 template<class Expr>
-inline constexpr auto ct_col_stride_value = Traits<Expr>::col_stride;
+inline constexpr auto ct_col_stride_value = Traits<esu::Remove_cv_ref<Expr>>::col_stride;
 
 namespace internal
 {
