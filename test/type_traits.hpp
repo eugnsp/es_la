@@ -1,5 +1,5 @@
 #pragma once
-#include <es_la/dense.hpp>
+#include <esl/dense.hpp>
 
 template<typename T>
 struct Type_trait_is_dense
@@ -11,9 +11,9 @@ struct Type_trait_is_dense
 
 	void operator()()
 	{
-		static_assert(es_la::is_dense<es_la::Matrix<T, std::size_t{2}, std::size_t{2}>>);
-		static_assert(es_la::is_dense<es_la::Matrix<T, std::size_t{2}, es_la::dynamic>>);
-		static_assert(es_la::is_dense<es_la::Matrix<T, es_la::dynamic, 2>>);
-		static_assert(es_la::is_dense<es_la::Matrix<T, es_la::dynamic, es_la::dynamic>>);
+		static_assert(esl::is_dense<esl::Matrix<T, std::size_t{2}, std::size_t{2}>>);
+		static_assert(esl::is_dense<esl::Matrix<T, std::size_t{2}, esl::dynamic>>);
+		static_assert(esl::is_dense<esl::Matrix<T, esl::dynamic, 2>>);
+		static_assert(esl::is_dense<esl::Matrix<T, esl::dynamic, esl::dynamic>>);
 	}
 };

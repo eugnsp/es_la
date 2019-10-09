@@ -1,11 +1,11 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <es_la/dense.hpp>
-#include <es_la/io/matfile_writer.hpp>
-#include <es_la/sparse.hpp>
-#include <es_util/time.hpp>
-#include <es_util/type_traits.hpp>
+#include <esl/dense.hpp>
+#include <esl/io/matfile_writer.hpp>
+#include <esl/sparse.hpp>
+#include <esu/time.hpp>
+#include <esu/type_traits.hpp>
 #include <fstream>
 #include <stdexcept>
 #include <string>
@@ -14,7 +14,7 @@
 
 #include <mkl.h>
 
-namespace es_la
+namespace esl
 {
 Matfile_writer::Matfile_writer(const std::string& file_name)
 {
@@ -130,7 +130,7 @@ void Matfile_writer::write_header()
 	header.version = 0x0100;
 	header.endian = ('M' << 8) | 'I'; // = "IM"
 
-	std::string text("MATLAB 5.0 MAT-file, created on: " + es_util::date_time_string());
+	std::string text("MATLAB 5.0 MAT-file, created on: " + esu::date_time_string());
 	text.resize(sizeof(header.text), ' ');
 	text.copy(header.text, sizeof(header.text));
 
@@ -175,7 +175,7 @@ void Matfile_writer::write_array_name_subelement(const std::string& name)
 // 		const std::string& name,
 // 		std::size_t rows, std::size_t cols,
 // 		const T* real_values,
-// 		es_util::Identity_t<const T*> complex_values = nullptr);
+// 		esu::Identity_t<const T*> complex_values = nullptr);
 //
 // 	template<typename T, typename Index>
 // 	void write_sparse_array_element(
@@ -184,7 +184,7 @@ void Matfile_writer::write_array_name_subelement(const std::string& name)
 // 		std::size_t nnz,
 // 		const Index* ir, const Index* jc,
 // 		const T* real_values,
-// 		es_util::Identity_t<const T*> complex_values = nullptr);
+// 		esu::Identity_t<const T*> complex_values = nullptr);
 //
 // private:
 // 	std::ofstream file_;
@@ -198,7 +198,7 @@ void Matfile_writer::write_array_name_subelement(const std::string& name)
 // void Matfile_writer::write_array_element(const std::string& name,
 // 	std::size_t rows, std::size_t cols,
 // 	const T* real_values,
-// 	es_util::Identity_t<const T*> complex_values)
+// 	esu::Identity_t<const T*> complex_values)
 // {
 // 	assert(real_values);
 //
@@ -241,7 +241,7 @@ void Matfile_writer::write_array_name_subelement(const std::string& name)
 // 	std::size_t nnz,
 // 	const Index* ir, const Index* jc,
 // 	const T* real_values,
-// 	es_util::Identity_t<const T*> complex_values)
+// 	esu::Identity_t<const T*> complex_values)
 // {
 // 	static_assert(std::is_integral_v<Index>);
 // 	assert(real_values);
@@ -300,4 +300,4 @@ void Matfile_writer::write_array_name_subelement(const std::string& name)
 // 		write_zero_padding(data_size_in_bytes);
 // 	}
 // }
-} // namespace es_la
+} // namespace esl

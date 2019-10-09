@@ -1,6 +1,6 @@
-#include <es_la/sparse/function/check.hpp>
+#include <esl/sparse/function/check.hpp>
 
-namespace es_la
+namespace esl
 {
 Csr_matrix_check_error_code::Csr_matrix_check_error_code(
 	::sparse_checker_error_values error_code, Check_result check_result) :
@@ -82,4 +82,4 @@ std::string Csr_matrix_check_error_code::check_result_string_non_ordered() const
 
 	return "j=" + j + ", ja[j]=" + aj + " and ja[j+1]=" + ajp1 + " are incompatible";
 }
-} // namespace es_la
+} // namespace esl

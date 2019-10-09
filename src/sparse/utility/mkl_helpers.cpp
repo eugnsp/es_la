@@ -1,10 +1,10 @@
-#include <es_la/sparse/utility/mkl_helpers.hpp>
+#include <esl/sparse/utility/mkl_helpers.hpp>
 
 #include <mkl_spblas.h>
 
 #include <string>
 
-namespace es_la::internal
+namespace esl::internal
 {
 std::string mkl_sparse_status_string(::sparse_status_t status)
 {
@@ -34,4 +34,4 @@ std::string mkl_sparse_status_string(::sparse_status_t status)
 
 	return "Unknown error";
 }
-} // namespace es_la::internal
+} // namespace esl::internal

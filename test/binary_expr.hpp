@@ -1,7 +1,7 @@
 #pragma once
 #include "check_elements.hpp"
 
-#include <es_la/dense.hpp>
+#include <esl/dense.hpp>
 
 #include <cassert>
 #include <cstddef>
@@ -17,10 +17,10 @@ struct Binary_expr_constructor
 
 	void operator()()
 	{
-		es_la::Matrix<T, 3, 4> mss;
-		es_la::Matrix<T, 3, es_la::dynamic> msd(4);
-		es_la::Matrix<T, es_la::dynamic, 4> mds(3);
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic> mdd(3, 4);
+		esl::Matrix<T, 3, 4> mss;
+		esl::Matrix<T, 3, esl::dynamic> msd(4);
+		esl::Matrix<T, esl::dynamic, 4> mds(3);
+		esl::Matrix<T, esl::dynamic, esl::dynamic> mdd(3, 4);
 
 		op(mss, mss);
 		op(mss, msd);

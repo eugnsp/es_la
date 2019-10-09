@@ -1,18 +1,21 @@
-#include <es_la/dense/type_traits.hpp>
-#include <es_la/dense/utility/mkl_overloads.hpp>
+#include <esl/dense/type_traits.hpp>
+#include <esl/dense/utility/mkl_overloads.hpp>
 
 #include <mkl_cblas.h>
+#include <mkl_lapacke.h>
 #include <mkl_trans.h>
 #include <mkl_types.h>
 
 #include <complex>
 #include <cstddef>
 #include <cstring>
+#include <stdexcept>
+#include <string>
 
-namespace es_la::internal
+namespace esl::internal
 {
 //////////////////////////////////////////////////////////////////////
-//* BLAS level 1 */
+//> BLAS level 1
 
 #define ES_LA_IMPL_MKL_BLAS_AXPY_R(fn, T)                                                                              \
 	void mkl_axpy(std::size_t n, T a, const T* data_x, std::size_t inc_x, T* data_y, std::size_t inc_y)                \
@@ -57,7 +60,7 @@ ES_LA_IMPL_MKL_BLAS_NRM2(cblas_scnrm2, std::complex<float>)
 ES_LA_IMPL_MKL_BLAS_NRM2(cblas_dznrm2, std::complex<double>)
 
 //////////////////////////////////////////////////////////////////////
-//* BLAS levels 2 and 3 */
+//> BLAS levels 2 and 3
 
 #define ES_LA_IMPL_MKL_GEMV_R(fn, T)                                                                                   \
 	void mkl_gemv(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE transp, std::size_t m, std::size_t n, T alpha, const T* data_a, \
@@ -106,7 +109,7 @@ ES_LA_IMPL_MKL_GEMM_C(cblas_cgemm3m, std::complex<float>)
 ES_LA_IMPL_MKL_GEMM_C(cblas_zgemm3m, std::complex<double>)
 
 ///////////////////////////////////////////////////////////////////////
-//* BLAS-like extensions */
+//> BLAS-like extensions
 
 #define ES_LA_IMPL_MKL_OMATCOPY(fn, T)                                                                                 \
 	void mkl_omatcopy(char layout, char trans, std::size_t rows, std::size_t cols, T alpha, const T* data_a,           \
@@ -122,4 +125,39 @@ ES_LA_IMPL_MKL_OMATCOPY(mkl_somatcopy, float)
 ES_LA_IMPL_MKL_OMATCOPY(mkl_domatcopy, double)
 ES_LA_IMPL_MKL_OMATCOPY(mkl_comatcopy, std::complex<float>)
 ES_LA_IMPL_MKL_OMATCOPY(mkl_zomatcopy, std::complex<double>)
-} // namespace es_la::internal
+
+//////////////////////////////////////////////////////////////////////
+//> LAPACK
+
+#define ES_LA_IMPL_MKL_LAPACK_SYTRD(fn, T)                                                                             \
+	void mkl_lapack_sytrd(                                                                                             \
+		int layout, char up_lo, std::size_t n, T* data_a, std::size_t lead_dim_a, T* data_d, T* data_e, T* data_tau)   \
+	{                                                                                                                  \
+		const auto info = ::fn(layout, up_lo, static_cast<lapack_int>(n), data_a, static_cast<lapack_int>(lead_dim_a), \
+			data_d, data_e, data_tau);                                                                                 \
+		if (info != 0)                                                                                                 \
+			throw std::runtime_error(                                                                                  \
+				"Parameter " + std::to_string(-info) + " has an illegal value in " + std::string(__FUNCTION__));       \
+	}
+
+ES_LA_IMPL_MKL_LAPACK_SYTRD(LAPACKE_ssytrd, float)
+ES_LA_IMPL_MKL_LAPACK_SYTRD(LAPACKE_dsytrd, double)
+
+///////////////////////////////////////////////////////////////////////
+
+#define ES_LA_IMPL_MKL_LAPACK_STERF(fn, T)                                                                             \
+	void mkl_lapack_sterf(std::size_t n, T* data_d, T* data_e)                                                         \
+	{                                                                                                                  \
+		const auto info = ::fn(static_cast<lapack_int>(n), data_d, data_e);                                            \
+		if (info > 0)                                                                                                  \
+			throw std::runtime_error(std::to_string(info) + " off-diagonal elements have not converged to zero in " +  \
+									 std::string(__FUNCTION__));                                                       \
+		else if (info < 0)                                                                                             \
+			throw std::runtime_error(                                                                                  \
+				"Parameter " + std::to_string(-info) + " has an illegal value in " + std::string(__FUNCTION__));       \
+	}
+
+ES_LA_IMPL_MKL_LAPACK_STERF(LAPACKE_ssterf, float)
+ES_LA_IMPL_MKL_LAPACK_STERF(LAPACKE_dsterf, double)
+
+} // namespace esl::internal

@@ -1,5 +1,5 @@
-#include <es_la/dense/type_traits.hpp>
-#include <es_la/sparse/utility/mkl_overloads.hpp>
+#include <esl/dense/type_traits.hpp>
+#include <esl/sparse/utility/mkl_overloads.hpp>
 
 #include <mkl_spblas.h>
 #include <mkl_types.h>
@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <cstring>
 
-namespace es_la::internal
+namespace esl::internal
 {
 #define ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(fn, T)                                                                        \
 	::sparse_status_t mkl_sparse_create_csr(::sparse_matrix_t& handle, MKL_UINT n_rows, MKL_UINT n_cols,               \
@@ -72,4 +72,4 @@ ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_s_mm, float)
 ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_d_mm, double)
 ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_c_mm, std::complex<float>)
 ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_z_mm, std::complex<double>)
-} // namespace es_la::internal
+} // namespace esl::internal

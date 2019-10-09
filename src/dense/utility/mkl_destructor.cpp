@@ -1,6 +1,6 @@
 #include <mkl_service.h>
 
-namespace es_la::internal
+namespace esl::internal
 {
 [[gnu::destructor]] void mkl_destructor()
 {

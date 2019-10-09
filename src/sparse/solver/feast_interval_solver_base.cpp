@@ -1,5 +1,5 @@
-#include <es_la/dense/type_traits.hpp>
-#include <es_la/sparse/solver/feast_interval_solver_base.hpp>
+#include <esl/dense/type_traits.hpp>
+#include <esl/sparse/solver/feast_interval_solver_base.hpp>
 
 #include <mkl_solvers_ee.h>
 #include <mkl_types.h>
@@ -7,7 +7,7 @@
 #include <complex>
 #include <string>
 
-namespace es_la::internal
+namespace esl::internal
 {
 Feast_interval_solver_base::Feast_interval_solver_base()
 {
@@ -97,4 +97,4 @@ std::string Feast_interval_solver_base::error_string(Status status)
 
 	return str + "Unknown error";
 }
-} // namespace es_la::internal
+} // namespace esl::internal

@@ -1,10 +1,10 @@
-#include <es_la/sparse/solver/pardiso_solver_base.hpp>
+#include <esl/sparse/solver/pardiso_solver_base.hpp>
 
 #include <mkl_types.h>
 
 #include <string>
 
-namespace es_la::internal
+namespace esl::internal
 {
 std::string Pardiso_solver_base::pardiso_error_string(MKL_INT error)
 {
@@ -41,4 +41,4 @@ std::string Pardiso_solver_base::pardiso_error_string(MKL_INT error)
 
 	return str + "Unknown error";
 }
-} // namespace es_la::internal
+} // namespace esl::internal

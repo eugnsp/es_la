@@ -1,6 +1,6 @@
 #pragma once
 #include <cstddef>
-#include <es_la/dense.hpp>
+#include <esl/dense.hpp>
 #include <initializer_list>
 
 template<class Expr, typename T>
@@ -28,7 +28,7 @@ template<class M, typename T>
 bool check_matrix_elements(const M& expr, std::initializer_list<T> list)
 {
 	auto it = list.begin();
-	if constexpr (es_la::is_col_major<M>)
+	if constexpr (esl::is_col_major<M>)
 	{
 		for (std::size_t col = 0; col < expr.cols(); ++col)
 			for (std::size_t row = 0; row < expr.rows(); ++row)

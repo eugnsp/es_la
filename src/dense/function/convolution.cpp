@@ -1,11 +1,11 @@
-#include <es_la/dense/function/convolution.hpp>
+#include <esl/dense/function/convolution.hpp>
 
 #include <mkl_types.h>
 #include <mkl_vsl.h>
 
 #include <string>
 
-namespace es_la::internal
+namespace esl::internal
 {
 std::string mkl_vsl_status_string(MKL_INT status)
 {
@@ -113,4 +113,4 @@ std::string mkl_vsl_status_string(MKL_INT status)
 		return "Unknown error";
 	}
 }
-} // namespace es_la::internal
+} // namespace esl::internal

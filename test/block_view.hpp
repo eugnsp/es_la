@@ -1,7 +1,7 @@
 #pragma once
 #include "check_elements.hpp"
 
-#include <es_la/dense.hpp>
+#include <esl/dense.hpp>
 
 #include <cassert>
 #include <cstddef>
@@ -17,8 +17,8 @@ struct Block_view_lvalue_copy_constructor
 
 	void operator()()
 	{
-		es_la::Matrix<T, 3, 3, es_la::Col_major> m1{1, 2, 3, 4, 5, 6, 7, 8, 9};
-		const es_la::Matrix<T, 3, 3, es_la::Col_major> m2{1, 2, 3, 4, 5, 6, 7, 8, 9};
+		esl::Matrix<T, 3, 3, esl::Col_major> m1{1, 2, 3, 4, 5, 6, 7, 8, 9};
+		const esl::Matrix<T, 3, 3, esl::Col_major> m2{1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 		auto v1 = m1.view(1, 1, 2, 3);
 		auto v1c = v1;
@@ -42,8 +42,8 @@ struct Block_view_lvalue_size
 
 	void operator()()
 	{
-		es_la::Matrix<T, 10, 11, es_la::Col_major> msc;
-		es_la::Matrix<T, 10, 11, es_la::Row_major> msr;
+		esl::Matrix<T, 10, 11, esl::Col_major> msc;
+		esl::Matrix<T, 10, 11, esl::Row_major> msr;
 
 		op(msc, 0, 0, 5, 6);
 		op(msc, 1, 2, 5, 6);
@@ -55,8 +55,8 @@ struct Block_view_lvalue_size
 		op<0, 0, 5, 6>(msr);
 		op<1, 2, 5, 6>(msr);
 
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Col_major> mdc;
-		es_la::Matrix<T, es_la::dynamic, es_la::dynamic, es_la::Row_major> mdr;
+		esl::Matrix<T, esl::dynamic, esl::dynamic, esl::Col_major> mdc;
+		esl::Matrix<T, esl::dynamic, esl::dynamic, esl::Row_major> mdr;
 
 		op(mdc, 0, 0, 5, 6);
 		op(mdc, 1, 2, 5, 6);
@@ -76,7 +76,7 @@ struct Block_view_lvalue_size
 		assert(v.rows() == rows);
 		assert(v.cols() == cols);
 		assert(v.lead_dim() == m.lead_dim());
-		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v)>, es_la::Layout_tag<M>>);
+		static_assert(std::is_same_v<esl::Layout_tag<decltype(v)>, esl::Layout_tag<M>>);
 	}
 
 	template<std::size_t start_row, std::size_t start_col, std::size_t rows, std::size_t cols, class M>
@@ -86,7 +86,7 @@ struct Block_view_lvalue_size
 		assert(v.rows() == rows);
 		assert(v.cols() == cols);
 		assert(v.lead_dim() == m.lead_dim());
-		static_assert(std::is_same_v<es_la::Layout_tag<decltype(v)>, es_la::Layout_tag<M>>);
+		static_assert(std::is_same_v<esl::Layout_tag<decltype(v)>, esl::Layout_tag<M>>);
 	}
 };
 
@@ -100,9 +100,9 @@ struct Block_view_lvalue_data
 
 	void operator()()
 	{
-		es_la::Matrix<T, 3, 4, es_la::Col_major> m1c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-		es_la::Matrix<T, 3, 4, es_la::Row_major> m1r{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-		const es_la::Matrix<T, 3, 4, es_la::Col_major> m2c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		esl::Matrix<T, 3, 4, esl::Col_major> m1c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		esl::Matrix<T, 3, 4, esl::Row_major> m1r{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		const esl::Matrix<T, 3, 4, esl::Col_major> m2c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
 		auto v1c = m1c.view(1, 1, 2, 3);
 		static_assert(std::is_same_v<decltype(v1c(0, 0)), T&>);
@@ -140,8 +140,8 @@ struct Block_view_lvalue_const
 
 	void operator()()
 	{
-		es_la::Matrix<T, 3, 3> m1;
-		const es_la::Matrix<T, 3, 3> m1c{};
+		esl::Matrix<T, 3, 3> m1;
+		const esl::Matrix<T, 3, 3> m1c{};
 
 		auto v1 = m1.view(0, 0, 1, 1);
 		auto v1c = m1c.view(0, 0, 1, 1);

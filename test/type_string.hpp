@@ -17,7 +17,7 @@ std::string type_string()
 #else
 	str = typeid(T).name();
 #endif
-	str = std::regex_replace(str, std::regex{"es_la::(internal::)?"}, "");
+	str = std::regex_replace(str, std::regex{"esl::(internal::)?"}, "");
 	str = std::regex_replace(str, std::regex{"18446744073709551615ul"}, "dynamic");
 	return str;
 }
