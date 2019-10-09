@@ -25,7 +25,8 @@ private:
 	using Base = Expression<Expr>;
 
 public:
-	using typename Base::Value;
+	using Value = Value_type<Expr>;
+	using Layout = Layout_tag<Expr>;
 
 public:
 	using Base::self;

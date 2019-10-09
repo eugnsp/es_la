@@ -10,7 +10,6 @@ class Expression
 {
 public:
 	using Value = Value_type<Expr>;
-	using Layout = Layout_tag<Expr>;
 
 public:
 	///////////////////////////////////////////////////////////////////////
