@@ -6,13 +6,15 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace esl::internal
+namespace esl
 {
-template<std::size_t t_size>
+namespace internal
+{
+template<std::size_t ct_size>
 class Slice
 {
 public:
-	explicit Slice(Vector<std::size_t, t_size> indices) : indices_(std::move(indices))
+	explicit Slice(Vector<std::size_t, ct_size> indices) : indices_(std::move(indices))
 	{
 		assert(!indices_.is_empty());
 	}
@@ -36,6 +38,16 @@ public:
 	}
 
 private:
-	const Vector<std::size_t, t_size> indices_;
+	const Vector<std::size_t, ct_size> indices_;
+};
+}
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+template<std::size_t size_>
+struct Traits<internal::Slice<size_>>
+{
+	static constexpr std::size_t size = size_;
 };
 }

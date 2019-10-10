@@ -5,7 +5,9 @@
 #include <cassert>
 #include <cstddef>
 
-namespace esl::internal
+namespace esl
+{
+namespace internal
 {
 template<std::size_t ct_start, std::size_t ct_size>
 class Range
@@ -152,5 +154,15 @@ public:
 private:
 	const std::size_t start_;
 	const std::size_t size_;
+};
+}
+
+///////////////////////////////////////////////////////////////////////
+//> Type traits
+
+template<std::size_t begin, std::size_t size_>
+struct Traits<internal::Range<begin, size_>>
+{
+	static constexpr std::size_t size = size_;
 };
 } // namespace esl::internal

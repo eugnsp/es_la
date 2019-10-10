@@ -10,32 +10,14 @@
 
 namespace esl
 {
-namespace internal
-{
-template<class Expr>
-struct Ct_size_trait_impl
-{};
-} // namespace internal
-
-template<class Expr>
-using Ct_size_trait = internal::Ct_size_trait_impl<esu::Remove_cv_ref<Expr>>;
-
-namespace internal
-{
-template<std::size_t ct_begin, std::size_t ct_size>
-struct Ct_size_trait_impl<internal::Range<ct_begin, ct_size>> : std::integral_constant<std::size_t, ct_size>
-{};
-
-template<std::size_t ct_size>
-struct Ct_size_trait_impl<internal::Slice<ct_size>> : std::integral_constant<std::size_t, ct_size>
-{};
-} // namespace internal
-
 template<class Expr>
 inline constexpr auto ct_rows_value = Traits<esu::Remove_cv_ref<Expr>>::rows;
 
 template<class Expr>
 inline constexpr auto ct_cols_value = Traits<esu::Remove_cv_ref<Expr>>::cols;
+
+template<class Expr>
+inline constexpr auto ct_size_value = Traits<esu::Remove_cv_ref<Expr>>::size;
 
 template<class Expr>
 inline constexpr auto ct_row_stride_value = Traits<esu::Remove_cv_ref<Expr>>::row_stride;

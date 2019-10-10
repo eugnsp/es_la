@@ -123,7 +123,7 @@ struct Traits<View<Expr, Rows, Cols, Category>>
 	using Value = Value_type<Expr>;
 	using Layout = Layout_tag<Expr>;
 
-	static constexpr std::size_t rows = ct_rows_value<Expr>;
-	static constexpr std::size_t cols = ct_cols_value<Expr>;
+	static constexpr std::size_t rows = ct_size_value<Rows>;
+	static constexpr std::size_t cols = ct_size_value<Cols>;
 };
 } // namespace esl

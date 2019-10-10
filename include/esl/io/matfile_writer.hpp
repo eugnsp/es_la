@@ -60,9 +60,9 @@ public:
 			throw std::length_error("Level 5 MAT-files cannot hold variables exceeding 2GB.");
 
 		// Convert CSR to CSC first
-		std::vector<MKL_INT> cscRows(nnz);
-		std::vector<MKL_INT> cscColumnIndex(n + 1);
-		std::vector<double> cscValues(nnz);
+		std::vector<MKL_INT> csc_rows(nnz);
+		std::vector<MKL_INT> csc_cols(n + 1);
+		std::vector<double> csc_values(nnz);
 
 		MKL_INT job[8] = {};
 		MKL_INT info;
@@ -72,13 +72,13 @@ public:
 		job[5] = 1;			 // All output arrays (acsc, ja1, and ia1) are filled in for the output storage
 
 		mkl_dcsrcsc(job, &n, const_cast<double*>(matrix.data()), (MKL_INT*)(matrix.col_indices()),
-			(MKL_INT*)(matrix.row_indices()), cscValues.data(), cscRows.data(), cscColumnIndex.data(), &info);
+			(MKL_INT*)(matrix.row_indices()), csc_values.data(), csc_rows.data(), csc_cols.data(), &info);
 
 		if (info != 0)
 			throw std::runtime_error("Matrix format conversion error");
 
-		write_sparse_array_element(var_name, matrix.n_rows(), matrix.n_cols(), matrix.nnz(), cscRows.data(),
-			cscColumnIndex.data(), cscValues.data());
+		write_sparse_array_element(var_name, matrix.n_rows(), matrix.n_cols(), matrix.nnz(), csc_rows.data(),
+			csc_cols.data(), csc_values.data());
 	}
 
 	void close()

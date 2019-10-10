@@ -216,5 +216,6 @@ template<typename Value_, class Symmetry_, typename Index_>
 struct Traits<Csr_matrix<Value_, Symmetry_, Index_>>
 {
 	using Value = Value_;
+	using Layout = No_layout;
 };
 } // namespace esl

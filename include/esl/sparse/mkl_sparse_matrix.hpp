@@ -137,6 +137,7 @@ template<typename Matrix>
 struct Traits<Mkl_sparse_matrix<Matrix>>
 {
 	using Value = Value_type<Matrix>;
+	using Layout = No_layout;
 
 	static constexpr std::size_t rows = dynamic;
 	static constexpr std::size_t cols = dynamic;
