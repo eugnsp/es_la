@@ -1,7 +1,7 @@
 # Dense expressions: Matrices
 
-Header: `<es_la/dense.hpp>`\
-Namespace: `es_la`
+Header: `<esl/dense.hpp>`\
+Namespace: `esl`
 
 ---
 

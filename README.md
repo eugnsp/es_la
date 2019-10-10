@@ -21,7 +21,7 @@ This is a linear algebra library that is being developed mostly for educational 
 ## Dependencies
 
 * Intel MKL
-* [`es_util` library](https://github.com/eugnsp/es_util)
+* [`esu` utilities library](https://github.com/eugnsp/esu)
 
 Requires C++17 compiler. Tested with GCC 8.3.0 and Clang 7.0.0.
 
