@@ -4,7 +4,7 @@
 
 ## Synopsis
 
-This is a linear algebra library that is being developed mostly for educational purposes. It is also extensively used in the [`es_fe` library](https://github.com/eugnsp/es_fe) for finite elements.
+This is a linear algebra library that is being developed mostly for educational purposes. It is also extensively used in the [`esf` library](https://github.com/eugnsp/esf) for finite elements.
 
 ## Main features
 
