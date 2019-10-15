@@ -34,7 +34,8 @@ public:
 		assert(mat_a.rows() == mat_b.rows() && mat_a.cols() == mat_b.cols());
 	}
 
-	bool solve(Matrix_x<Value>& vectors, Vector_x<Real>& values, std::pair<Real, Real> values_interval, bool user_init_guess = false)
+	bool solve(Matrix_x<Value>& vectors, Vector_x<Real>& values, std::pair<Real, Real> values_interval,
+		bool user_init_guess = false)
 	{
 		assert(values_interval.first < values_interval.second);
 

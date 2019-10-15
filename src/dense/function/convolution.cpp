@@ -65,10 +65,10 @@ std::string mkl_vsl_status_string(MKL_INT status)
 	case VSL_CC_ERROR_INTERNAL_PRECISION:
 		return "Bad parameter: internal_precision";
 
-	// MKL bug: duplicated value, see
-	// https://software.intel.com/en-us/forums/intel-math-kernel-library/topic/810189
-	// case VSL_CC_ERROR_PRECISION:
-	// 	return "Incompatible external/internal precisions";
+		// MKL bug: duplicated value, see
+		// https://software.intel.com/en-us/forums/intel-math-kernel-library/topic/810189
+		// case VSL_CC_ERROR_PRECISION:
+		// 	return "Incompatible external/internal precisions";
 
 	case VSL_CC_ERROR_DIMS:
 		return "Bad parameter: dims";

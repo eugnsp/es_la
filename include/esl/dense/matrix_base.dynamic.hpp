@@ -3,7 +3,6 @@
 #include <esl/dense/matrix_base.static.hpp>
 #include <esl/dense/matrix_dynamic_base.hpp>
 #include <esl/dense/shape.hpp>
-#include <esl/dense/storage/storage.hpp>
 #include <esl/dense/type_traits.hpp>
 
 #include <array>
@@ -26,13 +25,14 @@ public:
 public:
 	using Base::Base;
 
-	explicit Matrix_base(std::size_t cols) : Base(Internal{}, ct_rows, cols)
+	explicit Matrix_base(const std::size_t cols) : Base(Internal{}, ct_rows, cols)
 	{}
 
-	Matrix_base(std::size_t cols, const Value& value) : Matrix_base(Internal{}, ct_rows, cols, value)
+	Matrix_base(const std::size_t cols, const Value& value) : Base(Internal{}, ct_rows, cols, value)
 	{}
 
-	Matrix_base(std::size_t cols, std::initializer_list<Value> values) : Matrix_base(Internal{}, ct_rows, cols, values)
+	Matrix_base(const std::size_t cols, std::initializer_list<Value> values) :
+		Base(Internal{}, ct_rows, cols, values)
 	{}
 
 	Matrix_base(std::initializer_list<Value> values) : Matrix_base(values.size() / ct_rows, values)
@@ -46,7 +46,7 @@ public:
 
 	using Base::operator=;
 
-	void resize(std::size_t cols, bool preserve_data = false)
+	void resize(const std::size_t cols, const bool preserve_data = false)
 	{
 		Base::resize(ct_rows, cols, preserve_data);
 	}
@@ -67,13 +67,13 @@ public:
 public:
 	using Base::Base;
 
-	explicit Matrix_base(std::size_t rows = 0) : Base(Internal{}, rows, t_cols)
+	explicit Matrix_base(const std::size_t rows = 0) : Base(Internal{}, rows, t_cols)
 	{}
 
-	Matrix_base(std::size_t rows, const Value& value) : Base(Internal{}, rows, t_cols, value)
+	Matrix_base(const std::size_t rows, const Value& value) : Base(Internal{}, rows, t_cols, value)
 	{}
 
-	Matrix_base(std::size_t rows, std::initializer_list<Value> values) : Base(Internal{}, rows, t_cols, values)
+	Matrix_base(const std::size_t rows, std::initializer_list<Value> values) : Base(Internal{}, rows, t_cols, values)
 	{}
 
 	Matrix_base(std::initializer_list<Value> values) : Matrix_base(values.size() / t_cols, values)
@@ -87,7 +87,7 @@ public:
 
 	using Base::operator=;
 
-	void resize(std::size_t rows, bool preserve_data = false)
+	void resize(const std::size_t rows, const bool preserve_data = false)
 	{
 		Base::resize(rows, t_cols, preserve_data);
 	}
@@ -108,21 +108,23 @@ public:
 public:
 	using Base::Base;
 
-	Matrix_base(std::size_t rows, std::size_t cols) : Base(Internal{}, rows, cols)
+	Matrix_base(const std::size_t rows, const std::size_t cols) : Base(Internal{}, rows, cols)
 	{}
 
 	Matrix_base() : Matrix_base(0, 0)
 	{}
 
-	Matrix_base(std::size_t rows, std::size_t cols, const Value& value) : Base(Internal{}, rows, cols, value)
+	Matrix_base(const std::size_t rows, const std::size_t cols, const Value& value) :
+		Base(Internal{}, rows, cols, value)
 	{}
 
-	Matrix_base(std::size_t rows, std::size_t cols, std::initializer_list<Value> values) : Base(Internal{}, rows, cols, values)
+	Matrix_base(const std::size_t rows, const std::size_t cols, std::initializer_list<Value> values) :
+		Base(Internal{}, rows, cols, values)
 	{}
 
 	using Base::operator=;
 
-	void resize(std::size_t rows, std::size_t cols, bool preserve_data = false)
+	void resize(const std::size_t rows, const std::size_t cols, const bool preserve_data = false)
 	{
 		Base::resize(rows, cols, preserve_data);
 	}

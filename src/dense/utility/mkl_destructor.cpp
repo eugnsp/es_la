@@ -6,4 +6,4 @@ namespace esl::internal
 {
 	::mkl_free_buffers();
 }
-}
+} // namespace esl::internal

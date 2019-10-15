@@ -19,7 +19,7 @@ Feast_interval_solver_base::Feast_interval_solver_base()
 #endif
 }
 
-#define ES_LA_IMPL_MKL_FEAST_RCI(func, T)                                                                              \
+#define ESL_IMPL_MKL_FEAST_RCI(func, T)                                                                              \
 	Feast_interval_solver_base::Status Feast_interval_solver_base::mkl_feast_rci(Job& job, MKL_UINT n,                 \
 		Add_complex<T>& ze, T* work1, Add_complex<T>* work2, T* work3, T* work4, Remove_complex<T>& eps,               \
 		MKL_UINT& n_loops, std::pair<Remove_complex<T>, Remove_complex<T>> eigen_values_interval,                      \
@@ -49,10 +49,10 @@ Feast_interval_solver_base::Feast_interval_solver_base()
 		return static_cast<Status>(info);                                                                              \
 	}
 
-ES_LA_IMPL_MKL_FEAST_RCI(sfeast_srci, float)
-ES_LA_IMPL_MKL_FEAST_RCI(dfeast_srci, double)
-ES_LA_IMPL_MKL_FEAST_RCI(cfeast_hrci, std::complex<float>)
-ES_LA_IMPL_MKL_FEAST_RCI(zfeast_hrci, std::complex<double>)
+ESL_IMPL_MKL_FEAST_RCI(sfeast_srci, float)
+ESL_IMPL_MKL_FEAST_RCI(dfeast_srci, double)
+ESL_IMPL_MKL_FEAST_RCI(cfeast_hrci, std::complex<float>)
+ESL_IMPL_MKL_FEAST_RCI(zfeast_hrci, std::complex<double>)
 
 std::string Feast_interval_solver_base::error_string(Status status)
 {

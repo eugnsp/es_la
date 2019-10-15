@@ -34,12 +34,12 @@ template<class Expr>
 inline constexpr bool is_col_dynamic = (ct_cols_value<Expr> == dynamic);
 
 template<class Expr>
-inline constexpr bool is_rc_dynamic = is_row_dynamic<Expr> && is_col_dynamic<Expr>;
+inline constexpr bool is_rc_dynamic = is_row_dynamic<Expr>&& is_col_dynamic<Expr>;
 
 template<class Expr>
 inline constexpr bool is_dynamic = is_row_dynamic<Expr> || is_col_dynamic<Expr>;
 
 template<class Expr>
 inline constexpr bool is_vector = (ct_cols_value<Expr> == 1);
-}
+} // namespace internal
 } // namespace esl

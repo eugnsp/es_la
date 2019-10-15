@@ -14,6 +14,7 @@
 #include "type_traits.hpp"
 
 #include <esl/dense.hpp>
+#include <esl/io.hpp>
 #include <esl/sparse.hpp>
 
 #include <mkl_sparse_qr.h>
@@ -30,37 +31,19 @@ void run()
 	std::cout << "OK" << std::endl;
 }
 
-template<class Matrix>
-void print(const Matrix& mat)
-{
-	std::cout << "Matrix " << mat.rows() << " x " << mat.cols() << ' '
-			  << (esl::is_col_major<Matrix> ? "col-major" : "row-major") << ", row stride = " << mat.row_stride()
-			  << ", col_stride = " << mat.col_stride() << ", lead_dim = " << mat.lead_dim() << ":\n";
-
-	for (std::size_t row = 0; row < mat.rows(); ++row)
-	{
-		for (std::size_t col = 0; col < mat.cols(); ++col)
-			std::cout << std::setw(3) << mat(row, col) << ' ';
-		std::cout << std::endl;
-	}
-}
-
 int main()
 {
-	// esl::Matfile_reader mr("Indian_pines_gt.mat");
-	// esl::Matrix_xd m;
-	// mr.read("indian_pines_gt", m);
-
 	// ::mkl_verbose(1);
+
 	try
 	{
 		///////////////////////////////////////////////////////////////////////
-		//* Type traits */
+		//> Type traits
 
 		run<Type_trait_is_dense, int>();
 
-		// ///////////////////////////////////////////////////////////////////////
-		// //* Matrix class constructors */
+		///////////////////////////////////////////////////////////////////////
+		//> Matrix class constructors
 
 		run<Matrix_default_construction, int>();
 		run<Matrix_value_construction, int>();
@@ -79,8 +62,8 @@ int main()
 		run<Matrix_move_construction, Non_trivial>();
 		run<Matrix_default_construction, Non_trivial>();
 
-		// ///////////////////////////////////////////////////////////////////////
-		// //* Views */
+		///////////////////////////////////////////////////////////////////////
+		//> Views
 
 		run<Block_view_lvalue_copy_constructor, int>();
 		run<Block_view_lvalue_size, int>();
@@ -88,7 +71,7 @@ int main()
 		run<Block_view_lvalue_const, int>();
 
 		///////////////////////////////////////////////////////////////////////
-		//* Binary expressions */
+		//> Binary expressions
 
 		run<Binary_expr_constructor, int>();
 
@@ -109,12 +92,13 @@ int main()
 		auto m1 = esl::make_matrix<esl::Row_major>(4, 4, [](auto...) { return 0; });
 		auto m2 = esl::make_matrix<esl::Row_major>(4, 4, [](auto...) { return 2; });
 
-		print(m);
-		print(m1);
+		std::cout << printer_i(m) << std::endl;
+		std::cout << printer_i(m1) << std::endl;
 
 		m1.col_view(0) = m * m2.col_view(0);
 
-		print(m1);
+		std::cout << printer_i(m1) << std::endl;
+		std::cout << printer_i(m1+m1) << std::endl;
 
 		// esl::Matrix_x<T> mv(4, 4, 1000);
 		// mv = m;
@@ -157,12 +141,12 @@ int main()
 	}
 	catch (const std::exception& ex)
 	{
-		std::cout << ex.what() << '\n';
+		std::cout << ex.what() << std::endl;
 		return -1;
 	}
 	catch (...)
 	{
-		std::cout << "Exception!\n";
+		std::cout << "Exception!" << std::endl;
 		return -1;
 	}
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 struct Non_trivial
 {
@@ -40,4 +41,41 @@ struct Non_trivial
 	}
 
 	int i = 0;
+};
+
+struct Verbose_non_trivial
+{
+	Verbose_non_trivial()
+	{
+		std::cout << "Default constructor" << std::endl;
+	}
+
+	Verbose_non_trivial(const Verbose_non_trivial&)
+	{
+		std::cout << "Copy constructor" << std::endl;
+	}
+
+	Verbose_non_trivial(Verbose_non_trivial&&)
+	{
+		std::cout << "Move constructor" << std::endl;
+	}
+
+	Verbose_non_trivial& operator=(const Verbose_non_trivial&)
+	{
+		std::cout << "Copy assignment" << std::endl;
+		return *this;
+	}
+
+	Verbose_non_trivial& operator=(Verbose_non_trivial&&)
+	{
+		std::cout << "Move assignment" << std::endl;
+		return *this;
+	}
+
+	~Verbose_non_trivial()
+	{
+		std::cout << "Destructor" << std::endl;
+	}
+
+	int data_member_;
 };

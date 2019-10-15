@@ -10,7 +10,7 @@
 
 namespace esl::internal
 {
-#define ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(fn, T)                                                                        \
+#define ESL_IMPL_MKL_SPARSE_CREATE_CSR(fn, T)                                                                        \
 	::sparse_status_t mkl_sparse_create_csr(::sparse_matrix_t& handle, MKL_UINT n_rows, MKL_UINT n_cols,               \
 		MKL_UINT* rows_start, MKL_UINT* rows_end, MKL_UINT* col_index, T* values)                                      \
 	{                                                                                                                  \
@@ -20,12 +20,12 @@ namespace esl::internal
 			reinterpret_cast<Mkl_type<T>*>(values));                                                                   \
 	}
 
-ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_s_create_csr, float)
-ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_d_create_csr, double)
-ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_c_create_csr, std::complex<float>)
-ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_z_create_csr, std::complex<double>)
+ESL_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_s_create_csr, float)
+ESL_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_d_create_csr, double)
+ESL_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_c_create_csr, std::complex<float>)
+ESL_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_z_create_csr, std::complex<double>)
 
-#define ES_LA_IMPL_MKL_SPARSE_SET_VALUE(fn, T)                                                                         \
+#define ESL_IMPL_MKL_SPARSE_SET_VALUE(fn, T)                                                                         \
 	::sparse_status_t mkl_sparse_set_value(::sparse_matrix_t handle, MKL_UINT row, MKL_UINT col, T value)              \
 	{                                                                                                                  \
 		Mkl_type<T> value_m;                                                                                           \
@@ -33,12 +33,12 @@ ES_LA_IMPL_MKL_SPARSE_CREATE_CSR(mkl_sparse_z_create_csr, std::complex<double>)
 		return ::fn(handle, static_cast<MKL_INT>(row), static_cast<MKL_INT>(col), value_m);                            \
 	}
 
-ES_LA_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_s_set_value, float)
-ES_LA_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_d_set_value, double)
-ES_LA_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_c_set_value, std::complex<float>)
-ES_LA_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_z_set_value, std::complex<double>)
+ESL_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_s_set_value, float)
+ESL_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_d_set_value, double)
+ESL_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_c_set_value, std::complex<float>)
+ESL_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_z_set_value, std::complex<double>)
 
-#define ES_LA_IMPL_MKL_SPARSE_EXPORT_CSR(fn, T)                                                                        \
+#define ESL_IMPL_MKL_SPARSE_EXPORT_CSR(fn, T)                                                                        \
 	::sparse_status_t mkl_sparse_export_csr(::sparse_matrix_t handle, ::sparse_index_base_t& indexing,                 \
 		MKL_UINT& n_rows, MKL_UINT& n_cols, MKL_UINT*& rows_start, MKL_UINT*& rows_end, MKL_UINT*& col_index,          \
 		T*& values)                                                                                                    \
@@ -48,12 +48,12 @@ ES_LA_IMPL_MKL_SPARSE_SET_VALUE(mkl_sparse_z_set_value, std::complex<double>)
 			reinterpret_cast<MKL_INT**>(&col_index), reinterpret_cast<Mkl_type<T>**>(&values));                        \
 	}
 
-ES_LA_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_s_export_csr, float)
-ES_LA_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_d_export_csr, double)
-ES_LA_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_c_export_csr, std::complex<float>)
-ES_LA_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_z_export_csr, std::complex<double>)
+ESL_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_s_export_csr, float)
+ESL_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_d_export_csr, double)
+ESL_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_c_export_csr, std::complex<float>)
+ESL_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_z_export_csr, std::complex<double>)
 
-#define ES_LA_IMPL_MKL_SPARSE_MM(fn, T)                                                                                \
+#define ESL_IMPL_MKL_SPARSE_MM(fn, T)                                                                                \
 	::sparse_status_t mkl_sparse_mm(::sparse_operation_t operation, T alpha, ::sparse_matrix_t handle,                 \
 		const ::matrix_descr& descr, ::sparse_layout_t layout, const T* x, std::size_t columns, std::size_t l_dim_x,   \
 		T beta, T* y, std::size_t l_dim_y)                                                                             \
@@ -68,8 +68,8 @@ ES_LA_IMPL_MKL_SPARSE_EXPORT_CSR(mkl_sparse_z_export_csr, std::complex<double>)
 			static_cast<MKL_INT>(l_dim_y));                                                                            \
 	}
 
-ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_s_mm, float)
-ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_d_mm, double)
-ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_c_mm, std::complex<float>)
-ES_LA_IMPL_MKL_SPARSE_MM(mkl_sparse_z_mm, std::complex<double>)
+ESL_IMPL_MKL_SPARSE_MM(mkl_sparse_s_mm, float)
+ESL_IMPL_MKL_SPARSE_MM(mkl_sparse_d_mm, double)
+ESL_IMPL_MKL_SPARSE_MM(mkl_sparse_c_mm, std::complex<float>)
+ESL_IMPL_MKL_SPARSE_MM(mkl_sparse_z_mm, std::complex<double>)
 } // namespace esl::internal

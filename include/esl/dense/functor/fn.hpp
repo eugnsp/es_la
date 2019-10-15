@@ -46,4 +46,4 @@ struct Fn_div_assign
 		v1 /= v2;
 	}
 };
-}
+} // namespace esl::internal

@@ -25,7 +25,8 @@ struct Fn_expr_assign_trait<Expr1, Expr2, Lvalue_block_tag<Value>, Lvalue_block_
 
 // X = a * Y
 template<class Expr1, class Expr2, typename Value, typename Scalar>
-struct Fn_expr_assign_trait<Expr1, Expr2, Lvalue_block_tag<Value>, Scalar_expr_tag<Lvalue_block_tag<Value>, Scalar, Fn_mul_tag>,
+struct Fn_expr_assign_trait<Expr1, Expr2, Lvalue_block_tag<Value>,
+	Scalar_expr_tag<Lvalue_block_tag<Value>, Scalar, Fn_mul_tag>,
 	std::enable_if_t<is_fd_or_cfd<Value> && std::is_convertible_v<Scalar, Value> && is_rc_dynamic<Expr1> &&
 					 is_rc_dynamic<Expr2>>>
 {

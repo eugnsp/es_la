@@ -17,7 +17,7 @@ public:
 	template<class Matrix_f>
 	Mkl_sparse_matrix_ext(Matrix_f&& matrix) : matrix_(std::forward<Matrix_f>(matrix))
 	{
-		ES_LA_CALL_MKL_SPARSE(internal::mkl_sparse_create, handle_, matrix_);
+		ESL_CALL_MKL_SPARSE(internal::mkl_sparse_create, handle_, matrix_);
 	}
 
 private:
@@ -26,5 +26,5 @@ private:
 };
 
 template<class Matrix>
-Mkl_sparse_matrix_ext(Matrix&&) -> Mkl_sparse_matrix_ext<Matrix>;
+Mkl_sparse_matrix_ext(Matrix &&)->Mkl_sparse_matrix_ext<Matrix>;
 } // namespace esl

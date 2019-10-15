@@ -4,9 +4,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Build es_la",
+			"label": "Build esl (Debug)",
 			"type": "shell",
-			"command": "cmake .. && make -j4",
+			"command": "cmake -DCMAKE_BUILD_TYPE=DEBUG .. && make -j4",
 			"options": {"cwd": "${workspaceRoot}/build"},
 			"group": {
 				"kind": "build",

@@ -14,4 +14,4 @@ Dense<Expr, Lvalue>& operator*=(Dense<Expr, Lvalue>& expr, Scalar scalar)
 
 	return expr;
 }
-}
+} // namespace esl

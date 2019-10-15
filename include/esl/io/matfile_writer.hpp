@@ -120,8 +120,7 @@ private:
 
 	template<typename T, typename Index>
 	void write_sparse_array_element(const std::string& name, std::size_t rows, std::size_t cols, std::size_t nnz,
-		const Index* ir, const Index* jc, const T* real_values,
-		esu::Type_identity<const T*> complex_values = nullptr);
+		const Index* ir, const Index* jc, const T* real_values, esu::Type_identity<const T*> complex_values = nullptr);
 
 private:
 	std::ofstream file_;

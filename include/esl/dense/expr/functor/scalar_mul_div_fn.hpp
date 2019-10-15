@@ -44,4 +44,4 @@ public:
 		return expr(row, col) / scalar;
 	}
 };
-}
+} // namespace esl::internal

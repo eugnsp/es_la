@@ -17,7 +17,7 @@
 #include <type_traits>
 #include <utility>
 
-#define ES_LA_CALL_MKL_SPARSE(fn, ...)                                                                                 \
+#define ESL_CALL_MKL_SPARSE(fn, ...)                                                                                 \
 	do                                                                                                                 \
 	{                                                                                                                  \
 		[[maybe_unused]] const auto status = fn(__VA_ARGS__);                                                          \
@@ -95,7 +95,7 @@ public:
 	{
 		static_assert(!std::is_const_v<Matrix>, "Not a writable matrix");
 
-		ES_LA_CALL_MKL_SPARSE(internal::mkl_sparse_set_value, handle_, row, col, value);
+		ESL_CALL_MKL_SPARSE(internal::mkl_sparse_set_value, handle_, row, col, value);
 	}
 
 	void order()
@@ -103,7 +103,7 @@ public:
 		static_assert(!std::is_const_v<Matrix>, "Not a writable matrix");
 		static_assert(internal::is_csr_matrix<Matrix>, "Not a CSR matrix");
 
-		ES_LA_CALL_MKL_SPARSE(::mkl_sparse_order, handle_);
+		ESL_CALL_MKL_SPARSE(::mkl_sparse_order, handle_);
 	}
 
 protected:
@@ -118,7 +118,7 @@ private:
 			MKL_UINT rows, cols, *rows_start, *rows_end, *col_index;
 			Value* values;
 
-			ES_LA_CALL_MKL_SPARSE(internal::mkl_sparse_export_csr, handle_, indexing, rows, cols, rows_start, rows_end,
+			ESL_CALL_MKL_SPARSE(internal::mkl_sparse_export_csr, handle_, indexing, rows, cols, rows_start, rows_end,
 				col_index, values);
 			return {static_cast<Index>(rows), static_cast<Index>(cols)};
 		}

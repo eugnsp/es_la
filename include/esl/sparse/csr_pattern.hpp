@@ -3,8 +3,8 @@
 #include <esl/sparse/forward.hpp>
 
 //#include <esl/base/extended.hpp>
-#include <esl/dense/tags.hpp>
 #include <esl/dense/matrix.hpp>
+#include <esl/dense/tags.hpp>
 
 #include <algorithm>
 #include <type_traits>

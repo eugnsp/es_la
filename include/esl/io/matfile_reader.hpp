@@ -52,7 +52,6 @@ public:
 
 			if (tag.data_type == internal::matfile::Data_types::MATRIX)
 			{
-
 			}
 			else
 				file_.seekg(tag.n_bytes, std::ifstream::cur);

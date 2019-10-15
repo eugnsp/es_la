@@ -4,8 +4,8 @@
 #include <esl/dense/type_traits.hpp>
 
 #include <cstddef>
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 namespace esl
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include <esl/dense/utility/ct_extent.hpp>
 #include <esl/dense/type_traits.hpp>
+#include <esl/dense/utility/ct_extent.hpp>
 
 #include <cassert>
 #include <utility>

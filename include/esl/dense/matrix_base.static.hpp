@@ -1,7 +1,7 @@
 #pragma once
 #include <esl/dense/dense.hpp>
 #include <esl/dense/shape.hpp>
-#include <esl/dense/storage/storage.hpp>
+#include <esl/dense/storage/static_storage.hpp>
 #include <esl/dense/type_traits.hpp>
 
 #include <esu/array.hpp>
@@ -25,7 +25,7 @@ public:
 
 public:
 	//////////////////////////////////////////////////////////////////////
-	//* Constructors */
+	//> Constructors
 
 	Matrix_base() = default;
 	Matrix_base(const Matrix_base&) = default;
@@ -36,9 +36,8 @@ public:
 		Dense_base::assign_scalar(value);
 	}
 
-	template<typename... Values,
-		typename =
-			std::enable_if_t<sizeof...(Values) == ct_rows * ct_cols && (std::is_convertible_v<Values, Value> && ...)>>
+	template<typename... Values, typename = std::enable_if_t<sizeof...(Values) == ct_rows * ct_cols &&
+															 (std::is_convertible_v<Values, Value> && ...)>>
 	explicit constexpr Matrix_base(Values&&... values) : data_{std::forward<Values>(values)...}
 	{}
 
@@ -49,7 +48,7 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Assignments */
+	//> Assignments
 
 	using Dense_base::operator=;
 
@@ -57,10 +56,10 @@ public:
 	Matrix_base& operator=(Matrix_base&&) = default;
 
 	////////////////////////////////////////////////////////////////////////
-	//* Extents */
+	//> Extents
 
-	using Shape_base::rows;
 	using Shape_base::cols;
+	using Shape_base::rows;
 
 	static constexpr bool is_empty()
 	{
@@ -78,15 +77,15 @@ public:
 	}
 
 	///////////////////////////////////////////////////////////////////////
-	//* Element access */
+	//> Element access
 
-	/** @brief Returns the matrix element located in the row \p row and column \p col. */
+	// Returns the matrix element
 	constexpr Value& operator()(std::size_t row, std::size_t col)
 	{
 		return data_[this->linear_index(row, col)];
 	}
 
-	/** @brief Returns the matrix element located in the row \p row and column \p col. */
+	// Returns the matrix element
 	constexpr const Value& operator()(std::size_t row, std::size_t col) const
 	{
 		return data_[this->linear_index(row, col)];
@@ -114,7 +113,15 @@ public:
 		return (*this)[index];
 	}
 
+	///////////////////////////////////////////////////////////////////////
+	//> Modifiers
+
+	void swap(Matrix_base& other) noexcept(std::is_nothrow_swappable_v<Value>)
+	{
+		data_.swap(other.data_);
+	}
+
 protected:
-	Storage<Value, ct_rows * ct_cols> data_;
+	Static_storage<Value, ct_rows * ct_cols> data_;
 };
 } // namespace esl::internal

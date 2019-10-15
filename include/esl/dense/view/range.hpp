@@ -155,7 +155,7 @@ private:
 	const std::size_t start_;
 	const std::size_t size_;
 };
-}
+} // namespace internal
 
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
@@ -165,4 +165,4 @@ struct Traits<internal::Range<begin, size_>>
 {
 	static constexpr std::size_t size = size_;
 };
-} // namespace esl::internal
+} // namespace esl

@@ -84,4 +84,4 @@ inline constexpr char symmetry_as_mkl_char(Symmetric_lower)
 {
 	return 'L';
 }
-}
+} // namespace esl::internal

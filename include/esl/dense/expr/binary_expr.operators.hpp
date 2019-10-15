@@ -1,6 +1,6 @@
 #pragma once
-#include <esl/dense/expression.hpp>
 #include <esl/dense/expr/functor.hpp>
+#include <esl/dense/expression.hpp>
 #include <esl/dense/forward.hpp>
 
 namespace esl

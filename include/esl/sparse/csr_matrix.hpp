@@ -1,8 +1,8 @@
 #pragma once
 #include "sparsity_pattern.hpp"
+#include <esl/dense/type_traits.hpp>
 #include <esl/sparse/csr_pattern.hpp>
 #include <esl/sparse/forward.hpp>
-#include <esl/dense/type_traits.hpp>
 
 //#include <esl/base/extended.hpp>
 #include <esl/dense/matrix.hpp>

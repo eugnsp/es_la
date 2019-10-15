@@ -1,6 +1,6 @@
 #pragma once
-#include <esl/dense/type_traits/mkl_decay.hpp>
 #include <esl/dense/functor/fn_scalar_loop.hpp>
+#include <esl/dense/type_traits/mkl_decay.hpp>
 
 namespace esl::internal
 {
@@ -63,4 +63,4 @@ using Fn_scalar_mul_assign_type = Make_fn_scalar_type<Expr1, Expr2, Fn_scalar_mu
 // Returns a functor for the X /= a operation
 template<class Expr1, class Expr2>
 using Fn_scalar_div_assign_type = Make_fn_scalar_type<Expr1, Expr2, Fn_scalar_div_assign_trait>;
-}
+} // namespace esl::internal

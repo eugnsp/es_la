@@ -1,6 +1,6 @@
 #pragma once
-#include <esl/dense/tags.hpp>
 #include <esl/dense/forward.hpp>
+#include <esl/dense/tags.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -55,4 +55,4 @@ struct Mkl_expr_decay_trait_impl<Binary_expr<Expr1, Expr2, Mul_fn>>
 {
 	using Type = Binary_expr_tag<Mkl_expr_decay<Expr1>, Mkl_expr_decay<Expr2>, Fn_mul_tag>;
 };
-}
+} // namespace esl::internal

@@ -40,7 +40,7 @@ public:
 private:
 	const Vector<std::size_t, ct_size> indices_;
 };
-}
+} // namespace internal
 
 ///////////////////////////////////////////////////////////////////////
 //> Type traits
@@ -50,4 +50,4 @@ struct Traits<internal::Slice<size_>>
 {
 	static constexpr std::size_t size = size_;
 };
-}
+} // namespace esl
