@@ -1,5 +1,7 @@
 # Linear algebra library
 
+This repository is archived. The library has been merged into [`eslib` library](https://github.com/eugnsp/eslib).
+
 :construction: Under construction.
 
 ## Synopsis
